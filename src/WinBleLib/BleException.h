@@ -32,16 +32,27 @@ using namespace std;
 #include <iostream>
 #include <string>
 
+/// <summary>
+/// An exception class throw when errors occur interacting with the ble device classes
+/// </summary>
 class BleException
 {
-	protected:
+	private:
 		string message;
 
 	public:
+		/// <summary>
+		/// Construct an instance of a <see cref="BleException"/> class
+		/// </summary>
+		/// <param name="_message">The exception message</param>
 		BleException(const string & _message);
 
 		~BleException();
 
+		/// <summary>
+		/// The exception message
+		/// </summary>
+		/// <returns>The exception message</returns>
 		const string & Message();
 };
 

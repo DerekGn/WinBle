@@ -36,6 +36,7 @@ using namespace std;
 
 #include <list>
 
+
 class BleGattCharacteristic
 {
 	private:
@@ -53,46 +54,103 @@ class BleGattCharacteristic
 
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 		
+		/// <summary>
+		/// Get the list of gatt desriptors <see cref="PBTH_LE_GATT_DESCRIPTOR"/>
+		/// </summary>
+		/// <param name="hBleDeviceHandle">The handle to the device to retrive the descriptors</param>
+		/// <param name="pGattCharacteristic">The <see cref="PBTH_LE_GATT_CHARACTERISTIC"/> to enumerate the list of descriptors</param>
+		/// <param name="pGattDescriptorsCount">The number of descriptors enumerated</param>
+		/// <returns>A pointer to the first <see cref="PBTH_LE_GATT_CHARACTERISTIC"/> in the list</returns>
 		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(HANDLE hBleDeviceHandle, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic,
 			USHORT * pGattDescriptorsCount);
 
-		static VOID WINAPI NotificationCallback(BTH_LE_GATT_EVENT_TYPE EventType, PVOID EventOutParameter, PVOID Context);
+		/// <summary>
+		/// Handle <see cref="BleGattCharacteristic"/> notifications
+		/// </summary>
+		/// <param name="eventType">The notification</param>
+		/// <param name="eventOutParameter">The pointer to the event data associated with the event type</param>
+		/// <param name="context">The context passed to the call back</param>
+		/// <returns></returns>
+		static VOID WINAPI NotificationCallback(BTH_LE_GATT_EVENT_TYPE eventType, PVOID eventOutParameter, PVOID context);
 		
 	public:
+		/// <summary>
+		/// Constructs an instance of a <see cref="BleGattCharacteristic"/>
+		/// </summary>
+		/// <param name="bleDeviceContext">The ble device context</param>
+		/// <param name="pGattCharacteristic">The contained <see cref="PBTH_LE_GATT_CHARACTERISTIC"/></param>
 		BleGattCharacteristic(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 
+		/// <summary>
+		/// Get the service handle
+		/// </summary>
 		USHORT getServiceHandle();
 
+		/// <summary>
+		/// Gets the characteristics UUID
+		/// </summary>
 		BTH_LE_UUID getCharacteristicUuid();
 
 		USHORT getAttributeHandle();
 		
 		USHORT getCharacteristicValueHandle();
 		
+		/// <summary>
+		/// Indicates if a characteristic is broadcastable
+		/// </summary>
 		BOOLEAN getIsBroadcastable();
 
+		/// <summary>
+		/// Indicates if a characteristic is readable
+		/// </summary>
 		BOOLEAN getIsReadable();
 
+		/// <summary>
+		/// Indicates if a characteristic is writable
+		/// </summary>
 		BOOLEAN getIsWritable();
 
+		/// <summary>
+		/// Indicates if a characteristic is writable without a response
+		/// </summary>
 		BOOLEAN getIsWritableWithoutResponse();
 
+		/// <summary>
+		/// Indicates if a characteristic is signed writable
+		/// </summary>
 		BOOLEAN getIsSignedWritable();
 
+		/// <summary>
+		/// Indicates if a characteristic is notifiable
+		/// </summary>
 		BOOLEAN getIsNotifiable();
 
+		/// <summary>
+		/// Indicates if a characteristic is indicatable
+		/// </summary>
 		BOOLEAN getIsIndicatable();
 
+		/// <summary>
+		/// Indicates if a characteristic has extended properties
+		/// </summary>
 		BOOLEAN getHasExtendedProperties();
+
 
 		void registerCallback();
 
+		/// <summary>
+		/// Reads a characteristics value
+		/// </summary>
+		/// <remarks>Throws a BleException if the characteristic is not readable</remarks>
 		BleGattCharacteristicValue getValue();
 
 		typedef list<BleGattDescriptor*> BleGattDescriptors;
 
+		/// <summary>
+		/// Gets a list of <see cref="BleDescriptors"/> associated with this characteristic
+		/// </summary>
 		const BleGattDescriptors& getBleDescriptors();
 };
 #endif
