@@ -30,26 +30,46 @@ SOFTWARE.
 
 using namespace std;
 
-
+/// <summary>
+/// A class that defines ble device information determined by the <see cref="BleDeviceEnumerator"/>
+/// </summary>
 class BleDeviceInfo
 {
-private:
-	wstring name;
+	private:
+		wstring name;
 
-	wstring hardwareId;
+		wstring hardwareId;
 
-	wstring instanceId;
+		wstring instanceId;
 
-public:
-	BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId);
+	public:
+		/// <summary>
+		/// Constructs an instance of a <see cref="BleDeviceInfo"/>
+		/// </summary>
+		/// <param name="name">The device name</param>
+		/// <param name="hardwareId">The devices hardware Id</param>
+		/// <param name="instanceId">The devices instance Id</param>
+		BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId);
 
-	~BleDeviceInfo();
+		~BleDeviceInfo();
 
-	wstring getName();
+		/// <summary>
+		/// Gets the devices name
+		/// </summary>
+		/// <returns>The device name</returns>
+		wstring getName();
 
-	wstring getHardwareId();
+		/// <summary>
+		/// Gets the devices hardware Id
+		/// </summary>
+		/// <returns>The devices hardware Id</returns>
+		wstring getHardwareId();
 
-	wstring getInstanceId();
+		/// <summary>
+		/// Gets the devices instance Id
+		/// </summary>
+		/// <returns>The devices instance Id</returns>
+		wstring getInstanceId();
 };
 
 #endif
