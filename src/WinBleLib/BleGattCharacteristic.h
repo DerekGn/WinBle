@@ -30,12 +30,13 @@ SOFTWARE.
 #include <Bluetoothleapis.h>
 
 #include "BleGattDescriptor.h"
+#include "BleGattNotification.h"
 #include "BleGattCharacteristicValue.h"
 
 using namespace std;
 
 #include <list>
-
+#include <functional>
 
 class BleGattCharacteristic
 {
@@ -137,8 +138,12 @@ class BleGattCharacteristic
 		/// </summary>
 		BOOLEAN getHasExtendedProperties();
 
-
-		void registerCallback();
+		/// <summary>
+		/// Register the notification callback for this <see cref="BleGattCharacteristic"/>
+		/// </summary>
+		/// <param name="notificationHandler">The notification function that will be invoked on callback</param>
+		/// <remarks>Throws a <see cref="BleGattException"/> if the chararacteritic is not indicatable or notifiable</remarks>
+		void registerCallback(function<void(const BleGattNotification&)> notificationHandler);
 
 		/// <summary>
 		/// Reads a characteristics value
