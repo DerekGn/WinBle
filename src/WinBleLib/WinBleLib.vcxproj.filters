@@ -48,9 +48,6 @@
     <ClInclude Include="BleGattDescriptorValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BleGattNotification.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BleGattService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -61,6 +58,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CallbackContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BleGattNotificationData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,9 +95,6 @@
     <ClCompile Include="BleGattDescriptorValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BleGattNotification.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BleGattService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CallbackContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BleGattNotificationData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

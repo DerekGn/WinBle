@@ -29,8 +29,9 @@ SOFTWARE.
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
+#include "CallbackContext.h"
 #include "BleGattDescriptor.h"
-#include "BleGattNotification.h"
+#include "BleGattNotificationData.h"
 #include "BleGattCharacteristicValue.h"
 
 using namespace std;
@@ -47,6 +48,8 @@ class BleGattCharacteristic
 		GUID serviceUUID;
 		
 		USHORT gattDescriptorsCount = 0;
+
+		CallbackContext* callbackContext;
 
 		BleDeviceContext& bleDeviceContext;
 
@@ -152,7 +155,7 @@ class BleGattCharacteristic
 		/// </summary>
 		/// <param name="notificationHandler">The notification function that will be invoked on callback</param>
 		/// <remarks>Throws a <see cref="BleGattException"/> if the chararacteritic is not indicatable or notifiable</remarks>
-		void registerCallback(function<void(const BleGattNotification&)> notificationHandler);
+		void registerCallback(function<void(const BleGattNotificationData&)> notificationHandler);
 
 		/// <summary>
 		/// Reads a characteristics value

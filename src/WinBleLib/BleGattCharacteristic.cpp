@@ -99,17 +99,14 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE eventType, PVOID eventOutParameter, PVOID context)
 {
 	BLUETOOTH_GATT_VALUE_CHANGED_EVENT *pEvent = (BLUETOOTH_GATT_VALUE_CHANGED_EVENT *)eventOutParameter;
-	PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic = (PBTH_LE_GATT_CHARACTERISTIC)context;
-	if (pEvent->ChangedAttributeHandle == pGattCharacteristic->AttributeHandle)
+	CallbackContext* callbackContext = static_cast<CallbackContext*>(context);
+	if (pEvent->ChangedAttributeHandle == callbackContext->getGattCharacteristic()->AttributeHandle)
 	{
-		//BleGattCharacteristicNotification 
-		/*BTW_GATT_VALUE *p = (BTW_GATT_VALUE *)malloc(sizeof(BTW_GATT_VALUE));
-		if (p)
-		{
-			p->len = (USHORT)pEvent->CharacteristicValue->DataSize;
-			memcpy(p->value, pEvent->CharacteristicValue->Data, pEvent->CharacteristicValue->DataSize);
-			return p;
-		}*/
+		PBYTE p = (PBYTE) malloc(pEvent->CharacteristicValue->DataSize);
+
+		BleGattNotificationData* notification = new BleGattNotificationData(pEvent->CharacteristicValue->DataSize, p);
+
+		callbackContext->getNotificationHandler()(*notification);
 	}
 }
 
@@ -203,7 +200,7 @@ BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
 	return pGattCharacteristic->HasExtendedProperties;
 }
 
-void BleGattCharacteristic::registerCallback(function<void(const BleGattNotification&)> notificationHandler)
+void BleGattCharacteristic::registerCallback(function<void(const BleGattNotificationData&)> notificationHandler)
 {
 	if (pGattCharacteristic->IsNotifiable || pGattCharacteristic->IsIndicatable)
 	{
@@ -211,7 +208,13 @@ void BleGattCharacteristic::registerCallback(function<void(const BleGattNotifica
 		registration.NumCharacteristics = 1;
 		registration.Characteristics[0] = *pGattCharacteristic;
 		
-		BluetoothGATTRegisterEvent(bleDeviceContext.getBleServiceHandle(), CharacteristicValueChangedEvent, &registration, &NotificationCallback, pGattCharacteristic, &eventHandle, BLUETOOTH_GATT_FLAG_NONE);
+		if (callbackContext != nullptr)
+			delete callbackContext;
+
+		callbackContext = new CallbackContext(notificationHandler, pGattCharacteristic);
+
+		BluetoothGATTRegisterEvent(bleDeviceContext.getBleServiceHandle(), CharacteristicValueChangedEvent, 
+			&registration, &NotificationCallback, callbackContext, &eventHandle, BLUETOOTH_GATT_FLAG_NONE);
 	}
 	else
 	{

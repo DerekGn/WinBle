@@ -23,12 +23,27 @@ SOFTWARE.
 
 */
 
-#include "BleGattNotification.h"
+#ifndef BLEGATTNOTIFICATION_H
+#define BLEGATTNOTIFICATION_H
 
-BleGattNotification::BleGattNotification()
-{
-}
+#include <Windows.h>
 
-BleGattNotification::~BleGattNotification()
+/// <summary>
+/// 
+/// </summary>
+class BleGattNotificationData
 {
-}
+	private:
+		ULONG dataSize;
+
+		PBYTE bytes;
+	public:
+		BleGattNotificationData(ULONG dataSize, PBYTE bytes);
+		
+		~BleGattNotificationData();
+		
+		ULONG getDataSize();
+
+		const PBYTE getBytes();
+};
+#endif

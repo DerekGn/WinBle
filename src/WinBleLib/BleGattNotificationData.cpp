@@ -23,13 +23,26 @@ SOFTWARE.
 
 */
 
-#ifndef BLEGATTNOTIFICATION_H
-#define BLEGATTNOTIFICATION_H
+#include "BleGattNotificationData.h"
 
-class BleGattNotification
+BleGattNotificationData::BleGattNotificationData(ULONG _dataSize, PBYTE _bytes) :
+	dataSize(_dataSize),
+	bytes(_bytes)
 {
-	public:
-		BleGattNotification();
-		~BleGattNotification();
-};
-#endif
+}
+
+BleGattNotificationData::~BleGattNotificationData()
+{
+	if(bytes)
+		delete bytes;
+}
+
+ULONG BleGattNotificationData::getDataSize()
+{
+	return dataSize;
+}
+
+const PBYTE BleGattNotificationData::getBytes()
+{
+	return bytes;
+}
