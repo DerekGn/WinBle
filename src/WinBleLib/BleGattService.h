@@ -35,6 +35,9 @@ using namespace std;
 
 #include <list>
 
+/// <summary>
+/// Represents a service of a bluetooth low energy device
+/// </summary>
 class BleGattService
 {
 	private:
@@ -49,20 +52,41 @@ class BleGattService
 
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristics = nullptr;
 
+		/// <summary>
+		/// Get the list of characteristics for a service
+		/// </summary>
+		/// <param name="hBleDeviceHandle">The device handle</param>
+		/// <param name="pGattService">The service to retrive characteristics</param>
+		/// <param name="pGattCharcteristicsCount">The characteristic count</param>
+		/// <returns>A pointer to the first <see cref="PBTH_LE_GATT_CHARACTERISTIC"/> in the list</returns>
 		static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(HANDLE hBleDeviceHandle, 
 			PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount);
 
 	public:
+		/// <summary>
+		/// Create an instance of a <see cref="BleGattService"/>
+		/// </summary>
+		/// <param name="bleDeviceContext">The parent ble device context</param>
+		/// <param name="pGattService">The contained <see cref="PBTH_LE_GATT_SERVICE"/></param>
 		BleGattService(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService);
 
 		~BleGattService();
 
+		/// <summary>
+		/// Gets the services UUID
+		/// </summary>
 		BTH_LE_UUID getServiceUuid();
 
+		/// <summary>
+		/// Gets the services attribute handle
+		/// </summary>
 		USHORT getServiceAttributeHandle();
 
 		typedef list<BleGattCharacteristic*> BleGattCharacteristics;
 
+		/// <summary>
+		/// Gets the services list of characteristics
+		/// </summary>
 		const BleGattCharacteristics& getBleCharacteristics();
 };
 

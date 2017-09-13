@@ -56,19 +56,16 @@ class BleDeviceInfo
 		/// <summary>
 		/// Gets the devices name
 		/// </summary>
-		/// <returns>The device name</returns>
 		wstring getName();
 
 		/// <summary>
 		/// Gets the devices hardware Id
 		/// </summary>
-		/// <returns>The devices hardware Id</returns>
 		wstring getHardwareId();
 
 		/// <summary>
 		/// Gets the devices instance Id
 		/// </summary>
-		/// <returns>The devices instance Id</returns>
 		wstring getInstanceId();
 };
 

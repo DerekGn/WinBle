@@ -29,19 +29,33 @@ SOFTWARE.
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
+/// <summary>
+/// Represents a bluetooth low energy characteristic value read from a device
+/// </summary>
 class BleGattCharacteristicValue
 {
 	private:
 		PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue = nullptr;
 
 	public:
+		/// <summary>
+		/// Creates an instance of a bluetooth low energy characteristic value
+		/// </summary>
+		/// <param name="pGattCharacteristicValue">The underlying characteristc value</param>
 		BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
 		
 		~BleGattCharacteristicValue();
 
+		/// <summary>
+		/// The size of the underlying data
+		/// </summary>
 		unsigned long getDataSize();
 
-		unsigned char* getData();
+		/// <summary>
+		/// Gets the data for this characteristic value
+		/// </summary>
+		/// <returns>A const pointer to the data</returns>
+		const unsigned char* getData();
 };
 
 #endif

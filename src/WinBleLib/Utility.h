@@ -28,6 +28,9 @@ using namespace std;
 #include <Windows.h>
 #include <string>
 
+/// <summary>
+/// A utility class of healer methods
+/// </summary>
 class Utility
 {
 	public:
@@ -35,12 +38,27 @@ class Utility
 
 		~Utility();
 
+		/// <summary>
+		/// Gets the last win32 error as a string
+		/// </summary>
 		string getLastError();
 
+		/// <summary>
+		/// Converts a GUID to a string
+		/// </summary>
+		/// <param name="uuid">The guid to convert</param>
 		string guidToString(GUID uuid);
 
+		/// <summary>
+		/// Converts a wide string to a narrow string
+		/// </summary>
+		/// <param name="value">The string to convert</param>
 		string convertToString(wstring value);
 
+		/// <summary>
+		/// Handles memory allocation failure
+		/// </summary>
+		/// <param name="size">The size of bytes that failed to allocate</param>
 		void handleMallocFailure(unsigned long size);
 };
 

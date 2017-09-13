@@ -65,13 +65,11 @@ class BleDeviceContext
 		/// <summary>
 		/// Get the device handle
 		/// </summary>
-		/// <returns>The device handle</returns>
 		HANDLE getBleDeviceHandle();
 
 		/// <summary>
 		/// Gets the device instance Id
 		/// </summary>
-		/// <returns>The device instance Id</returns>
 		wstring getDeviceInstanceId();
 };
 

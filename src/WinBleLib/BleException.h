@@ -52,7 +52,6 @@ class BleException
 		/// <summary>
 		/// The exception message
 		/// </summary>
-		/// <returns>The exception message</returns>
 		const string & Message();
 };
 

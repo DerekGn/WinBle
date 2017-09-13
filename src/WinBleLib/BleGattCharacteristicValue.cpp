@@ -45,7 +45,7 @@ unsigned long BleGattCharacteristicValue::getDataSize()
 	return pGattCharacteristicValue ? pGattCharacteristicValue->DataSize : 0;
 }
 
-unsigned char* BleGattCharacteristicValue::getData()
+const unsigned char* BleGattCharacteristicValue::getData()
 {
 	return pGattCharacteristicValue ? pGattCharacteristicValue->Data : nullptr;
 }

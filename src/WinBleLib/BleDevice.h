@@ -37,7 +37,7 @@ using namespace std;
 #include "BleGattService.h"
 
 /// <summary>
-/// The ble device container
+/// Represents a paired connected bluetooth low energy device
 /// </summary>
 class BleDevice
 {
@@ -74,7 +74,6 @@ class BleDevice
 		/// <summary>
 		/// Gets the device instance name
 		/// </summary>
-		/// <returns>The device instance name</returns>
 		wstring getDeviceIntstanceId();
 
 		typedef list<BleGattService*> BleGattServices;
@@ -82,7 +81,6 @@ class BleDevice
 		/// <summary>
 		/// Get the list of <see cref="BleGattServices"/>
 		/// </summary>
-		/// <returns>The list of <see cref="BleGattServices"/> for this device</returns>
 		const BleGattServices& getBleGattServices();
 };
 #endif

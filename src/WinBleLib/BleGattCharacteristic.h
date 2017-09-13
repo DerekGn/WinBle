@@ -38,6 +38,9 @@ using namespace std;
 #include <list>
 #include <functional>
 
+/// <summary>
+/// Represents a characteristic of a bluetooth low energy device
+/// </summary>
 class BleGattCharacteristic
 {
 	private:
@@ -78,7 +81,7 @@ class BleGattCharacteristic
 		/// <summary>
 		/// Constructs an instance of a <see cref="BleGattCharacteristic"/>
 		/// </summary>
-		/// <param name="bleDeviceContext">The ble device context</param>
+		/// <param name="bleDeviceContext">The parent ble device context</param>
 		/// <param name="pGattCharacteristic">The contained <see cref="PBTH_LE_GATT_CHARACTERISTIC"/></param>
 		BleGattCharacteristic(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
@@ -94,8 +97,14 @@ class BleGattCharacteristic
 		/// </summary>
 		BTH_LE_UUID getCharacteristicUuid();
 
+		/// <summary>
+		/// Gets the characteristics attribute handle
+		/// </summary>
 		USHORT getAttributeHandle();
 		
+		/// <summary>
+		/// Gets the characteristics value handle
+		/// </summary>
 		USHORT getCharacteristicValueHandle();
 		
 		/// <summary>

@@ -31,42 +31,91 @@ SOFTWARE.
 
 using namespace std;
 
+/// <summary>
+/// Represents a descriptor value read from a characteristic of a bluetooth low energy device
+/// </summary>
 class BleGattDescriptorValue
 {
 	private:
 		PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue = nullptr;
 
 	public:
+		/// <summary>
+		/// Create an instance of a <see cref="BleGattDescriptor"/>
+		/// </summary>
+		/// <param name="pGattDescriptorValue">The contained <see cref="PBTH_LE_GATT_DESCRIPTOR_VALUE"/></param>
 		BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue);
 
 		~BleGattDescriptorValue();
 
+		/// <summary>
+		/// Get the descriptor type
+		/// </summary>
 		BTH_LE_GATT_DESCRIPTOR_TYPE GetDescriptorType();
 
+		/// <summary>
+		/// Get the descriptor UUID
+		/// </summary>
 		BTH_LE_UUID getDescriptorUuid();
 
+		/// <summary>
+		/// Indicates if a descriptor is reliable write enabled
+		/// </summary>
 		BOOLEAN getIsReliableWriteEnabled();
 
+		/// <summary>
+		/// Indicates if a descriptor is auxiliarie write enabled
+		/// </summary>
 		BOOLEAN getIsAuxiliariesWritable();
 
+		/// <summary>
+		/// Indicates if a descriptor can be subscribed too for notification
+		/// </summary>
 		BOOLEAN getIsSubscribeToNotification();
 
+		/// <summary>
+		/// Indicates if a descriptor can be subscribed too for indication
+		/// </summary>
 		BOOLEAN getIsSubscribeToIndication();
 
+		/// <summary>
+		/// Indicates if a descriptor is broadcast
+		/// </summary>
 		BOOLEAN getIsBroadcast();
 
+		/// <summary>
+		/// Gets the descriptor format
+		/// </summary>
 		unsigned char getFormat();
 
+		/// <summary>
+		/// Gets the descriptor exponent
+		/// </summary>
 		unsigned char getExponent();
 
+		/// <summary>
+		/// Gets the descriptor unit
+		/// </summary>
 		BTH_LE_UUID getUnit();
 
+		/// <summary>
+		/// Gets the descriptor namespace
+		/// </summary>
 		unsigned char getNameSpace();
 
+		/// <summary>
+		/// Gets the descriptor description
+		/// </summary>
 		BTH_LE_UUID getDescription();
 
+		/// <summary>
+		/// Gets the descriptor data size
+		/// </summary>
 		unsigned long getDataSize();
 
+		/// <summary>
+		/// Gets the descriptor data
+		/// </summary>
 		unsigned char* getData();
 };
 
