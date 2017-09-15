@@ -72,19 +72,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)WinBleLib\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)WinBle\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)WinBleLib;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)WinBle;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)WinBleLib\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)WinBle\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)WinBleLib;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)WinBle;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -156,7 +156,7 @@
     <ClCompile Include="WinBleTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WinBleLib\WinBleLib.vcxproj">
+    <ProjectReference Include="..\WinBle\WinBle.vcxproj">
       <Project>{f49592b2-0735-4961-b12c-8fe061c509a3}</Project>
     </ProjectReference>
   </ItemGroup>
