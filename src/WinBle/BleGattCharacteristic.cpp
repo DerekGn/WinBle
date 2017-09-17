@@ -200,7 +200,7 @@ BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
 	return pGattCharacteristic->HasExtendedProperties;
 }
 
-void BleGattCharacteristic::registerCallback(function<void(const BleGattNotificationData&)> notificationHandler)
+void BleGattCharacteristic::registerCallback(function<void(BleGattNotificationData&)> notificationHandler)
 {
 	if (pGattCharacteristic->IsNotifiable || pGattCharacteristic->IsIndicatable)
 	{

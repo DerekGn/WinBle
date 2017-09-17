@@ -19,6 +19,11 @@ static const GUID UUID_TX_CHARACTERISTIC = { 0x49535343, 0x8841, 0x43F4,{ 0xA8, 
 // {49535343-1E4D-4BD9-BA61-23C647249616}
 static const GUID UUID_RX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 0x61, 0x23, 0xC6, 0x47, 0x24, 0x96, 0x16 } };
 
+void HandleCallback(BleGattNotificationData& data)
+{
+	cout << "Recieved callback data: " << data.getDataSize() << endl;
+}
+
 int main()
 {
 	try
@@ -30,7 +35,7 @@ int main()
 			<< " HardwareId: " << i->getHardwareId()
 			<< " InstanceId: " << i->getInstanceId() << endl;
 		
-		if (BleEnumerator.getBleDevices().size() > 1)
+		if (BleEnumerator.getBleDevices().size() >= 1)
 		{
 			cout << "Opening device" << endl;
 
@@ -110,6 +115,22 @@ int main()
 					cout << "Found Serial Rx characteristic: " << setbase(16) << service->getServiceUuid().Value.ShortUuid << endl;
 
 					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*cit);
+
+					std::function<void(BleGattNotificationData&)> callback = HandleCallback;
+
+					characteristic->registerCallback(callback);
+				}
+
+				cit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
+				{
+					return c->getCharacteristicUuid().Value.LongUuid == UUID_TX_CHARACTERISTIC;
+				});
+
+				if (cit != characteristics.end())
+				{
+					cout << "Found Serial Tx characteristic: " << setbase(16) << service->getServiceUuid().Value.ShortUuid << endl;
+
+					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*cit);
 				}
 			}
 		}
@@ -125,4 +146,6 @@ int main()
 		delete e;
 	}
 }
+
+
 

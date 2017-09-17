@@ -39,14 +39,14 @@ class CallbackContext
 	private:
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 
-		function<void(const BleGattNotificationData&)> notificationHandler;
+		function<void(BleGattNotificationData&)> notificationHandler;
 
 	public:
-		CallbackContext(function<void(const BleGattNotificationData&)> notificationHandler, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		CallbackContext(function<void(BleGattNotificationData&)> notificationHandler, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 
 		~CallbackContext();
 
-		function<void(const BleGattNotificationData&)> getNotificationHandler();
+		function<void(BleGattNotificationData&)> getNotificationHandler();
 
 		PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristic();
 };
