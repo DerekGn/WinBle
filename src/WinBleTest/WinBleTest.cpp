@@ -105,32 +105,35 @@ int main()
 
 				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
 
-				auto cit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
+				auto rxit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
 				{
 					return c->getCharacteristicUuid().Value.LongUuid == UUID_RX_CHARACTERISTIC;
 				});
 
-				if (cit != characteristics.end())
+				if (rxit != characteristics.end())
 				{
-					cout << "Found Serial Rx characteristic: " << setbase(16) << service->getServiceUuid().Value.ShortUuid << endl;
+					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*rxit);
 
-					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*cit);
+					cout << "Found Serial Rx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
 
 					std::function<void(BleGattNotificationData&)> callback = HandleCallback;
 
 					characteristic->registerCallback(callback);
 				}
 
-				cit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
+				auto txit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
 				{
 					return c->getCharacteristicUuid().Value.LongUuid == UUID_TX_CHARACTERISTIC;
 				});
 
-				if (cit != characteristics.end())
+				if (txit != characteristics.end())
 				{
-					cout << "Found Serial Tx characteristic: " << setbase(16) << service->getServiceUuid().Value.ShortUuid << endl;
+					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*txit);
 
-					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*cit);
+					cout << "Found Serial Tx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
+
+					UCHAR data = 'V';
+					characteristic->setValue(&data, 1);
 				}
 			}
 		}

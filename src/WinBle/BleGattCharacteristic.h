@@ -163,6 +163,12 @@ class BleGattCharacteristic
 		/// <remarks>Throws a BleException if the characteristic is not readable</remarks>
 		BleGattCharacteristicValue getValue();
 
+		/// <summary>
+		/// Writes a characteristics value
+		/// </summary>
+		/// <remarks>Throws a BleException if the characteristic is not writable</remarks>
+		void setValue(UCHAR* data, ULONG size);
+
 		typedef list<BleGattDescriptor*> BleGattDescriptors;
 
 		/// <summary>

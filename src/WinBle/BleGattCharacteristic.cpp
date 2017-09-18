@@ -282,6 +282,34 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 	return BleGattCharacteristicValue(pCharValueBuffer);
 }
 
+void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
+{
+	if (pGattCharacteristic->IsSignedWritable || pGattCharacteristic->IsWritable || pGattCharacteristic->IsWritableWithoutResponse)
+	{
+		size_t required_length = size + offsetof(BTH_LE_GATT_CHARACTERISTIC_VALUE, Data);
+
+		BTH_LE_GATT_CHARACTERISTIC_VALUE* gatt_value = reinterpret_cast<BTH_LE_GATT_CHARACTERISTIC_VALUE*>(new UINT8[required_length]);
+
+		gatt_value->DataSize = size;
+		memcpy(gatt_value->Data, data, size);
+
+		HRESULT hr = BluetoothGATTSetCharacteristicValue(bleDeviceContext.getBleServiceHandle(), pGattCharacteristic, &gatt_value, NULL, BLUETOOTH_GATT_FLAG_CONNECTION_ENCRYPTED);
+
+		if (HRESULT_FROM_WIN32(S_OK) != hr)
+		{
+			stringstream msg;
+			msg << "Unable to write the characeristic value. Reason: ["
+				<< Util.getLastError() << "]";
+
+			throw new BleException(msg.str());
+		}
+	}
+	else
+	{
+		throw new BleException("characteristic is not writable");
+	}
+}
+
 const BleGattCharacteristic::BleGattDescriptors& BleGattCharacteristic::getBleDescriptors()
 {
 	return bleGattDescriptors;
