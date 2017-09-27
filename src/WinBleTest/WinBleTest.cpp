@@ -132,8 +132,7 @@ int main()
 
 					cout << "Found Serial Tx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
 
-					UCHAR data = 'V';
-					characteristic->setValue(&data, 1);
+					characteristic->setValue('V');
 				}
 			}
 		}

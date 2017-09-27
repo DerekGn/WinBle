@@ -93,7 +93,7 @@ void BleDeviceEnumerator::enumerate()
 		msg << "Unable to get handle to device information elements. Reason: ["
 			<< Util.getLastError() << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVINFO_DATA);

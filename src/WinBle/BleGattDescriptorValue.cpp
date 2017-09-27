@@ -30,7 +30,7 @@ SOFTWARE.
 BleGattDescriptorValue::BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE _pGattDescriptorValue)
 {
 	if (!_pGattDescriptorValue)
-		throw new BleException("pGattDescriptorValue is nullptr");
+		throw BleException("pGattDescriptorValue is nullptr");
 
 	pGattDescriptorValue = _pGattDescriptorValue;
 }
