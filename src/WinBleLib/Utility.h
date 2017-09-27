@@ -41,7 +41,7 @@ class Utility
 		/// <summary>
 		/// Gets the last win32 error as a string
 		/// </summary>
-		string getLastError();
+		string getLastErrorMessage(DWORD errorMessageId);
 
 		/// <summary>
 		/// Converts a GUID to a string

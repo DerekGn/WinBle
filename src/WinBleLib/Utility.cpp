@@ -40,16 +40,14 @@ Utility::~Utility()
 {
 }
 
-string Utility::getLastError()
+string Utility::getLastErrorMessage(DWORD errorMessageId)
 {
-	DWORD errorMessageID = ::GetLastError();
-
-	if (errorMessageID == 0)
+	if (errorMessageId == 0)
 		return string();
 
 	LPSTR messageBuffer = nullptr;
 	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+		NULL, errorMessageId, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
 	string message(messageBuffer, size);
 

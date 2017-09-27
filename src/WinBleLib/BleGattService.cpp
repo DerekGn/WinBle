@@ -53,7 +53,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 		{
 			stringstream msg;
 			msg << "Unable to determine the number of gatt characteristics. Reason: ["
-				<< Util.getLastError() << "]";
+				<< Util.getLastErrorMessage(hr) << "]";
 
 			throw new BleException(msg.str());
 		}
@@ -85,7 +85,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 			{
 				stringstream msg;
 				msg << "Unable to determine the number of gatt characteristics. Reason: ["
-					<< Util.getLastError() << "]";
+					<< Util.getLastErrorMessage(hr) << "]";
 
 				throw new BleException(msg.str());
 			}

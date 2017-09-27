@@ -50,7 +50,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 		{
 			stringstream msg;
 			msg << "Unable to determine the number of gatt descriptors. Reason: ["
-				<< Util.getLastError() << "]";
+				<< Util.getLastErrorMessage(hr) << "]";
 
 			throw new BleException(msg.str());
 		}
@@ -82,7 +82,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 			{
 				stringstream msg;
 				msg << "Unable to determine the number of gatt services. Reason: ["
-					<< Util.getLastError() << "]";
+					<< Util.getLastErrorMessage(hr) << "]";
 
 				throw new BleException(msg.str());
 			}
@@ -241,7 +241,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		{
 			stringstream msg;
 			msg << "Unable to determine the characeristic value size. Reason: ["
-				<< Util.getLastError() << "]";
+				<< Util.getLastErrorMessage(hr) << "]";
 
 			throw new BleException(msg.str());
 		}
@@ -269,7 +269,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		{
 			stringstream msg;
 			msg << "Unable to read the characeristic value. Reason: ["
-				<< Util.getLastError() << "]";
+				<< Util.getLastErrorMessage(hr) << "]";
 
 			throw new BleException(msg.str());
 		}
