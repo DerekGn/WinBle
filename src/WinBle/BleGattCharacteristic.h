@@ -167,7 +167,7 @@ class BleGattCharacteristic
 		/// Writes a characteristics value
 		/// </summary>
 		/// <remarks>Throws a BleException if the characteristic is not writable</remarks>
-		void setValue(UCHAR data);
+		void setValue(UCHAR * data, ULONG size);
 
 		typedef list<BleGattDescriptor*> BleGattDescriptors;
 

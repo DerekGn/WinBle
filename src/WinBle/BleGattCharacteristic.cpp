@@ -282,16 +282,22 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 	return BleGattCharacteristicValue(pCharValueBuffer);
 }
 
-void BleGattCharacteristic::setValue(UCHAR data)
+void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 {
 	if (pGattCharacteristic->IsSignedWritable || pGattCharacteristic->IsWritable || pGattCharacteristic->IsWritableWithoutResponse)
 	{
-		BTH_LE_GATT_CHARACTERISTIC_VALUE gatt_value;
+		size_t required_size = sizeof(BTH_LE_GATT_CHARACTERISTIC_VALUE) + size;
 
-		gatt_value.DataSize = 1;
-		gatt_value.Data[0] = data;
+		PBTH_LE_GATT_CHARACTERISTIC_VALUE gatt_value = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(required_size);
 
-		HRESULT hr = BluetoothGATTSetCharacteristicValue(bleDeviceContext.getBleServiceHandle(), pGattCharacteristic, &gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
+		ZeroMemory(gatt_value, required_size);
+
+		gatt_value->DataSize = (ULONG)size;
+		memcpy(gatt_value->Data, data, size);
+
+		HRESULT hr = BluetoothGATTSetCharacteristicValue(bleDeviceContext.getBleServiceHandle(), pGattCharacteristic, gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
+
+		delete(gatt_value);
 
 		if (HRESULT_FROM_WIN32(S_OK) != hr)
 		{

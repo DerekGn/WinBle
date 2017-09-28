@@ -42,7 +42,6 @@ Utility::~Utility()
 
 string Utility::getLastError(DWORD errorMessageID)
 {
-	//DWORD errorMessageID = ::GetLastError();
 
 	if (errorMessageID == 0)
 		return string();
