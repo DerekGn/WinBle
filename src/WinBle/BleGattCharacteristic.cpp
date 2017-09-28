@@ -52,7 +52,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 			msg << "Unable to determine the number of gatt descriptors. Reason: ["
 				<< Util.getLastError(hr) << "]";
 
-			throw new BleException(msg.str());
+			throw BleException(msg.str());
 		}
 		
 		if (expectedDescriptorBufferCount > 0)
@@ -84,11 +84,11 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 				msg << "Unable to determine the number of gatt services. Reason: ["
 					<< Util.getLastError(hr) << "]";
 
-				throw new BleException(msg.str());
+				throw BleException(msg.str());
 			}
 
 			if (*pGattDescriptorsCount != expectedDescriptorBufferCount) {
-				throw new BleException("descriptor count expected and descriptor count actual mismatch");
+				throw BleException("descriptor count expected and descriptor count actual mismatch");
 			}
 		}
 	}
@@ -115,7 +115,7 @@ BleGattCharacteristic::BleGattCharacteristic(BleDeviceContext & _bleDeviceContex
 	eventHandle(INVALID_HANDLE_VALUE)
 {
 	if (!_pGattCharacteristic)
-		throw new BleException("pGattCharacteristic is nullptr");
+		throw BleException("pGattCharacteristic is nullptr");
 
 	pGattCharacteristic = _pGattCharacteristic;
 
@@ -218,7 +218,7 @@ void BleGattCharacteristic::registerCallback(function<void(BleGattNotificationDa
 	}
 	else
 	{
-		throw new BleException("characteristic is not notifiable or indicatable");
+		throw BleException("characteristic is not notifiable or indicatable");
 	}
 }
 
@@ -243,7 +243,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 			msg << "Unable to determine the characeristic value size. Reason: ["
 				<< Util.getLastError(hr) << "]";
 
-			throw new BleException(msg.str());
+			throw BleException(msg.str());
 		}
 
 		pCharValueBuffer = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(charValueDataSize);
@@ -271,12 +271,12 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 			msg << "Unable to read the characeristic value. Reason: ["
 				<< Util.getLastError(hr) << "]";
 
-			throw new BleException(msg.str());
+			throw BleException(msg.str());
 		}
 	}
 	else
 	{
-		throw new BleException("characteristic is not readable");
+		throw BleException("characteristic is not readable");
 	}
 
 	return BleGattCharacteristicValue(pCharValueBuffer);
@@ -299,12 +299,12 @@ void BleGattCharacteristic::setValue(UCHAR data)
 			msg << "Unable to write the characeristic value. Reason: ["
 				<< Util.getLastError(hr) << "]";
 
-			throw new BleException(msg.str());
+			throw BleException(msg.str());
 		}
 	}
 	else
 	{
-		throw new BleException("characteristic is not writable");
+		throw BleException("characteristic is not writable");
 	}
 }
 

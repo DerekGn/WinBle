@@ -55,7 +55,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 			msg << "Unable to determine the number of gatt characteristics. Reason: ["
 				<< Util.getLastError(hr) << "]";
 
-			throw new BleException(msg.str());
+			throw BleException(msg.str());
 		}
 
 		if (expectedCharBufferCount > 0)
@@ -87,12 +87,12 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 				msg << "Unable to determine the number of gatt characteristics. Reason: ["
 					<< Util.getLastError(hr) << "]";
 
-				throw new BleException(msg.str());
+				throw BleException(msg.str());
 			}
 
 			if (*pGattCharcteristicsCount != expectedCharBufferCount)
 			{
-				throw new BleException("characteristic count expected and characteristic count actual mismatch");
+				throw BleException("characteristic count expected and characteristic count actual mismatch");
 			}
 		}
 	}
@@ -103,7 +103,7 @@ BleGattService::BleGattService(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT
 	:bleDeviceContext(_bleDeviceContext)
 {
 	if (!_pGattService)
-		throw new BleException("pGattService is nullptr");
+		throw BleException("pGattService is nullptr");
 
 	pGattService = _pGattService;
 	

@@ -55,7 +55,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 			<< Util.convertToString(deviceInstanceId) << "] Reason: ["
 			<< Util.getLastError(0) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -105,7 +105,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 		msg << "Device interface UUID: ["
 			<< Util.convertToString(deviceInstanceId) << "] not found";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	return hComm;
@@ -126,7 +126,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 		msg << "Unable to determine the number of gatt services. Reason: ["
 			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	hr = BluetoothGATTGetServices(
@@ -158,7 +158,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 		msg << "Unable to determine the number of gatt services. Reason: ["
 			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	return pServiceBuffer;

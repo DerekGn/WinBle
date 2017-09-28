@@ -35,7 +35,7 @@ BleGattDescriptor::BleGattDescriptor(BleDeviceContext& _bleDeviceContext, PBTH_L
 	bleDeviceContext(_bleDeviceContext)
 {
 	if (!_pGattDescriptor)
-		throw new BleException("pGattDescriptor is nullptr");
+		throw BleException("pGattDescriptor is nullptr");
 	
 	pGattDescriptor = _pGattDescriptor;
 }
@@ -88,7 +88,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 		msg << "Unable to determine the descriptor value size. Reason: ["
 			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	PBTH_LE_GATT_DESCRIPTOR_VALUE pDescValueBuffer = (PBTH_LE_GATT_DESCRIPTOR_VALUE)malloc(descValueDataSize);
@@ -116,7 +116,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 		msg << "Unable to read the descriptor value size. Reason: ["
 			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 	
 	return new BleGattDescriptorValue(pDescValueBuffer);

@@ -83,5 +83,5 @@ void Utility::handleMallocFailure(unsigned long size)
 	stringstream msg;
 	msg << "Unable to allocate [" << size << "] bytes";
 
-	throw new BleException(msg.str());
+	throw BleException(msg.str());
 }

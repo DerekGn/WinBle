@@ -51,7 +51,7 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 			<< Util.guidToString(interfaceUUID) << "] Reason: ["
 			<< Util.getLastError(0) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -101,7 +101,7 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 					<< Util.guidToString(interfaceUUID) << "] Reason: ["
 					<< Util.getLastError(0) << "]";
 
-				throw new BleException(msg.str());
+				throw BleException(msg.str());
 			}
 		}
 	}
@@ -114,7 +114,7 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 		msg << "Device interface UUID: ["
 			<< Util.guidToString(interfaceUUID) << "] not found";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	return hComm;
@@ -139,7 +139,7 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 			<< Util.guidToString(interfaceUUID) << "] Reason: ["
 			<< Util.getLastError(0) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -187,7 +187,7 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 						<< Util.guidToString(interfaceUUID) << "] Reason: ["
 						<< Util.getLastError(0) << "]";
 
-					throw new BleException(msg.str());
+					throw BleException(msg.str());
 				}
 
 				break;
