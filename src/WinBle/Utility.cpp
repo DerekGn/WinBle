@@ -40,9 +40,9 @@ Utility::~Utility()
 {
 }
 
-string Utility::getLastError()
+string Utility::getLastError(DWORD errorMessageID)
 {
-	DWORD errorMessageID = ::GetLastError();
+	//DWORD errorMessageID = ::GetLastError();
 
 	if (errorMessageID == 0)
 		return string();

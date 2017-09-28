@@ -9,6 +9,7 @@ using namespace std;
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include "WinBleTest.h"
 
 //{49535343-FE7D-4AE5-8FA9-9FAFD205E455}
 static const GUID UUID_SERIAL_SERVICE = { 0x49535343, 0xFE7D, 0x4AE5,{ 0x8F, 0xA9, 0x9F, 0xAF, 0xD2, 0x05, 0xE4, 0x55 } };
@@ -22,6 +23,23 @@ static const GUID UUID_RX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 
 void HandleCallback(BleGattNotificationData& data)
 {
 	cout << "Recieved callback data: " << data.getDataSize() << endl;
+}
+
+void readCharacteristicValueAndDisplay(list<BleGattCharacteristic *> &characteristics, USHORT uuid)
+{
+	auto cit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
+	{
+		return c->getCharacteristicUuid().Value.ShortUuid == uuid;
+	});
+
+	if (cit != characteristics.end())
+	{
+		BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*cit);
+
+		BleGattCharacteristicValue value = characteristic->getValue();
+
+		cout << "Value :" << value.getData() << endl;
+	}
 }
 
 int main()
@@ -77,19 +95,9 @@ int main()
 				cout << "Found Device Information Service: " << service->getServiceUuid().Value.ShortUuid << endl;
 				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
 
-				auto cit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c) 
-				{
-					return c->getCharacteristicUuid().Value.ShortUuid == GATT_UUID_MANU_NAME;
-				});
+				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_MANU_NAME);
 
-				if (cit != characteristics.end())
-				{
-					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*cit);
-
-					BleGattCharacteristicValue value = characteristic->getValue();
-
-					cout << "Manuf :" << value.getData() << endl;
-				}
+				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_SW_VERSION_STR);
 			}
 
 			it = find_if(begin(services), end(services), [&](BleGattService *s)
@@ -132,8 +140,7 @@ int main()
 
 					cout << "Found Serial Tx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
 
-					UCHAR data = 'V';
-					characteristic->setValue(&data, 1);
+					characteristic->setValue('V');
 				}
 			}
 		}

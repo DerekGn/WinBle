@@ -86,7 +86,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	{
 		stringstream msg;
 		msg << "Unable to determine the descriptor value size. Reason: ["
-			<< Util.getLastError() << "]";
+			<< Util.getLastError(hr) << "]";
 
 		throw new BleException(msg.str());
 	}
@@ -114,7 +114,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	{
 		stringstream msg;
 		msg << "Unable to read the descriptor value size. Reason: ["
-			<< Util.getLastError() << "]";
+			<< Util.getLastError(hr) << "]";
 
 		throw new BleException(msg.str());
 	}
