@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -151,11 +151,17 @@ class BleGattCharacteristic
 		BOOLEAN getHasExtendedProperties();
 
 		/// <summary>
-		/// Register the notification callback for this <see cref="BleGattCharacteristic"/>
+		/// Register the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
 		/// </summary>
 		/// <param name="notificationHandler">The notification function that will be invoked on callback</param>
 		/// <remarks>Throws a <see cref="BleGattException"/> if the chararacteritic is not indicatable or notifiable</remarks>
-		void registerCallback(function<void(BleGattNotificationData&)> notificationHandler);
+		void enableNotifications(function<void(BleGattNotificationData&)> notificationHandler);
+
+		/// <summary>
+		/// Register the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
+		/// </summary>
+		/// <remarks></remarks>
+		void disableNotifications();
 
 		/// <summary>
 		/// Reads a characteristics value

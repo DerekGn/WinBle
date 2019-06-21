@@ -15,10 +15,10 @@ using namespace std;
 static const GUID UUID_SERIAL_SERVICE = { 0x49535343, 0xFE7D, 0x4AE5,{ 0x8F, 0xA9, 0x9F, 0xAF, 0xD2, 0x05, 0xE4, 0x55 } };
 
 // {49535343-8841-43F4-A8D4-ECBE34729BB3}
-static const GUID UUID_TX_CHARACTERISTIC = { 0x49535343, 0x8841, 0x43F4,{ 0xA8, 0xD4, 0xEC, 0xBE, 0x34, 0x72, 0x9B, 0xB3 } };
+static const GUID UUID_RX_CHARACTERISTIC = { 0x49535343, 0x8841, 0x43F4,{ 0xA8, 0xD4, 0xEC, 0xBE, 0x34, 0x72, 0x9B, 0xB3 } };
 
 // {49535343-1E4D-4BD9-BA61-23C647249616}
-static const GUID UUID_RX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 0x61, 0x23, 0xC6, 0x47, 0x24, 0x96, 0x16 } };
+static const GUID UUID_TX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 0x61, 0x23, 0xC6, 0x47, 0x24, 0x96, 0x16 } };
 
 void HandleCallback(BleGattNotificationData& data)
 {
@@ -113,23 +113,32 @@ int main()
 
 				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
 
-				auto rxit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
+				auto txit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
 				{
-					return c->getCharacteristicUuid().Value.LongUuid == UUID_RX_CHARACTERISTIC;
+					return c->getCharacteristicUuid().Value.LongUuid == UUID_TX_CHARACTERISTIC;
 				});
 
-				if (rxit != characteristics.end())
+				if (txit != characteristics.end())
 				{
-					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*rxit);
+					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*txit);
 
 					cout << "Found Serial Rx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
 
-					std::function<void(BleGattNotificationData&)> callback = HandleCallback;
+					/*UCHAR values[] = { 'H', 'I' };
+					characteristic->setValue(values, 2);*/
 
-					characteristic->registerCallback(callback);
+					const std::function<void(BleGattNotificationData&)> callback = HandleCallback;
+
+					characteristic->enableNotifications(callback);
+
+					cout << "Press any key to continue" << endl;
+
+					std::cin.get();
+
+					characteristic->disableNotifications();
 				}
 
-				auto txit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
+				/*auto txit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
 				{
 					return c->getCharacteristicUuid().Value.LongUuid == UUID_TX_CHARACTERISTIC;
 				});
@@ -142,7 +151,7 @@ int main()
 
 					UCHAR values[] = {'V'};
 					characteristic->setValue(values, 1);
-				}
+				}*/
 			}
 		}
 		else

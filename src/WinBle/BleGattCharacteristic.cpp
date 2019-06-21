@@ -200,25 +200,53 @@ BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
 	return pGattCharacteristic->HasExtendedProperties;
 }
 
-void BleGattCharacteristic::registerCallback(function<void(BleGattNotificationData&)> notificationHandler)
+void BleGattCharacteristic::enableNotifications(function<void(BleGattNotificationData&)> notificationHandler)
 {
+	if (callbackContext == nullptr)
+		return;
+
 	if (pGattCharacteristic->IsNotifiable || pGattCharacteristic->IsIndicatable)
 	{
 		BLUETOOTH_GATT_VALUE_CHANGED_EVENT_REGISTRATION registration;
 		registration.NumCharacteristics = 1;
 		registration.Characteristics[0] = *pGattCharacteristic;
-		
-		if (callbackContext != nullptr)
-			delete callbackContext;
 
 		callbackContext = new CallbackContext(notificationHandler, pGattCharacteristic);
 
-		BluetoothGATTRegisterEvent(bleDeviceContext.getBleServiceHandle(), CharacteristicValueChangedEvent, 
+		HRESULT hr = BluetoothGATTRegisterEvent(bleDeviceContext.getBleServiceHandle(), CharacteristicValueChangedEvent,
 			&registration, &NotificationCallback, callbackContext, &eventHandle, BLUETOOTH_GATT_FLAG_NONE);
+
+		if (S_OK != hr)
+		{
+			stringstream msg;
+			msg << "Unable to subscribe to the characteristic. Reason: ["
+				<< Util.getLastError(hr) << "]";
+
+			throw BleException(msg.str());
+		}
 	}
 	else
 	{
 		throw BleException("characteristic is not notifiable or indicatable");
+	}
+}
+
+void BleGattCharacteristic::disableNotifications()
+{
+	if (callbackContext != nullptr)
+	{
+		HRESULT hr = BluetoothGATTUnregisterEvent(eventHandle, BLUETOOTH_GATT_FLAG_NONE);
+
+		delete callbackContext;
+
+		if (S_OK != hr)
+		{
+			stringstream msg;
+			msg << "Unable to unsubscribe from the characteristic. Reason: ["
+				<< Util.getLastError(hr) << "]";
+
+			throw BleException(msg.str());
+		}
 	}
 }
 
