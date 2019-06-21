@@ -164,36 +164,36 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	return pServiceBuffer;
 }
 
-BleDevice::BleDevice(wstring _deviceInstanceId) : hBleDevice(getBleDeviceHandle(_deviceInstanceId)), deviceContext(hBleDevice, _deviceInstanceId)
+BleDevice::BleDevice(wstring deviceInstanceId) : _hBleDevice(getBleDeviceHandle(deviceInstanceId)), _deviceContext(_hBleDevice, deviceInstanceId)
 {
-	deviceInstanceId = _deviceInstanceId;
+	_deviceInstanceId = deviceInstanceId;
 	
-	pGattServiceBuffer = getGattServices(hBleDevice, &gattServiceCount);
+	_pGattServiceBuffer = getGattServices(_hBleDevice, &_gattServiceCount);
 
-	for (size_t i = 0; i < gattServiceCount; i++)
+	for (size_t i = 0; i < _gattServiceCount; i++)
 	{
-		bleGattServices.push_back(new BleGattService(deviceContext, &pGattServiceBuffer[i]));
+		_bleGattServices.push_back(new BleGattService(_deviceContext, &_pGattServiceBuffer[i]));
 	}
 }
 
 BleDevice::~BleDevice()
 {
-	for (BleGattService *s : bleGattServices)
+	for (BleGattService *s : _bleGattServices)
 		delete(s);
 
-	if (pGattServiceBuffer)
-		free(pGattServiceBuffer);
+	if (_pGattServiceBuffer)
+		free(_pGattServiceBuffer);
 
-	if (hBleDevice)
-		CloseHandle(hBleDevice);
+	if (_hBleDevice)
+		CloseHandle(_hBleDevice);
 }
 
 wstring BleDevice::getDeviceIntstanceId()
 {
-	return deviceInstanceId;
+	return _deviceInstanceId;
 }
 
 const BleDevice::BleGattServices & BleDevice::getBleGattServices()
 {
-	return bleGattServices;
+	return _bleGattServices;
 }

@@ -42,17 +42,17 @@ using namespace std;
 class BleDevice
 {
 	private:
-		HANDLE hBleDevice = nullptr;
+		HANDLE _hBleDevice = nullptr;
 
-		wstring deviceInstanceId;
+		wstring _deviceInstanceId;
 
-		BleDeviceContext deviceContext;
+		BleDeviceContext _deviceContext;
 
-		list<BleGattService*> bleGattServices;
+		list<BleGattService*> _bleGattServices;
 
-		USHORT gattServiceCount = 0;
+		USHORT _gattServiceCount = 0;
 
-		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
+		PBTH_LE_GATT_SERVICE _pGattServiceBuffer = nullptr;
 	
 		static HANDLE getBleDeviceHandle(wstring deviceInstanceId);
 
