@@ -45,21 +45,20 @@ using namespace std;
 class BleGattCharacteristic
 {
 	private:
-		GUID serviceUUID;
+
+		USHORT _gattDescriptorsCount = 0;
+
+		CallbackContext* _callbackContext;
+
+		BleDeviceContext& _bleDeviceContext;
+
+		BLUETOOTH_GATT_EVENT_HANDLE _eventHandle;
 		
-		USHORT gattDescriptorsCount = 0;
+		list<BleGattDescriptor*> _bleGattDescriptors;
 
-		CallbackContext* callbackContext;
+		PBTH_LE_GATT_DESCRIPTOR _pGattDescriptors = nullptr;
 
-		BleDeviceContext& bleDeviceContext;
-
-		BLUETOOTH_GATT_EVENT_HANDLE eventHandle;
-		
-		list<BleGattDescriptor*> bleGattDescriptors;
-
-		PBTH_LE_GATT_DESCRIPTOR pGattDescriptors = nullptr;
-
-		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
+		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic;
 		
 		/// <summary>
 		/// Get the list of gatt desriptors <see cref="PBTH_LE_GATT_DESCRIPTOR"/>
