@@ -25,11 +25,11 @@ SOFTWARE.
 
 #include "BleDeviceInfo.h"
 
-BleDeviceInfo::BleDeviceInfo(wstring _name, wstring _hardwareId, wstring _instanceId)
+BleDeviceInfo::BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId)
 {
-	name = _name;
-	hardwareId = _hardwareId;
-	instanceId = _instanceId;
+	_name = _name;
+	_hardwareId = hardwareId;
+	_instanceId = instanceId;
 }
 
 BleDeviceInfo::~BleDeviceInfo()
@@ -38,15 +38,15 @@ BleDeviceInfo::~BleDeviceInfo()
 
 wstring BleDeviceInfo::getName()
 {
-	return name;
+	return _name;
 }
 
 wstring BleDeviceInfo::getHardwareId()
 {
-	return hardwareId;
+	return _hardwareId;
 }
 
 wstring BleDeviceInfo::getInstanceId()
 {
-	return instanceId;
+	return _instanceId;
 }

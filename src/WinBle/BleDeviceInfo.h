@@ -36,11 +36,11 @@ using namespace std;
 class BleDeviceInfo
 {
 	private:
-		wstring name;
+		wstring _name;
 
-		wstring hardwareId;
+		wstring _hardwareId;
 
-		wstring instanceId;
+		wstring _instanceId;
 
 	public:
 		/// <summary>
