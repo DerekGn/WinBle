@@ -28,7 +28,7 @@ SOFTWARE.
 
 BleDeviceContext::BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId)
 {
-	_hBleDevice = _hBleDevice;
+	_hBleDevice = hBleDevice;
 	_deviceInstanceId = deviceInstanceId;
 	_hBleService = getBleServiceInterfaceHandle(UUID_DEVICE_INFO, deviceInstanceId);
 }
