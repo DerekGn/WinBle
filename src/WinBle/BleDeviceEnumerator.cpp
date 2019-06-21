@@ -75,12 +75,12 @@ BleDeviceEnumerator::BleDeviceEnumerator()
 
 BleDeviceEnumerator::~BleDeviceEnumerator()
 {
-	bleEnumeratedDevices.clear();
+	_bleEnumeratedDevices.clear();
 }
 
 void BleDeviceEnumerator::enumerate()
 {
-	bleEnumeratedDevices.clear();
+	_bleEnumeratedDevices.clear();
 
 	SP_DEVINFO_DATA did;
 	DWORD i;
@@ -124,7 +124,7 @@ void BleDeviceEnumerator::enumerate()
 
 			if (name.size() > 0)
 			{
-				bleEnumeratedDevices.push_back(new BleDeviceInfo(rtrim_null(name), rtrim_null(hwId), rtrim_null(deviceInstanceId)));
+				_bleEnumeratedDevices.push_back(new BleDeviceInfo(rtrim_null(name), rtrim_null(hwId), rtrim_null(deviceInstanceId)));
 			}
 		}
 	}
@@ -137,5 +137,5 @@ void BleDeviceEnumerator::enumerate()
 
 const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
 {
-	return bleEnumeratedDevices;
+	return _bleEnumeratedDevices;
 }

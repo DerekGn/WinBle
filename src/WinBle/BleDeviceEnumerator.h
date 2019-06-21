@@ -40,7 +40,7 @@ using namespace std;
 class BleDeviceEnumerator
 {
 	private:
-		list<BleDeviceInfo*> bleEnumeratedDevices;
+		list<BleDeviceInfo*> _bleEnumeratedDevices;
 	
 		/// <summary>
 		/// Reads a string from the device registry
