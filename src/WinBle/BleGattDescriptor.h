@@ -43,9 +43,9 @@ class BleGattDescriptor
 {
 	private:
 		
-		BleDeviceContext& bleDeviceContext;
+		BleDeviceContext& _bleDeviceContext;
 
-		PBTH_LE_GATT_DESCRIPTOR pGattDescriptor = nullptr;
+		PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor = nullptr;
 
 	public:
 		/// <summary>

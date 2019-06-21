@@ -31,13 +31,13 @@ SOFTWARE.
 
 using namespace std;
 
-BleGattDescriptor::BleGattDescriptor(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor) :
-	bleDeviceContext(_bleDeviceContext)
+BleGattDescriptor::BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor) :
+	_bleDeviceContext(bleDeviceContext)
 {
 	if (!_pGattDescriptor)
 		throw BleException("pGattDescriptor is nullptr");
 	
-	pGattDescriptor = _pGattDescriptor;
+	_pGattDescriptor = pGattDescriptor;
 }
 
 BleGattDescriptor::~BleGattDescriptor()
@@ -47,27 +47,27 @@ BleGattDescriptor::~BleGattDescriptor()
 
 USHORT BleGattDescriptor::getServiceHandle()
 {
-	return pGattDescriptor->ServiceHandle;
+	return _pGattDescriptor->ServiceHandle;
 }
 
 USHORT BleGattDescriptor::getCharacteristicHandle()
 {
-	return pGattDescriptor->CharacteristicHandle;
+	return _pGattDescriptor->CharacteristicHandle;
 }
 
 BTH_LE_GATT_DESCRIPTOR_TYPE BleGattDescriptor::getDescriptorType()
 {
-	return pGattDescriptor->DescriptorType;
+	return _pGattDescriptor->DescriptorType;
 }
 
 BTH_LE_UUID BleGattDescriptor::getDescriptorUuid()
 {
-	return pGattDescriptor->DescriptorUuid;
+	return _pGattDescriptor->DescriptorUuid;
 }
 
 USHORT BleGattDescriptor::getAttributeHandle()
 {
-	return pGattDescriptor->AttributeHandle;
+	return _pGattDescriptor->AttributeHandle;
 }
 
 BleGattDescriptorValue* BleGattDescriptor::getValue()
@@ -75,8 +75,8 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	USHORT descValueDataSize;
 
 	HRESULT hr = BluetoothGATTGetDescriptorValue(
-		bleDeviceContext.getBleServiceHandle(),
-		pGattDescriptor,
+		_bleDeviceContext.getBleServiceHandle(),
+		_pGattDescriptor,
 		0,
 		NULL,
 		&descValueDataSize,
@@ -103,8 +103,8 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	}
 
 	hr = BluetoothGATTGetDescriptorValue(
-		bleDeviceContext.getBleServiceHandle(),
-		pGattDescriptor,
+		_bleDeviceContext.getBleServiceHandle(),
+		_pGattDescriptor,
 		(ULONG)descValueDataSize,
 		pDescValueBuffer,
 		NULL,
