@@ -26,31 +26,31 @@ SOFTWARE.
 #include "BleDeviceContext.h"
 #include "BleFunctions.h"
 
-BleDeviceContext::BleDeviceContext(HANDLE _hBleDevice, wstring _deviceInstanceId)
+BleDeviceContext::BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId)
 {
-	hBleDevice = _hBleDevice;
-	deviceInstanceId = _deviceInstanceId;
-	hBleService = getBleServiceInterfaceHandle(UUID_DEVICE_INFO, deviceInstanceId);
+	_hBleDevice = _hBleDevice;
+	_deviceInstanceId = deviceInstanceId;
+	_hBleService = getBleServiceInterfaceHandle(UUID_DEVICE_INFO, deviceInstanceId);
 }
 
 BleDeviceContext::~BleDeviceContext()
 {
-	if (hBleService)
-		releaseBleInterfaceHandle(hBleService);
+	if (_hBleService)
+		releaseBleInterfaceHandle(_hBleService);
 }
 
 HANDLE BleDeviceContext::getBleServiceHandle()
 {
-	return hBleService;
+	return _hBleService;
 }
 
 HANDLE BleDeviceContext::getBleDeviceHandle()
 {
-	return hBleDevice;
+	return _hBleDevice;
 }
 
 wstring BleDeviceContext::getDeviceInstanceId()
 {
-	return deviceInstanceId;
+	return _deviceInstanceId;
 }
 
