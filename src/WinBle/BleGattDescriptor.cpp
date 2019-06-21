@@ -34,7 +34,7 @@ using namespace std;
 BleGattDescriptor::BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor) :
 	_bleDeviceContext(bleDeviceContext)
 {
-	if (!_pGattDescriptor)
+	if (!pGattDescriptor)
 		throw BleException("pGattDescriptor is nullptr");
 	
 	_pGattDescriptor = pGattDescriptor;

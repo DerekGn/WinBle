@@ -42,15 +42,15 @@ class BleGattService
 {
 	private:
 		
-		BleDeviceContext& bleDeviceContext;
+		BleDeviceContext& _bleDeviceContext;
 
-		USHORT gattCharacteristicsCount = 0;
+		USHORT _gattCharacteristicsCount = 0;
 
-		PBTH_LE_GATT_SERVICE pGattService = nullptr;
+		PBTH_LE_GATT_SERVICE _pGattService = nullptr;
 
-		list<BleGattCharacteristic*> bleGattCharacteristics;
+		list<BleGattCharacteristic*> _bleGattCharacteristics;
 
-		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristics = nullptr;
+		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristics = nullptr;
 
 		/// <summary>
 		/// Get the list of characteristics for a service

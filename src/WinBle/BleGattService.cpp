@@ -99,40 +99,40 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 	return pCharBuffer;
 }
 
-BleGattService::BleGattService(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT_SERVICE _pGattService)
-	:bleDeviceContext(_bleDeviceContext)
+BleGattService::BleGattService(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService)
+	:_bleDeviceContext(bleDeviceContext)
 {
-	if (!_pGattService)
+	if (!pGattService)
 		throw BleException("pGattService is nullptr");
 
-	pGattService = _pGattService;
+	_pGattService = pGattService;
 	
-	pGattCharacteristics = getGattCharacteristics(bleDeviceContext.getBleDeviceHandle(), pGattService, &gattCharacteristicsCount);
+	_pGattCharacteristics = getGattCharacteristics(bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
 
-	for (size_t i = 0; i < gattCharacteristicsCount; i++)
-		bleGattCharacteristics.push_back(new BleGattCharacteristic(bleDeviceContext, &pGattCharacteristics[i]));
+	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
+		_bleGattCharacteristics.push_back(new BleGattCharacteristic(_bleDeviceContext, &_pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()
 {
-	for (BleGattCharacteristic *c : bleGattCharacteristics)
+	for (BleGattCharacteristic *c : _bleGattCharacteristics)
 		delete(c);
 
-	if (pGattCharacteristics)
-		free(pGattCharacteristics);
+	if (_pGattCharacteristics)
+		free(_pGattCharacteristics);
 }
 
 BTH_LE_UUID BleGattService::getServiceUuid()
 {
-	return pGattService->ServiceUuid;
+	return _pGattService->ServiceUuid;
 }
 
 USHORT BleGattService::getServiceAttributeHandle()
 {
-	return pGattService->AttributeHandle;
+	return _pGattService->AttributeHandle;
 }
 
 const BleGattService::BleGattCharacteristics & BleGattService::getBleCharacteristics()
 {
-	return bleGattCharacteristics;
+	return _bleGattCharacteristics;
 }

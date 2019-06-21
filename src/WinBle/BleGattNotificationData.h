@@ -34,9 +34,9 @@ SOFTWARE.
 class BleGattNotificationData
 {
 	private:
-		ULONG dataSize;
+		ULONG _dataSize;
 
-		PBYTE bytes;
+		PBYTE _bytes;
 	public:
 		BleGattNotificationData(ULONG dataSize, PBYTE bytes);
 		
