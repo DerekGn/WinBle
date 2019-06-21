@@ -153,9 +153,6 @@ int main()
 	catch (BleException& e)
 	{
 		cout << endl << "An error occurred:" << endl;
-		cout << "  [" << e.Message() << "]" << endl;
+		cout << "  [" << e.what() << "]" << endl;
 	}
 }
-
-
-
