@@ -83,24 +83,24 @@ int main()
 
 			list<BleGattService*> services = bleDevice.getBleGattServices();
 
-			/*auto it = find_if(begin(services), end(services), [&](BleGattService *s)
+			auto it = find_if(begin(services), end(services), [&](BleGattService *s)
 			{
 				return s->getServiceUuid().Value.ShortUuid == GATT_UUID_DEVICE_INFO_SVC;
-			});*/
+			});
 
-			//if (it != services.end())
-			//{
-			//	BleGattService* service = ((BleGattService*)*it);
+			if (it != services.end())
+			{
+				BleGattService* service = ((BleGattService*)*it);
 
-			//	cout << "Found Device Information Service: " << service->getServiceUuid().Value.ShortUuid << endl;
-			//	list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
+				cout << "Found Device Information Service: " << service->getServiceUuid().Value.ShortUuid << endl;
+				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
 
-			//	readCharacteristicValueAndDisplay(characteristics, GATT_UUID_MANU_NAME);
+				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_MANU_NAME);
 
-			//	//readCharacteristicValueAndDisplay(characteristics, GATT_UUID_SW_VERSION_STR);
-			//}
+				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_SW_VERSION_STR);
+			}
 
-			auto it = find_if(begin(services), end(services), [&](BleGattService *s)
+			it = find_if(begin(services), end(services), [&](BleGattService *s)
 			{
 				return s->getServiceUuid().Value.LongUuid == UUID_SERIAL_SERVICE;
 			});
@@ -113,7 +113,7 @@ int main()
 
 				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
 
-				/*auto rxit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
+				auto rxit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
 				{
 					return c->getCharacteristicUuid().Value.LongUuid == UUID_RX_CHARACTERISTIC;
 				});
@@ -127,7 +127,7 @@ int main()
 					std::function<void(BleGattNotificationData&)> callback = HandleCallback;
 
 					characteristic->registerCallback(callback);
-				}*/
+				}
 
 				auto txit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
 				{
