@@ -53,7 +53,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
 			<< Util.convertToString(deviceInstanceId) << "] Reason: ["
-			<< Util.getLastError(0) << "]";
+			<< Util.getLastError(GetLastError()) << "]";
 
 		throw BleException(msg.str());
 	}

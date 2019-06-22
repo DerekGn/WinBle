@@ -49,7 +49,7 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
 			<< Util.guidToString(interfaceUUID) << "] Reason: ["
-			<< Util.getLastError(0) << "]";
+			<< Util.getLastError(GetLastError()) << "]";
 
 		throw BleException(msg.str());
 	}
@@ -99,7 +99,7 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 				stringstream msg;
 				msg << "Unable to open device handle for interface UUID: ["
 					<< Util.guidToString(interfaceUUID) << "] Reason: ["
-					<< Util.getLastError(0) << "]";
+					<< Util.getLastError(GetLastError()) << "]";
 
 				throw BleException(msg.str());
 			}
@@ -137,7 +137,7 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
 			<< Util.guidToString(interfaceUUID) << "] Reason: ["
-			<< Util.getLastError(0) << "]";
+			<< Util.getLastError(GetLastError()) << "]";
 
 		throw BleException(msg.str());
 	}
@@ -185,7 +185,7 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 					stringstream msg;
 					msg << "Unable to open device information service handle for interface UUID: ["
 						<< Util.guidToString(interfaceUUID) << "] Reason: ["
-						<< Util.getLastError(0) << "]";
+						<< Util.getLastError(GetLastError()) << "]";
 
 					throw BleException(msg.str());
 				}

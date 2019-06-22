@@ -91,7 +91,7 @@ void BleDeviceEnumerator::enumerate()
 	{
 		stringstream msg;
 		msg << "Unable to get handle to device information elements. Reason: ["
-			<< Util.getLastError(0) << "]";
+			<< Util.getLastError(GetLastError()) << "]";
 
 		throw BleException(msg.str());
 	}
