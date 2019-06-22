@@ -30,18 +30,10 @@ BleDeviceContext::BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId)
 {
 	_hBleDevice = hBleDevice;
 	_deviceInstanceId = deviceInstanceId;
-	_hBleService = getBleServiceInterfaceHandle(UUID_DEVICE_INFO, deviceInstanceId);
 }
 
 BleDeviceContext::~BleDeviceContext()
 {
-	if (_hBleService)
-		releaseBleInterfaceHandle(_hBleService);
-}
-
-HANDLE BleDeviceContext::getBleServiceHandle()
-{
-	return _hBleService;
 }
 
 HANDLE BleDeviceContext::getBleDeviceHandle()

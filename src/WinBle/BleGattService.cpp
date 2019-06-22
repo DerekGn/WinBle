@@ -99,6 +99,19 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 	return pCharBuffer;
 }
 
+GUID BleGattService::mapServiceUUID(const PBTH_LE_UUID serviceUUID)
+{
+	if (serviceUUID->IsShortUuid)
+	{
+		return { serviceUUID->Value.ShortUuid, 0x0000, 0x1000, { 0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB } };
+	}
+	else
+	{
+		return serviceUUID->Value.LongUuid;
+	}
+}
+
+
 BleGattService::BleGattService(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService)
 	:_bleDeviceContext(bleDeviceContext)
 {
@@ -109,8 +122,10 @@ BleGattService::BleGattService(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_
 	
 	_pGattCharacteristics = getGattCharacteristics(bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
 
+	_hBleService = getBleServiceInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid), _bleDeviceContext.getDeviceInstanceId());
+
 	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
-		_bleGattCharacteristics.push_back(new BleGattCharacteristic(_bleDeviceContext, &_pGattCharacteristics[i]));
+		_bleGattCharacteristics.push_back(new BleGattCharacteristic(_bleDeviceContext, _hBleService, &_pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()
@@ -120,6 +135,9 @@ BleGattService::~BleGattService()
 
 	if (_pGattCharacteristics)
 		free(_pGattCharacteristics);
+
+	if(_hBleService)
+		releaseBleInterfaceHandle(_hBleService);
 }
 
 BTH_LE_UUID BleGattService::getServiceUuid()

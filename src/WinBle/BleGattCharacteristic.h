@@ -46,6 +46,8 @@ class BleGattCharacteristic
 {
 	private:
 
+		HANDLE _hBleService = nullptr;
+
 		USHORT _gattDescriptorsCount = 0;
 
 		CallbackContext* _callbackContext;
@@ -84,8 +86,9 @@ class BleGattCharacteristic
 		/// Constructs an instance of a <see cref="BleGattCharacteristic"/>
 		/// </summary>
 		/// <param name="bleDeviceContext">The parent ble device context</param>
+		/// <param name="hBleService">The Gatt service handle</parma>
 		/// <param name="pGattCharacteristic">The contained <see cref="PBTH_LE_GATT_CHARACTERISTIC"/></param>
-		BleGattCharacteristic(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		BleGattCharacteristic(BleDeviceContext &bleDeviceContext, HANDLE hBleService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 

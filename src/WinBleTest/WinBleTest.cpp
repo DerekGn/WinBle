@@ -124,8 +124,8 @@ int main()
 
 					cout << "Found Serial Rx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
 
-					/*UCHAR values[] = { 'H', 'I' };
-					characteristic->setValue(values, 2);*/
+					UCHAR values[] = { 'H', 'I' };
+					characteristic->setValue(values, 2);
 
 					const std::function<void(BleGattNotificationData&)> callback = HandleCallback;
 

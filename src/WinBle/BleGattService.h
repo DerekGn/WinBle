@@ -42,6 +42,8 @@ class BleGattService
 {
 	private:
 		
+		HANDLE _hBleService = nullptr;
+
 		BleDeviceContext& _bleDeviceContext;
 
 		USHORT _gattCharacteristicsCount = 0;
@@ -61,6 +63,13 @@ class BleGattService
 		/// <returns>A pointer to the first <see cref="PBTH_LE_GATT_CHARACTERISTIC"/> in the list</returns>
 		static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(HANDLE hBleDeviceHandle, 
 			PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount);
+
+		/// <summary>
+		/// Map a standard or custom service to full GUID UUID
+		/// </summary>
+		/// <param name="serviceUUID">The service to map the GUID</param>
+		/// <returns>A <see cref="GUID"> UUDI for the service</returns>
+		static GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID);
 
 	public:
 		/// <summary>

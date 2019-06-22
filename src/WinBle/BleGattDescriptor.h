@@ -43,6 +43,8 @@ class BleGattDescriptor
 {
 	private:
 		
+		HANDLE _hBleService = nullptr;
+
 		BleDeviceContext& _bleDeviceContext;
 
 		PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor = nullptr;
@@ -52,8 +54,9 @@ class BleGattDescriptor
 		/// Create an instance of a <see cref="BleGattDescriptor"/>
 		/// </summary>
 		/// <param name="bleDeviceContext">The parent ble device context</param>
+		/// <param name="hBleService">The Gatt service handle</parma>
 		/// <param name="pGattDescriptor">The contained <see cref="PBTH_LE_GATT_DESCRIPTOR"/></param>
-		BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
+		BleGattDescriptor(BleDeviceContext& bleDeviceContext, HANDLE hBleService, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
 
 		~BleGattDescriptor();
 

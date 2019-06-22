@@ -42,8 +42,6 @@ class BleDeviceContext
 	private:
 		HANDLE _hBleDevice = nullptr;
 		
-		HANDLE _hBleService = nullptr;
-
 		wstring _deviceInstanceId;
 
 	public:
@@ -55,12 +53,6 @@ class BleDeviceContext
 		BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId);
 		
 		~BleDeviceContext();
-
-		/// <summary>
-		/// Gets the handle to the devices device information service
-		/// </summary>
-		/// <returns>The device information service handle</returns>
-		HANDLE getBleServiceHandle();
 
 		/// <summary>
 		/// Get the device handle
