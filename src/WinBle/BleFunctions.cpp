@@ -83,6 +83,8 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID)
 				break;
 			}
 
+			_wcsupr_s(pInterfaceDetailData->DevicePath, wcslen(pInterfaceDetailData->DevicePath) + 1);
+
 			hComm = CreateFile(pInterfaceDetailData->DevicePath,
 				GENERIC_READ, 
 				FILE_SHARE_READ | FILE_SHARE_WRITE,
