@@ -176,7 +176,10 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 			if (wcsstr(pInterfaceDetailData->DevicePath, &deviceId[0]) != NULL)
 			{
 				hComm = CreateFile(pInterfaceDetailData->DevicePath,
-					GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+					GENERIC_READ, 
+					FILE_SHARE_READ | FILE_SHARE_WRITE,
+					NULL,
+					OPEN_EXISTING, 0, NULL);
 
 				GlobalFree(pInterfaceDetailData);
 
