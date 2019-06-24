@@ -76,6 +76,12 @@ class BleDevice
 		/// </summary>
 		wstring getDeviceIntstanceId();
 
+		/// <summary>
+		/// Enumerate this devices list of ble services
+		/// </summary>
+		/// <remarks>must be called prior to calling get services</remarks>
+		void enumerateBleServices();
+
 		typedef list<BleGattService*> BleGattServices;
 
 		/// <summary>

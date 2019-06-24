@@ -91,6 +91,12 @@ class BleGattService
 		/// </summary>
 		USHORT getServiceAttributeHandle();
 
+		/// <summary>
+		/// Enumerate this services list of ble characteristics
+		/// </summary>
+		/// <remarks>must be called prior to calling get charateristics</remarks>
+		void enumerateBleCharacteristics();
+
 		typedef list<BleGattCharacteristic*> BleGattCharacteristics;
 
 		/// <summary>

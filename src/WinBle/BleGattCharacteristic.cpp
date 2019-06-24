@@ -111,22 +111,11 @@ VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE e
 }
 
 BleGattCharacteristic::BleGattCharacteristic(BleDeviceContext &bleDeviceContext, HANDLE hBleService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic) :
+	_pGattCharacteristic(pGattCharacteristic),
 	_bleDeviceContext(bleDeviceContext),
 	_eventHandle(INVALID_HANDLE_VALUE),
 	_hBleService(hBleService)
 {
-	if (!pGattCharacteristic)
-		throw BleException("pGattCharacteristic is nullptr");
-
-	_pGattCharacteristic = pGattCharacteristic;
-
-	_bleDeviceContext = bleDeviceContext;
-
-	_gattDescriptorsCount = 0;
-	_pGattDescriptors = getGattDescriptors(_bleDeviceContext.getBleDeviceHandle(), _pGattCharacteristic, &_gattDescriptorsCount);
-
-	for (size_t i = 0; i < _gattDescriptorsCount; i++)
-		_bleGattDescriptors.push_back(new BleGattDescriptor(_bleDeviceContext, _hBleService, &_pGattDescriptors[i]));
 }
 
 BleGattCharacteristic::~BleGattCharacteristic()
@@ -341,6 +330,22 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 	{
 		throw BleException("characteristic is not writable");
 	}
+}
+
+void BleGattCharacteristic::enumerateBleDescriptors()
+{
+	for (BleGattDescriptor *d : _bleGattDescriptors)
+		delete(d);
+
+	if (_pGattDescriptors)
+		free(_pGattDescriptors);
+
+	_gattDescriptorsCount = 0;
+	_pGattDescriptors = getGattDescriptors(_bleDeviceContext.getBleDeviceHandle(), _pGattCharacteristic, &_gattDescriptorsCount);
+
+	for (size_t i = 0; i < _gattDescriptorsCount; i++)
+		_bleGattDescriptors.push_back(new BleGattDescriptor(_bleDeviceContext, _hBleService, &_pGattDescriptors[i]));
+
 }
 
 const BleGattCharacteristic::BleGattDescriptors& BleGattCharacteristic::getBleDescriptors()

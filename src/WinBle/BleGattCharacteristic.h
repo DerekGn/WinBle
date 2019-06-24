@@ -177,6 +177,12 @@ class BleGattCharacteristic
 		/// <remarks>Throws a BleException if the characteristic is not writable</remarks>
 		void setValue(UCHAR * data, ULONG size);
 
+		/// <summary>
+		/// Enumerate this characteristics list of ble descriptors
+		/// </summary>
+		/// <remarks>must be called prior to calling get charateristics</remarks>
+		void enumerateBleDescriptors();
+
 		typedef list<BleGattDescriptor*> BleGattDescriptors;
 
 		/// <summary>

@@ -59,12 +59,16 @@ int main()
 
 			BleDevice bleDevice = BleDevice(BleEnumerator.getBleDevices().front()->getInstanceId());
 
+			bleDevice.enumerateBleServices();
+
 			cout << "BleGattServices Count: " << bleDevice.getBleGattServices().size() << endl;
 
 			for (BleGattService *s : bleDevice.getBleGattServices())
 			{
 				cout << "\tService - Guid: " << Util.guidToString(s->getServiceUuid().Value.LongUuid) << setbase(16)
 					<< " Short Id:" << s->getServiceUuid().Value.ShortUuid << endl;
+
+				s->enumerateBleCharacteristics();
 
 				for (BleGattCharacteristic *c : s->getBleCharacteristics())
 				{
