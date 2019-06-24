@@ -33,18 +33,10 @@ SOFTWARE.
 using namespace std;
 
 /// <summary>
-/// Open a handle to a ble device
-/// </summary>
-/// <param name="interfaceUUID">The interface to open on the ble device</param>
-/// <param name="instanceId">The instance Id of the ble device to open a handle to the interface</param>
-HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId);
-
-/// <summary>
 /// Open a handle to an interface of a ble device
 /// </summary>
 /// <param name="interfaceUUID">The interface to open on the ble device</param>
-/// <param name="instanceId">The instance Id of the ble device to open a handle to the interface</param>
-HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId);
+HANDLE getBleInterfaceHandle(GUID interfaceUUID);
 
 /// <summary>
 /// Release an allocated ble interface handle

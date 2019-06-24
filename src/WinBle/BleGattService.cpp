@@ -111,7 +111,6 @@ GUID BleGattService::mapServiceUUID(const PBTH_LE_UUID serviceUUID)
 	}
 }
 
-
 BleGattService::BleGattService(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService)
 	:_bleDeviceContext(bleDeviceContext)
 {
@@ -150,7 +149,7 @@ void BleGattService::enumerateBleCharacteristics()
 
 	_pGattCharacteristics = getGattCharacteristics(_bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
 
-	_hBleService = getBleServiceInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid), _bleDeviceContext.getDeviceInstanceId());
+	_hBleService = getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid));
 
 	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
 		_bleGattCharacteristics.push_back(new BleGattCharacteristic(_bleDeviceContext, _hBleService, &_pGattCharacteristics[i]));
