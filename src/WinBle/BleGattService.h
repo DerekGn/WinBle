@@ -64,13 +64,6 @@ class BleGattService
 		static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(HANDLE hBleDeviceHandle, 
 			PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount);
 
-		/// <summary>
-		/// Map a standard or custom service to full GUID UUID
-		/// </summary>
-		/// <param name="serviceUUID">The service to map the GUID</param>
-		/// <returns>A <see cref="GUID"> UUDI for the service</returns>
-		static GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID);
-
 	public:
 		/// <summary>
 		/// Create an instance of a <see cref="BleGattService"/>

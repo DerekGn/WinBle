@@ -37,6 +37,18 @@ SOFTWARE.
 
 #include <sstream>
 
+GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID)
+{
+	if (serviceUUID->IsShortUuid)
+	{
+		return { serviceUUID->Value.ShortUuid, 0x0000, 0x1000, { 0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB } };
+	}
+	else
+	{
+		return serviceUUID->Value.LongUuid;
+	}
+}
+
 HANDLE getBleInterfaceHandle(GUID interfaceUUID)
 {
 	HDEVINFO hDI;
@@ -111,7 +123,6 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID)
 
 	return hComm;
 }
-
 
 void releaseBleInterfaceHandle(HANDLE hinterfaceHandle)
 {

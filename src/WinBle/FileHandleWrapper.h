@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -23,22 +23,29 @@ SOFTWARE.
 
 */
 
-#ifndef BLEFUNCTIONS_H
-#define BLEFUNCTIONS_H
+#ifndef FILEHANDLEWRAPPER_H
+#define FILEHANDLEWRAPPER_H
 
-#include <Windows.h>
-#include <Bluetoothleapis.h>
-
-#include <string>
-
-using namespace std;
-
-GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID);
+#include <windows.h>
 
 /// <summary>
-/// Open a handle to an interface of a ble device
+/// A class for wrapping windows handles created with CreateFile
 /// </summary>
-/// <param name="interfaceUUID">The interface to open on the ble device</param>
-HANDLE getBleInterfaceHandle(GUID interfaceUUID);
+class FileHandleWrapper
+{
+private:
+	HANDLE _handle = nullptr;
+
+	FileHandleWrapper(const FileHandleWrapper &obj);
+
+	FileHandleWrapper& FileHandleWrapper::operator=(const FileHandleWrapper& other);
+
+public:
+	FileHandleWrapper(HANDLE handle);
+
+	~FileHandleWrapper();
+
+	HANDLE get();
+};
 
 #endif

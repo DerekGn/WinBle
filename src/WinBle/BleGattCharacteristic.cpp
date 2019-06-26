@@ -24,6 +24,8 @@ SOFTWARE.
 */
 
 #include "BleGattCharacteristic.h"
+#include "FileHandleWrapper.h"
+#include "BleFunctions.h"
 #include "BleException.h"
 #include "Utility.h"
 
@@ -110,11 +112,11 @@ VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE e
 	}
 }
 
-BleGattCharacteristic::BleGattCharacteristic(BleDeviceContext &bleDeviceContext, HANDLE hBleService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic) :
+BleGattCharacteristic::BleGattCharacteristic(BleDeviceContext &bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic) :
 	_pGattCharacteristic(pGattCharacteristic),
 	_bleDeviceContext(bleDeviceContext),
 	_eventHandle(INVALID_HANDLE_VALUE),
-	_hBleService(hBleService)
+	_pGattService(pGattService)
 {
 }
 
@@ -203,7 +205,10 @@ void BleGattCharacteristic::enableNotifications(function<void(BleGattNotificatio
 
 		_callbackContext = new CallbackContext(notificationHandler, _pGattCharacteristic);
 
-		HRESULT hr = BluetoothGATTRegisterEvent(_hBleService, CharacteristicValueChangedEvent,
+		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
+
+
+		HRESULT hr = BluetoothGATTRegisterEvent(hBleService.get(), CharacteristicValueChangedEvent,
 			&registration, &NotificationCallback, _callbackContext, &_eventHandle, BLUETOOTH_GATT_FLAG_NONE);
 
 		if (S_OK != hr)
@@ -247,8 +252,10 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 	if (_pGattCharacteristic->IsReadable) 
 	{
+		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
+
 		HRESULT hr = BluetoothGATTGetCharacteristicValue(
-			_hBleService,
+			hBleService.get(),
 			_pGattCharacteristic,
 			0,
 			NULL,
@@ -276,7 +283,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		}
 
 		hr = BluetoothGATTGetCharacteristicValue(
-			_hBleService,
+			hBleService.get(),
 			_pGattCharacteristic,
 			(ULONG)charValueDataSize,
 			pCharValueBuffer,
@@ -313,7 +320,9 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 		gatt_value->DataSize = (ULONG)size;
 		memcpy(gatt_value->Data, data, size);
 
-		HRESULT hr = BluetoothGATTSetCharacteristicValue(_hBleService, _pGattCharacteristic, gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
+		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
+
+		HRESULT hr = BluetoothGATTSetCharacteristicValue(hBleService.get(), _pGattCharacteristic, gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
 
 		delete(gatt_value);
 
@@ -343,8 +352,10 @@ void BleGattCharacteristic::enumerateBleDescriptors()
 	_gattDescriptorsCount = 0;
 	_pGattDescriptors = getGattDescriptors(_bleDeviceContext.getBleDeviceHandle(), _pGattCharacteristic, &_gattDescriptorsCount);
 
+	FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
+
 	for (size_t i = 0; i < _gattDescriptorsCount; i++)
-		_bleGattDescriptors.push_back(new BleGattDescriptor(_bleDeviceContext, _hBleService, &_pGattDescriptors[i]));
+		_bleGattDescriptors.push_back(new BleGattDescriptor(_bleDeviceContext, hBleService.get(), &_pGattDescriptors[i]));
 
 }
 

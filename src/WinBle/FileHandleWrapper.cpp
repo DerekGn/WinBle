@@ -23,22 +23,23 @@ SOFTWARE.
 
 */
 
-#ifndef BLEFUNCTIONS_H
-#define BLEFUNCTIONS_H
+#include "FileHandleWrapper.h"
 
-#include <Windows.h>
-#include <Bluetoothleapis.h>
 
-#include <string>
+FileHandleWrapper::FileHandleWrapper(HANDLE handle) : _handle(handle)
+{
+}
 
-using namespace std;
 
-GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID);
+FileHandleWrapper::~FileHandleWrapper()
+{
+	if (_handle)
+	{
+		CloseHandle(_handle);
+	}
+}
 
-/// <summary>
-/// Open a handle to an interface of a ble device
-/// </summary>
-/// <param name="interfaceUUID">The interface to open on the ble device</param>
-HANDLE getBleInterfaceHandle(GUID interfaceUUID);
-
-#endif
+HANDLE FileHandleWrapper::get()
+{
+	return _handle;
+}
