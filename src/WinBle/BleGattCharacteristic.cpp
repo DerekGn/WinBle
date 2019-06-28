@@ -237,6 +237,8 @@ void BleGattCharacteristic::disableNotifications()
 
 		delete _callbackContext;
 
+		_callbackContext = nullptr;
+
 		if (S_OK != hr)
 		{
 			stringstream msg;
