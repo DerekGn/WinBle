@@ -65,19 +65,19 @@ int main()
 
 			for (BleGattService *s : bleDevice.getBleGattServices())
 			{
-				cout << "\tService - Guid: " 
-					<< Util.guidToString(s->getServiceUuid().Value.LongUuid)
+				cout << "\tService - Guid: [" 
+					<< Util.guidToString(s->getServiceUuid().Value.LongUuid) << "]"
 					<< setbase(16)
-					<< " Short Id:" << s->getServiceUuid().Value.ShortUuid << endl;
+					<< " Short Id: [" << s->getServiceUuid().Value.ShortUuid << "]" << endl;
 
 				s->enumerateBleCharacteristics();
 
 				for (BleGattCharacteristic *c : s->getBleCharacteristics())
 				{
-					cout << "\t\tCharacteristic - Guid: " 
-						<< Util.guidToString(c->getCharacteristicUuid().Value.LongUuid)
+					cout << "\t\tCharacteristic - Guid: [" 
+						<< Util.guidToString(c->getCharacteristicUuid().Value.LongUuid) << "]"
 						<< setbase(16)
-						<< " Short Id:"	<< c->getCharacteristicUuid().Value.ShortUuid << endl;
+						<< " Short Id: [" << c->getCharacteristicUuid().Value.ShortUuid << "]" << endl;
 
 					cout << "\t\t\tIsBroadcastable: " << +c->getIsBroadcastable() << endl
 						<< "\t\t\tIsIndicatable: " << +c->getIsIndicatable() << endl
@@ -100,7 +100,7 @@ int main()
 			{
 				BleGattService* service = ((BleGattService*)*it);
 
-				cout << "Found Device Information Service: " << service->getServiceUuid().Value.ShortUuid << endl;
+				cout << "Found Device Information Service: [" << service->getServiceUuid().Value.ShortUuid << "]" << endl;
 				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
 
 				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_MANU_NAME);
@@ -119,7 +119,7 @@ int main()
 			{
 				BleGattService* service = ((BleGattService*)*it);
 
-				cout << "Found Serial Service: " << setbase(16) << service->getServiceUuid().Value.ShortUuid << endl;
+				cout << "Found Serial Service: [" << setbase(16) << Util.guidToString(service->getServiceUuid().Value.LongUuid) << "]" << endl;
 
 				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
 
@@ -133,9 +133,9 @@ int main()
 					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*txit);
 
 					cout << "Found Serial Rx characteristic: "
-						<< setbase(16) 
-						<< characteristic->getCharacteristicUuid().Value.ShortUuid
-						<< " writing to characteristic" << endl;
+						<< setbase(16) << "["
+						<< Util.guidToString(characteristic->getCharacteristicUuid().Value.LongUuid)
+						<< "] writing to characteristic" << endl;
 
 					UCHAR values[] = { 'H', 'I' };
 					characteristic->setValue(values, 2);

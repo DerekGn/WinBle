@@ -29,7 +29,7 @@ using namespace std;
 #include <string>
 
 /// <summary>
-/// A utility class of healer methods
+/// A utility class of helper methods
 /// </summary>
 class Utility
 {
