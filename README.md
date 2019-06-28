@@ -11,14 +11,14 @@ A set of classes for enumerating and interacting with Bluetooth low energy devic
 
 ### Read a Characteristic
 
-``` csharp
+``` cpp
 // The characteristic must have IsReadable set to true or an exception will be thrown
 BleGattCharacteristicValue value = characteristic->getValue();
 ```
 
 ### Write a Characteristic Value
 
-``` csharp
+``` cpp
 // The characteristic must have IsSignedWritable, IsWritable, IsWritableWithoutResponse set to true or an exception will be thrown
 UCHAR values[] = { 'H', 'I', '\r', '\n' };
 
@@ -27,11 +27,11 @@ characteristic->setValue(values, 4);
 
 ### Subscribe to a Characteristic Notification
 
-``` csharp
+``` cpp
 // The callback for the characteristic notification
 void HandleCallback(BleGattNotificationData& data)
 {
-	cout << "Recieved callback data: " << data.getDataSize() << endl;
+    cout << "Recieved callback data: " << data.getDataSize() << endl;
 }
 
 // the callback function
