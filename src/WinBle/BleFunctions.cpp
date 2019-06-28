@@ -54,13 +54,14 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess, DWORD dw
 	HDEVINFO hDI;
 	SP_DEVICE_INTERFACE_DATA did;
 	SP_DEVINFO_DATA dd;
+	GUID BluetoothInterfaceGUID = interfaceUUID;
 	HANDLE hComm = NULL;
 
-	if ((hDI = SetupDiGetClassDevs(&interfaceUUID, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT)) == INVALID_HANDLE_VALUE)
+	if ((hDI = SetupDiGetClassDevs(&BluetoothInterfaceGUID, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT)) == INVALID_HANDLE_VALUE)
 	{
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
-			<< Util.guidToString(interfaceUUID) << "] Reason: ["
+			<< Util.guidToString(BluetoothInterfaceGUID) << "] Reason: ["
 			<< Util.getLastError(GetLastError()) << "]";
 
 		throw BleException(msg.str());
@@ -71,7 +72,7 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess, DWORD dw
 
 	DWORD i = 0;
 
-	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &interfaceUUID, i, &did); i++)
+	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &BluetoothInterfaceGUID, i, &did); i++)
 	{
 		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData;
 
@@ -90,42 +91,31 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess, DWORD dw
 			pInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
 			if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, pInterfaceDetailData, size, &size, &dd))
-			{
-				GlobalFree(pInterfaceDetailData);
 				break;
-			}
 
-			_wcsupr_s(pInterfaceDetailData->DevicePath, wcslen(pInterfaceDetailData->DevicePath) + 1);
-
-			hComm = CreateFile(pInterfaceDetailData->DevicePath,
+			hComm = CreateFile(
+				pInterfaceDetailData->DevicePath,
 				dwDesiredAccess,
 				dwShareMode,
 				NULL,
-				OPEN_EXISTING, 0, NULL);
+				OPEN_EXISTING,
+				0,
+				NULL);
 
 			GlobalFree(pInterfaceDetailData);
 
 			if (hComm == INVALID_HANDLE_VALUE)
 			{
 				stringstream msg;
-				msg << "Unable to open device information service handle for interface UUID: ["
-					<< Util.guidToString(interfaceUUID) << "] Reason: ["
+				msg << "Unable to file handle for interface UUID: ["
+					<< Util.guidToString(BluetoothInterfaceGUID) << "] Reason: ["
 					<< Util.getLastError(GetLastError()) << "]";
 
 				throw BleException(msg.str());
 			}
-
-			GlobalFree(pInterfaceDetailData);
 		}
 	}
 
 	SetupDiDestroyDeviceInfoList(hDI);
-
 	return hComm;
-}
-
-void releaseBleInterfaceHandle(HANDLE hinterfaceHandle)
-{
-	if(hinterfaceHandle)
-		CloseHandle(hinterfaceHandle);
 }
