@@ -137,8 +137,8 @@ int main()
 						<< Util.guidToString(characteristic->getCharacteristicUuid().Value.LongUuid)
 						<< "] writing to characteristic" << endl;
 
-					UCHAR values[] = { 'H', 'I' };
-					characteristic->setValue(values, 2);
+					UCHAR values[] = { 'H', 'I', '\r', '\n' };
+					characteristic->setValue(values, 4);
 
 					const std::function<void(BleGattNotificationData&)> callback = HandleCallback;
 
