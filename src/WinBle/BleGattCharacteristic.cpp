@@ -205,8 +205,11 @@ void BleGattCharacteristic::enableNotifications(function<void(BleGattNotificatio
 
 		_callbackContext = new CallbackContext(notificationHandler, _pGattCharacteristic);
 
-		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
-
+		FileHandleWrapper hBleService(
+			getBleInterfaceHandle(
+				mapServiceUUID(&_pGattService->ServiceUuid), 
+				GENERIC_READ | GENERIC_WRITE,
+				FILE_SHARE_READ | FILE_SHARE_WRITE));
 
 		HRESULT hr = BluetoothGATTRegisterEvent(hBleService.get(), CharacteristicValueChangedEvent,
 			&registration, &NotificationCallback, _callbackContext, &_eventHandle, BLUETOOTH_GATT_FLAG_NONE);
@@ -252,7 +255,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 	if (_pGattCharacteristic->IsReadable) 
 	{
-		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
+		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE));
 
 		HRESULT hr = BluetoothGATTGetCharacteristicValue(
 			hBleService.get(),
@@ -320,7 +323,7 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 		gatt_value->DataSize = (ULONG)size;
 		memcpy(gatt_value->Data, data, size);
 
-		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
+		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE));
 
 		HRESULT hr = BluetoothGATTSetCharacteristicValue(hBleService.get(), _pGattCharacteristic, gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
 
@@ -352,10 +355,8 @@ void BleGattCharacteristic::enumerateBleDescriptors()
 	_gattDescriptorsCount = 0;
 	_pGattDescriptors = getGattDescriptors(_bleDeviceContext.getBleDeviceHandle(), _pGattCharacteristic, &_gattDescriptorsCount);
 
-	FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid)));
-
 	for (size_t i = 0; i < _gattDescriptorsCount; i++)
-		_bleGattDescriptors.push_back(new BleGattDescriptor(_bleDeviceContext, hBleService.get(), &_pGattDescriptors[i]));
+		_bleGattDescriptors.push_back(new BleGattDescriptor(_bleDeviceContext, _pGattService, &_pGattDescriptors[i]));
 
 }
 

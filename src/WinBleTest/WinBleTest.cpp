@@ -65,15 +65,19 @@ int main()
 
 			for (BleGattService *s : bleDevice.getBleGattServices())
 			{
-				cout << "\tService - Guid: " << Util.guidToString(s->getServiceUuid().Value.LongUuid) << setbase(16)
+				cout << "\tService - Guid: " 
+					<< Util.guidToString(s->getServiceUuid().Value.LongUuid)
+					<< setbase(16)
 					<< " Short Id:" << s->getServiceUuid().Value.ShortUuid << endl;
 
 				s->enumerateBleCharacteristics();
 
 				for (BleGattCharacteristic *c : s->getBleCharacteristics())
 				{
-					cout << "\t\tCharacteristic - Guid: " << Util.guidToString(c->getCharacteristicUuid().Value.LongUuid)
-						<< setbase(16) << " Short Id:" << c->getCharacteristicUuid().Value.ShortUuid << endl;
+					cout << "\t\tCharacteristic - Guid: " 
+						<< Util.guidToString(c->getCharacteristicUuid().Value.LongUuid)
+						<< setbase(16)
+						<< " Short Id:"	<< c->getCharacteristicUuid().Value.ShortUuid << endl;
 
 					cout << "\t\t\tIsBroadcastable: " << +c->getIsBroadcastable() << endl
 						<< "\t\t\tIsIndicatable: " << +c->getIsIndicatable() << endl
@@ -102,6 +106,8 @@ int main()
 				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_MANU_NAME);
 
 				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_SW_VERSION_STR);
+
+				readCharacteristicValueAndDisplay(characteristics, GATT_UUID_MODEL_NUMBER_STR);
 			}
 
 			it = find_if(begin(services), end(services), [&](BleGattService *s)
@@ -126,7 +132,10 @@ int main()
 				{
 					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*txit);
 
-					cout << "Found Serial Rx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
+					cout << "Found Serial Rx characteristic: "
+						<< setbase(16) 
+						<< characteristic->getCharacteristicUuid().Value.ShortUuid
+						<< " writing to characteristic" << endl;
 
 					UCHAR values[] = { 'H', 'I' };
 					characteristic->setValue(values, 2);
@@ -141,21 +150,6 @@ int main()
 
 					characteristic->disableNotifications();
 				}
-
-				/*auto txit = find_if(begin(characteristics), end(characteristics), [&](BleGattCharacteristic *c)
-				{
-					return c->getCharacteristicUuid().Value.LongUuid == UUID_TX_CHARACTERISTIC;
-				});
-
-				if (txit != characteristics.end())
-				{
-					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*txit);
-
-					cout << "Found Serial Tx characteristic: " << setbase(16) << characteristic->getCharacteristicUuid().Value.ShortUuid << endl;
-
-					UCHAR values[] = {'V'};
-					characteristic->setValue(values, 1);
-				}*/
 			}
 		}
 		else

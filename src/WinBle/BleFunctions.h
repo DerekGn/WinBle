@@ -39,6 +39,8 @@ GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID);
 /// Open a handle to an interface of a ble device
 /// </summary>
 /// <param name="interfaceUUID">The interface to open on the ble device</param>
-HANDLE getBleInterfaceHandle(GUID interfaceUUID);
+/// <param name="dwDesiredAccess">The desired access mode</param>
+/// <param name="dwShareMode">The share mode</param>
+HANDLE getBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess, DWORD dwShareMode);
 
 #endif

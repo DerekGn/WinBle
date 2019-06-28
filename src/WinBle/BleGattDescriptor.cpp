@@ -24,6 +24,8 @@ SOFTWARE.
 */
 
 #include "BleGattDescriptor.h"
+#include "FileHandleWrapper.h"
+#include "BleFunctions.h"
 #include "BleException.h"
 #include "Utility.h"
 
@@ -31,9 +33,9 @@ SOFTWARE.
 
 using namespace std;
 
-BleGattDescriptor::BleGattDescriptor(BleDeviceContext& bleDeviceContext, HANDLE hBleService, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor) :
+BleGattDescriptor::BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor) :
 	_bleDeviceContext(bleDeviceContext),
-	_hBleService(hBleService)
+	_pGattService(pGattService)
 {
 	if (!pGattDescriptor)
 		throw BleException("pGattDescriptor is nullptr");
@@ -75,8 +77,13 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 {
 	USHORT descValueDataSize;
 
+	FileHandleWrapper hBleService(
+		getBleInterfaceHandle(
+			mapServiceUUID(&_pGattService->ServiceUuid), 
+			GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE));
+
 	HRESULT hr = BluetoothGATTGetDescriptorValue(
-		_hBleService,
+		hBleService.get(),
 		_pGattDescriptor,
 		0,
 		NULL,
@@ -104,7 +111,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	}
 
 	hr = BluetoothGATTGetDescriptorValue(
-		_hBleService,
+		hBleService.get(),
 		_pGattDescriptor,
 		(ULONG)descValueDataSize,
 		pDescValueBuffer,
