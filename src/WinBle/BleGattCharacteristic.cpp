@@ -194,7 +194,7 @@ BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
 
 void BleGattCharacteristic::enableNotifications(function<void(BleGattNotificationData&)> notificationHandler)
 {
-	if (_callbackContext == nullptr)
+	if (_callbackContext != nullptr)
 		return;
 
 	if (_pGattCharacteristic->IsNotifiable || _pGattCharacteristic->IsIndicatable)
