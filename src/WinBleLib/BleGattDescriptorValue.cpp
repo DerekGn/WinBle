@@ -56,9 +56,19 @@ BOOLEAN BleGattDescriptorValue::getIsReliableWriteEnabled()
 	return _pGattDescriptorValue->CharacteristicExtendedProperties.IsReliableWriteEnabled;
 }
 
+void BleGattDescriptorValue::setIsReliableWriteEnabled(BOOLEAN value)
+{
+	_pGattDescriptorValue->CharacteristicExtendedProperties.IsReliableWriteEnabled = value;
+}
+
 BOOLEAN BleGattDescriptorValue::getIsAuxiliariesWritable()
 {
 	return _pGattDescriptorValue->CharacteristicExtendedProperties.IsAuxiliariesWritable;
+}
+
+void BleGattDescriptorValue::setIsAuxiliariesWritable(BOOLEAN value)
+{
+	_pGattDescriptorValue->CharacteristicExtendedProperties.IsAuxiliariesWritable = value;
 }
 
 BOOLEAN BleGattDescriptorValue::getIsSubscribeToNotification()
@@ -66,9 +76,19 @@ BOOLEAN BleGattDescriptorValue::getIsSubscribeToNotification()
 	return _pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToNotification;
 }
 
+void BleGattDescriptorValue::setIsSubscribeToNotification(BOOLEAN value)
+{
+	_pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToIndication = value;
+}
+
 BOOLEAN BleGattDescriptorValue::getIsSubscribeToIndication()
 {
 	return _pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToIndication;
+}
+
+void BleGattDescriptorValue::setIsSubscribeToIndication(BOOLEAN value)
+{
+	_pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToIndication = value;
 }
 
 BOOLEAN BleGattDescriptorValue::getIsBroadcast()
@@ -109,4 +129,9 @@ unsigned long BleGattDescriptorValue::getDataSize()
 unsigned char* BleGattDescriptorValue::getData()
 {
 	return _pGattDescriptorValue->Data;
+}
+
+PBTH_LE_GATT_DESCRIPTOR_VALUE BleGattDescriptorValue::getValue()
+{
+	return _pGattDescriptorValue;
 }
