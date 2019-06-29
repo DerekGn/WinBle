@@ -37,7 +37,7 @@ using namespace std;
 class BleGattDescriptorValue
 {
 	private:
-		PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue = nullptr;
+		PBTH_LE_GATT_DESCRIPTOR_VALUE _pGattDescriptorValue = nullptr;
 
 	public:
 		/// <summary>
@@ -117,6 +117,11 @@ class BleGattDescriptorValue
 		/// Gets the descriptor data
 		/// </summary>
 		unsigned char* getData();
+
+		/// <summary>
+		/// Gets the descriptor value
+		/// </summary>
+		PBTH_LE_GATT_DESCRIPTOR_VALUE getValue();
 };
 
 #endif

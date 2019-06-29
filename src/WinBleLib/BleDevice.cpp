@@ -53,9 +53,9 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
 			<< Util.convertToString(deviceInstanceId) << "] Reason: ["
-			<< Util.getLastErrorMessage(GetLastError()) << "]";
+			<< Util.getLastError(GetLastError()) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -105,7 +105,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 		msg << "Device interface UUID: ["
 			<< Util.convertToString(deviceInstanceId) << "] not found";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	return hComm;
@@ -124,9 +124,9 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	{
 		stringstream msg;
 		msg << "Unable to determine the number of gatt services. Reason: ["
-			<< Util.getLastErrorMessage(hr) << "]";
+			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	hr = BluetoothGATTGetServices(
@@ -156,44 +156,53 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	{
 		stringstream msg;
 		msg << "Unable to determine the number of gatt services. Reason: ["
-			<< Util.getLastErrorMessage(hr) << "]";
+			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	return pServiceBuffer;
 }
 
-BleDevice::BleDevice(wstring _deviceInstanceId) : hBleDevice(getBleDeviceHandle(_deviceInstanceId)), deviceContext(hBleDevice, _deviceInstanceId)
+BleDevice::BleDevice(wstring deviceInstanceId) : _hBleDevice(getBleDeviceHandle(deviceInstanceId)), _deviceContext(_hBleDevice, deviceInstanceId)
 {
-	deviceInstanceId = _deviceInstanceId;
-	
-	pGattServiceBuffer = getGattServices(hBleDevice, &gattServiceCount);
-
-	for (size_t i = 0; i < gattServiceCount; i++)
-	{
-		bleGattServices.push_back(new BleGattService(deviceContext, &pGattServiceBuffer[i]));
-	}
+	_deviceInstanceId = deviceInstanceId;
 }
 
 BleDevice::~BleDevice()
 {
-	for (BleGattService *s : bleGattServices)
+	for (BleGattService *s : _bleGattServices)
 		delete(s);
 
-	if (pGattServiceBuffer)
-		free(pGattServiceBuffer);
+	if (_pGattServiceBuffer)
+		free(_pGattServiceBuffer);
 
-	if (hBleDevice)
-		CloseHandle(hBleDevice);
+	if (_hBleDevice)
+		CloseHandle(_hBleDevice);
 }
 
 wstring BleDevice::getDeviceIntstanceId()
 {
-	return deviceInstanceId;
+	return _deviceInstanceId;
+}
+
+void BleDevice::enumerateBleServices()
+{
+	for (BleGattService *s : _bleGattServices)
+		delete(s);
+
+	_bleGattServices.clear();
+
+	if (_pGattServiceBuffer)
+		free(_pGattServiceBuffer);
+
+	_pGattServiceBuffer = getGattServices(_hBleDevice, &_gattServiceCount);
+
+	for (size_t i = 0; i < _gattServiceCount; i++)
+		_bleGattServices.push_back(new BleGattService(_deviceContext, &_pGattServiceBuffer[i]));
 }
 
 const BleDevice::BleGattServices & BleDevice::getBleGattServices()
-{
-	return bleGattServices;
+{	
+	return _bleGattServices;
 }

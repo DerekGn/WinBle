@@ -42,17 +42,17 @@ using namespace std;
 class BleDevice
 {
 	private:
-		HANDLE hBleDevice = nullptr;
+		HANDLE _hBleDevice = nullptr;
 
-		wstring deviceInstanceId;
+		wstring _deviceInstanceId;
 
-		BleDeviceContext deviceContext;
+		BleDeviceContext _deviceContext;
 
-		list<BleGattService*> bleGattServices;
+		list<BleGattService*> _bleGattServices;
 
-		USHORT gattServiceCount = 0;
+		USHORT _gattServiceCount = 0;
 
-		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
+		PBTH_LE_GATT_SERVICE _pGattServiceBuffer = nullptr;
 	
 		static HANDLE getBleDeviceHandle(wstring deviceInstanceId);
 
@@ -75,6 +75,12 @@ class BleDevice
 		/// Gets the device instance name
 		/// </summary>
 		wstring getDeviceIntstanceId();
+
+		/// <summary>
+		/// Enumerate this devices list of ble services
+		/// </summary>
+		/// <remarks>must be called prior to calling get services</remarks>
+		void enumerateBleServices();
 
 		typedef list<BleGattService*> BleGattServices;
 

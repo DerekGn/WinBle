@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -23,30 +23,29 @@ SOFTWARE.
 
 */
 
-#include "BleDeviceInfo.h"
+#ifndef FILEHANDLEWRAPPER_H
+#define FILEHANDLEWRAPPER_H
 
-BleDeviceInfo::BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId)
-{
-	_name = _name;
-	_hardwareId = hardwareId;
-	_instanceId = instanceId;
-}
+#include <windows.h>
 
-BleDeviceInfo::~BleDeviceInfo()
+/// <summary>
+/// A class for wrapping windows handles created with CreateFile
+/// </summary>
+class FileHandleWrapper
 {
-}
+private:
+	HANDLE _handle = nullptr;
 
-wstring BleDeviceInfo::getName()
-{
-	return _name;
-}
+	FileHandleWrapper(const FileHandleWrapper &obj);
 
-wstring BleDeviceInfo::getHardwareId()
-{
-	return _hardwareId;
-}
+	FileHandleWrapper& FileHandleWrapper::operator=(const FileHandleWrapper& other);
 
-wstring BleDeviceInfo::getInstanceId()
-{
-	return _instanceId;
-}
+public:
+	FileHandleWrapper(HANDLE handle);
+
+	~FileHandleWrapper();
+
+	HANDLE get();
+};
+
+#endif

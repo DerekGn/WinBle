@@ -27,28 +27,19 @@ SOFTWARE.
 #define BLEFUNCTIONS_H
 
 #include <Windows.h>
+#include <Bluetoothleapis.h>
 
 #include <string>
 
 using namespace std;
 
-/// <summary>
-/// Open a handle to a ble device
-/// </summary>
-/// <param name="interfaceUUID">The interface to open on the ble device</param>
-/// <param name="instanceId">The instance Id of the ble device to open a handle to the interface</param>
-HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId);
+GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID);
 
 /// <summary>
 /// Open a handle to an interface of a ble device
 /// </summary>
 /// <param name="interfaceUUID">The interface to open on the ble device</param>
-/// <param name="instanceId">The instance Id of the ble device to open a handle to the interface</param>
-HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId);
-
-/// <summary>
-/// Release an allocated ble interface handle
-/// </summary>
-void releaseBleInterfaceHandle(HANDLE hInterfaceHandle);
+/// <param name="dwDesiredAccess">The desired access mode</param>
+HANDLE openBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess);
 
 #endif

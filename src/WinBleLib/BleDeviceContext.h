@@ -40,11 +40,9 @@ static const GUID UUID_DEVICE_INFO = { 0x0000180A, 0x0000, 0x1000, { 0x80, 0x00,
 class BleDeviceContext
 {
 	private:
-		HANDLE hBleDevice = nullptr;
+		HANDLE _hBleDevice = nullptr;
 		
-		HANDLE hBleService = nullptr;
-
-		wstring deviceInstanceId;
+		wstring _deviceInstanceId;
 
 	public:
 		/// <summary>
@@ -55,12 +53,6 @@ class BleDeviceContext
 		BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId);
 		
 		~BleDeviceContext();
-
-		/// <summary>
-		/// Gets the handle to the devices device information service
-		/// </summary>
-		/// <returns>The device information service handle</returns>
-		HANDLE getBleServiceHandle();
 
 		/// <summary>
 		/// Get the device handle

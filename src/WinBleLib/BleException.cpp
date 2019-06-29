@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -26,15 +26,6 @@ SOFTWARE.
 #include "BleException.h"
 
 BleException::BleException(const string & _message) :
-	message(_message)
+	std::runtime_error(_message)
 {
-}
-
-BleException::~BleException()
-{
-}
-
-const string & BleException::Message()
-{
-	return message;
 }

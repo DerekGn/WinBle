@@ -43,17 +43,22 @@ class BleGattDescriptor
 {
 	private:
 		
-		BleDeviceContext& bleDeviceContext;
+		PBTH_LE_GATT_SERVICE _pGattService;
 
-		PBTH_LE_GATT_DESCRIPTOR pGattDescriptor = nullptr;
+		BleDeviceContext& _bleDeviceContext;
+
+		PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor = nullptr;
+
+		void setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE value);
 
 	public:
 		/// <summary>
 		/// Create an instance of a <see cref="BleGattDescriptor"/>
 		/// </summary>
 		/// <param name="bleDeviceContext">The parent ble device context</param>
+		/// <param name="pGattService">The Gatt service</parma>
 		/// <param name="pGattDescriptor">The contained <see cref="PBTH_LE_GATT_DESCRIPTOR"/></param>
-		BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
+		BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
 
 		~BleGattDescriptor();
 
@@ -86,5 +91,25 @@ class BleGattDescriptor
 		/// Gets the descriptors value
 		/// </summary>
 		BleGattDescriptorValue* getValue();
+
+		/// <summary>
+		/// Subscribe to notifications
+		/// </summary>
+		void setIsSubscribeToNotification();
+
+		/// <summary>
+		/// Unsubscribe to notifications
+		/// </summary>
+		void clearIsSubscribeToNotification();
+
+		/// <summary>
+		/// Subscribe to indications
+		/// </summary>
+		void setIsSubscribeToIndication();
+
+		/// <summary>
+		/// Unsubscribe to indications
+		/// </summary>
+		void clearIsSubscribeToIndication();
 };
 #endif

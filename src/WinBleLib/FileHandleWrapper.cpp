@@ -23,30 +23,23 @@ SOFTWARE.
 
 */
 
-#include "BleDeviceInfo.h"
+#include "FileHandleWrapper.h"
 
-BleDeviceInfo::BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId)
-{
-	_name = _name;
-	_hardwareId = hardwareId;
-	_instanceId = instanceId;
-}
 
-BleDeviceInfo::~BleDeviceInfo()
+FileHandleWrapper::FileHandleWrapper(HANDLE handle) : _handle(handle)
 {
 }
 
-wstring BleDeviceInfo::getName()
+
+FileHandleWrapper::~FileHandleWrapper()
 {
-	return _name;
+	if (_handle)
+	{
+		CloseHandle(_handle);
+	}
 }
 
-wstring BleDeviceInfo::getHardwareId()
+HANDLE FileHandleWrapper::get()
 {
-	return _hardwareId;
-}
-
-wstring BleDeviceInfo::getInstanceId()
-{
-	return _instanceId;
+	return _handle;
 }

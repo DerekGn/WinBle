@@ -40,14 +40,15 @@ Utility::~Utility()
 {
 }
 
-string Utility::getLastErrorMessage(DWORD errorMessageId)
+string Utility::getLastError(DWORD errorMessageID)
 {
-	if (errorMessageId == 0)
+
+	if (errorMessageID == 0)
 		return string();
 
 	LPSTR messageBuffer = nullptr;
 	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, errorMessageId, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
 	string message(messageBuffer, size);
 
@@ -81,5 +82,5 @@ void Utility::handleMallocFailure(unsigned long size)
 	stringstream msg;
 	msg << "Unable to allocate [" << size << "] bytes";
 
-	throw new BleException(msg.str());
+	throw BleException(msg.str());
 }

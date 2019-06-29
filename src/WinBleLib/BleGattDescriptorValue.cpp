@@ -27,86 +27,91 @@ SOFTWARE.
 #include "BleException.h"
 #include "Utility.h"
 
-BleGattDescriptorValue::BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE _pGattDescriptorValue)
+BleGattDescriptorValue::BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue)
 {
-	if (!_pGattDescriptorValue)
-		throw new BleException("pGattDescriptorValue is nullptr");
+	if (!pGattDescriptorValue)
+		throw BleException("pGattDescriptorValue is nullptr");
 
-	pGattDescriptorValue = _pGattDescriptorValue;
+	_pGattDescriptorValue = pGattDescriptorValue;
 }
 
 BleGattDescriptorValue::~BleGattDescriptorValue()
 {
-	if (pGattDescriptorValue)
-		free(pGattDescriptorValue);
+	if (_pGattDescriptorValue)
+		free(_pGattDescriptorValue);
 }
 
 BTH_LE_GATT_DESCRIPTOR_TYPE BleGattDescriptorValue::GetDescriptorType()
 {
-	return pGattDescriptorValue->DescriptorType;
+	return _pGattDescriptorValue->DescriptorType;
 }
 
 BTH_LE_UUID BleGattDescriptorValue::getDescriptorUuid()
 {
-	return pGattDescriptorValue->DescriptorUuid;
+	return _pGattDescriptorValue->DescriptorUuid;
 }
 
 BOOLEAN BleGattDescriptorValue::getIsReliableWriteEnabled()
 {
-	return pGattDescriptorValue->CharacteristicExtendedProperties.IsReliableWriteEnabled;
+	return _pGattDescriptorValue->CharacteristicExtendedProperties.IsReliableWriteEnabled;
 }
 
 BOOLEAN BleGattDescriptorValue::getIsAuxiliariesWritable()
 {
-	return pGattDescriptorValue->CharacteristicExtendedProperties.IsAuxiliariesWritable;
+	return _pGattDescriptorValue->CharacteristicExtendedProperties.IsAuxiliariesWritable;
 }
 
 BOOLEAN BleGattDescriptorValue::getIsSubscribeToNotification()
 {
-	return pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToNotification;
+	return _pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToNotification;
 }
 
 BOOLEAN BleGattDescriptorValue::getIsSubscribeToIndication()
 {
-	return pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToIndication;
+	return _pGattDescriptorValue->ClientCharacteristicConfiguration.IsSubscribeToIndication;
 }
 
 BOOLEAN BleGattDescriptorValue::getIsBroadcast()
 {
-	return pGattDescriptorValue->ServerCharacteristicConfiguration.IsBroadcast;
+	return _pGattDescriptorValue->ServerCharacteristicConfiguration.IsBroadcast;
 }
 
 unsigned char BleGattDescriptorValue::getFormat()
 {
-	return pGattDescriptorValue->CharacteristicFormat.Format;
+	return _pGattDescriptorValue->CharacteristicFormat.Format;
 }
 
 unsigned char BleGattDescriptorValue::getExponent()
 {
-	return pGattDescriptorValue->CharacteristicFormat.Exponent;
+	return _pGattDescriptorValue->CharacteristicFormat.Exponent;
 }
 
 BTH_LE_UUID BleGattDescriptorValue::getUnit()
 {
-	return pGattDescriptorValue->CharacteristicFormat.Unit;
+	return _pGattDescriptorValue->CharacteristicFormat.Unit;
 }
 
 unsigned char BleGattDescriptorValue::getNameSpace()
 {
-	return pGattDescriptorValue->CharacteristicFormat.NameSpace;
+	return _pGattDescriptorValue->CharacteristicFormat.NameSpace;
 }
 
 BTH_LE_UUID BleGattDescriptorValue::getDescription()
 {
-	return pGattDescriptorValue->CharacteristicFormat.Description;
+	return _pGattDescriptorValue->CharacteristicFormat.Description;
 }
 
 unsigned long BleGattDescriptorValue::getDataSize()
 {
-	return pGattDescriptorValue->DataSize;
+	return _pGattDescriptorValue->DataSize;
 }
 
 unsigned char* BleGattDescriptorValue::getData()
 {
-	return pGattDescriptorValue->Data;
+	return _pGattDescriptorValue->Data;
+}
+
+PBTH_LE_GATT_DESCRIPTOR_VALUE BleGattDescriptorValue::getValue()
+{
+	return _pGattDescriptorValue;
 }

@@ -53,9 +53,9 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 		{
 			stringstream msg;
 			msg << "Unable to determine the number of gatt characteristics. Reason: ["
-				<< Util.getLastErrorMessage(hr) << "]";
+				<< Util.getLastError(hr) << "]";
 
-			throw new BleException(msg.str());
+			throw BleException(msg.str());
 		}
 
 		if (expectedCharBufferCount > 0)
@@ -85,54 +85,67 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 			{
 				stringstream msg;
 				msg << "Unable to determine the number of gatt characteristics. Reason: ["
-					<< Util.getLastErrorMessage(hr) << "]";
+					<< Util.getLastError(hr) << "]";
 
-				throw new BleException(msg.str());
+				throw BleException(msg.str());
 			}
 
 			if (*pGattCharcteristicsCount != expectedCharBufferCount)
 			{
-				throw new BleException("characteristic count expected and characteristic count actual mismatch");
+				throw BleException("characteristic count expected and characteristic count actual mismatch");
 			}
 		}
 	}
 	return pCharBuffer;
 }
 
-BleGattService::BleGattService(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT_SERVICE _pGattService)
-	:bleDeviceContext(_bleDeviceContext)
+BleGattService::BleGattService(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService)
+	:_bleDeviceContext(bleDeviceContext)
 {
-	if (!_pGattService)
-		throw new BleException("pGattService is nullptr");
+	if (!pGattService)
+		throw BleException("pGattService is nullptr");
 
-	pGattService = _pGattService;
-	
-	pGattCharacteristics = getGattCharacteristics(bleDeviceContext.getBleDeviceHandle(), pGattService, &gattCharacteristicsCount);
-
-	for (size_t i = 0; i < gattCharacteristicsCount; i++)
-		bleGattCharacteristics.push_back(new BleGattCharacteristic(bleDeviceContext, &pGattCharacteristics[i]));
+	_pGattService = pGattService;
 }
 
 BleGattService::~BleGattService()
 {
-	for (BleGattCharacteristic *c : bleGattCharacteristics)
+	for (BleGattCharacteristic *c : _bleGattCharacteristics)
 		delete(c);
 
-	if (pGattCharacteristics)
-		free(pGattCharacteristics);
+	if (_pGattCharacteristics)
+		free(_pGattCharacteristics);
+
+	if(_hBleService)
+		CloseHandle(_hBleService);
 }
 
 BTH_LE_UUID BleGattService::getServiceUuid()
 {
-	return pGattService->ServiceUuid;
+	return _pGattService->ServiceUuid;
 }
 
 USHORT BleGattService::getServiceAttributeHandle()
 {
-	return pGattService->AttributeHandle;
+	return _pGattService->AttributeHandle;
+}
+
+void BleGattService::enumerateBleCharacteristics()
+{
+	for (BleGattCharacteristic *c : _bleGattCharacteristics)
+		delete(c);
+
+	_pGattCharacteristics = getGattCharacteristics(_bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
+
+	_hBleService = openBleInterfaceHandle(
+		mapServiceUUID(&_pGattService->ServiceUuid),
+		GENERIC_READ);
+
+	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
+		_bleGattCharacteristics.push_back(new BleGattCharacteristic(_bleDeviceContext, _pGattService, &_pGattCharacteristics[i]));
 }
 
 const BleGattService::BleGattCharacteristics & BleGattService::getBleCharacteristics()
 {
-	return bleGattCharacteristics;
+	return _bleGattCharacteristics;
 }

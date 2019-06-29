@@ -25,24 +25,24 @@ SOFTWARE.
 
 #include "BleGattNotificationData.h"
 
-BleGattNotificationData::BleGattNotificationData(ULONG _dataSize, PBYTE _bytes) :
-	dataSize(_dataSize),
-	bytes(_bytes)
+BleGattNotificationData::BleGattNotificationData(ULONG dataSize, PBYTE bytes) :
+	_dataSize(dataSize),
+	_bytes(bytes)
 {
 }
 
 BleGattNotificationData::~BleGattNotificationData()
 {
-	if(bytes)
-		delete bytes;
+	if(_bytes)
+		delete _bytes;
 }
 
 ULONG BleGattNotificationData::getDataSize()
 {
-	return dataSize;
+	return _dataSize;
 }
 
 const PBYTE BleGattNotificationData::getBytes()
 {
-	return bytes;
+	return _bytes;
 }

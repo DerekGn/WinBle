@@ -29,7 +29,7 @@ using namespace std;
 #include <string>
 
 /// <summary>
-/// A utility class of healer methods
+/// A utility class of helper methods
 /// </summary>
 class Utility
 {
@@ -41,7 +41,7 @@ class Utility
 		/// <summary>
 		/// Gets the last win32 error as a string
 		/// </summary>
-		string getLastErrorMessage(DWORD errorMessageId);
+		string getLastError(DWORD errorMessageID);
 
 		/// <summary>
 		/// Converts a GUID to a string

@@ -37,16 +37,16 @@ using namespace std;
 class CallbackContext
 {
 	private:
-		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
+		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic;
 
-		function<void(const BleGattNotificationData&)> notificationHandler;
+		function<void(BleGattNotificationData&)> _notificationHandler;
 
 	public:
-		CallbackContext(function<void(const BleGattNotificationData&)> notificationHandler, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		CallbackContext(function<void(BleGattNotificationData&)> notificationHandler, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 
 		~CallbackContext();
 
-		function<void(const BleGattNotificationData&)> getNotificationHandler();
+		function<void(BleGattNotificationData&)> getNotificationHandler();
 
 		PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristic();
 };

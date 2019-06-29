@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -45,21 +45,22 @@ using namespace std;
 class BleGattCharacteristic
 {
 	private:
-		GUID serviceUUID;
+
+		PBTH_LE_GATT_SERVICE _pGattService;
+
+		USHORT _gattDescriptorsCount = 0;
+
+		CallbackContext* _callbackContext;
+
+		BleDeviceContext& _bleDeviceContext;
+
+		BLUETOOTH_GATT_EVENT_HANDLE _eventHandle;
 		
-		USHORT gattDescriptorsCount = 0;
+		list<BleGattDescriptor*> _bleGattDescriptors;
 
-		CallbackContext* callbackContext;
+		PBTH_LE_GATT_DESCRIPTOR _pGattDescriptors = nullptr;
 
-		BleDeviceContext& bleDeviceContext;
-
-		BLUETOOTH_GATT_EVENT_HANDLE eventHandle;
-		
-		list<BleGattDescriptor*> bleGattDescriptors;
-
-		PBTH_LE_GATT_DESCRIPTOR pGattDescriptors = nullptr;
-
-		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
+		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic;
 		
 		/// <summary>
 		/// Get the list of gatt desriptors <see cref="PBTH_LE_GATT_DESCRIPTOR"/>
@@ -85,8 +86,9 @@ class BleGattCharacteristic
 		/// Constructs an instance of a <see cref="BleGattCharacteristic"/>
 		/// </summary>
 		/// <param name="bleDeviceContext">The parent ble device context</param>
+		/// <param name="hBleService">The Gatt service handle</parma>
 		/// <param name="pGattCharacteristic">The contained <see cref="PBTH_LE_GATT_CHARACTERISTIC"/></param>
-		BleGattCharacteristic(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		BleGattCharacteristic(BleDeviceContext &bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 
@@ -151,17 +153,35 @@ class BleGattCharacteristic
 		BOOLEAN getHasExtendedProperties();
 
 		/// <summary>
-		/// Register the notification callback for this <see cref="BleGattCharacteristic"/>
+		/// Register the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
 		/// </summary>
 		/// <param name="notificationHandler">The notification function that will be invoked on callback</param>
 		/// <remarks>Throws a <see cref="BleGattException"/> if the chararacteritic is not indicatable or notifiable</remarks>
-		void registerCallback(function<void(const BleGattNotificationData&)> notificationHandler);
+		void registerNotificationHandler(function<void(BleGattNotificationData&)> notificationHandler);
+
+		/// <summary>
+		/// Unregister the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
+		/// </summary>
+		/// <remarks></remarks>
+		void unregisterNotificationHandler();
 
 		/// <summary>
 		/// Reads a characteristics value
 		/// </summary>
 		/// <remarks>Throws a BleException if the characteristic is not readable</remarks>
 		BleGattCharacteristicValue getValue();
+
+		/// <summary>
+		/// Writes a characteristics value
+		/// </summary>
+		/// <remarks>Throws a BleException if the characteristic is not writable</remarks>
+		void setValue(UCHAR * data, ULONG size);
+
+		/// <summary>
+		/// Enumerate this characteristics list of ble descriptors
+		/// </summary>
+		/// <remarks>must be called prior to calling get charateristics</remarks>
+		void enumerateBleDescriptors();
 
 		typedef list<BleGattDescriptor*> BleGattDescriptors;
 

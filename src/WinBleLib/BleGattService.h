@@ -42,15 +42,17 @@ class BleGattService
 {
 	private:
 		
-		BleDeviceContext& bleDeviceContext;
+		HANDLE _hBleService = nullptr;
 
-		USHORT gattCharacteristicsCount = 0;
+		BleDeviceContext& _bleDeviceContext;
 
-		PBTH_LE_GATT_SERVICE pGattService = nullptr;
+		USHORT _gattCharacteristicsCount = 0;
 
-		list<BleGattCharacteristic*> bleGattCharacteristics;
+		PBTH_LE_GATT_SERVICE _pGattService = nullptr;
 
-		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristics = nullptr;
+		list<BleGattCharacteristic*> _bleGattCharacteristics;
+
+		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristics = nullptr;
 
 		/// <summary>
 		/// Get the list of characteristics for a service
@@ -81,6 +83,12 @@ class BleGattService
 		/// Gets the services attribute handle
 		/// </summary>
 		USHORT getServiceAttributeHandle();
+
+		/// <summary>
+		/// Enumerate this services list of ble characteristics
+		/// </summary>
+		/// <remarks>must be called prior to calling get charateristics</remarks>
+		void enumerateBleCharacteristics();
 
 		typedef list<BleGattCharacteristic*> BleGattCharacteristics;
 

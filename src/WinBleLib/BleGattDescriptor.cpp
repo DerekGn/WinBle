@@ -24,6 +24,8 @@ SOFTWARE.
 */
 
 #include "BleGattDescriptor.h"
+#include "FileHandleWrapper.h"
+#include "BleFunctions.h"
 #include "BleException.h"
 #include "Utility.h"
 
@@ -31,52 +33,82 @@ SOFTWARE.
 
 using namespace std;
 
-BleGattDescriptor::BleGattDescriptor(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor) :
-	bleDeviceContext(_bleDeviceContext)
+void BleGattDescriptor::setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE newValue)
 {
-	if (!_pGattDescriptor)
-		throw new BleException("pGattDescriptor is nullptr");
+	FileHandleWrapper hBleService(
+		openBleInterfaceHandle(
+			mapServiceUUID(&_pGattService->ServiceUuid),
+			GENERIC_READ | GENERIC_WRITE));
+
+	HRESULT hr = BluetoothGATTSetDescriptorValue(
+		hBleService.get(),
+		_pGattDescriptor,
+		newValue,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (S_OK != hr) {
+		stringstream msg;
+		msg << "Unable to set the descriptor value. Reason: ["
+			<< Util.getLastError(hr) << "]";
+
+		throw BleException(msg.str());
+	}
+}
+
+BleGattDescriptor::BleGattDescriptor(
+	BleDeviceContext& bleDeviceContext,
+	PBTH_LE_GATT_SERVICE pGattService,
+	PBTH_LE_GATT_DESCRIPTOR pGattDescriptor) :
+	_bleDeviceContext(bleDeviceContext),
+	_pGattService(pGattService)
+{
+	if (!pGattDescriptor)
+		throw BleException("pGattDescriptor is nullptr");
 	
-	pGattDescriptor = _pGattDescriptor;
+	_pGattDescriptor = pGattDescriptor;
 }
 
 BleGattDescriptor::~BleGattDescriptor()
 {
-
 }
 
 USHORT BleGattDescriptor::getServiceHandle()
 {
-	return pGattDescriptor->ServiceHandle;
+	return _pGattDescriptor->ServiceHandle;
 }
 
 USHORT BleGattDescriptor::getCharacteristicHandle()
 {
-	return pGattDescriptor->CharacteristicHandle;
+	return _pGattDescriptor->CharacteristicHandle;
 }
 
 BTH_LE_GATT_DESCRIPTOR_TYPE BleGattDescriptor::getDescriptorType()
 {
-	return pGattDescriptor->DescriptorType;
+	return _pGattDescriptor->DescriptorType;
 }
 
 BTH_LE_UUID BleGattDescriptor::getDescriptorUuid()
 {
-	return pGattDescriptor->DescriptorUuid;
+	return _pGattDescriptor->DescriptorUuid;
 }
 
 USHORT BleGattDescriptor::getAttributeHandle()
 {
-	return pGattDescriptor->AttributeHandle;
+	return _pGattDescriptor->AttributeHandle;
 }
 
 BleGattDescriptorValue* BleGattDescriptor::getValue()
 {
 	USHORT descValueDataSize;
 
+	FileHandleWrapper hBleService(
+		openBleInterfaceHandle(
+			mapServiceUUID(&_pGattService->ServiceUuid), 
+			GENERIC_READ));
+
 	HRESULT hr = BluetoothGATTGetDescriptorValue(
-		bleDeviceContext.getBleServiceHandle(),
-		pGattDescriptor,
+		hBleService.get(),
+		_pGattDescriptor,
 		0,
 		NULL,
 		&descValueDataSize,
@@ -86,9 +118,9 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	{
 		stringstream msg;
 		msg << "Unable to determine the descriptor value size. Reason: ["
-			<< Util.getLastErrorMessage(hr) << "]";
+			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 
 	PBTH_LE_GATT_DESCRIPTOR_VALUE pDescValueBuffer = (PBTH_LE_GATT_DESCRIPTOR_VALUE)malloc(descValueDataSize);
@@ -103,8 +135,8 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	}
 
 	hr = BluetoothGATTGetDescriptorValue(
-		bleDeviceContext.getBleServiceHandle(),
-		pGattDescriptor,
+		hBleService.get(),
+		_pGattDescriptor,
 		(ULONG)descValueDataSize,
 		pDescValueBuffer,
 		NULL,
@@ -114,10 +146,58 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	{
 		stringstream msg;
 		msg << "Unable to read the descriptor value size. Reason: ["
-			<< Util.getLastErrorMessage(hr) << "]";
+			<< Util.getLastError(hr) << "]";
 
-		throw new BleException(msg.str());
+		throw BleException(msg.str());
 	}
 	
 	return new BleGattDescriptorValue(pDescValueBuffer);
+}
+
+void BleGattDescriptor::setIsSubscribeToNotification()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToNotification = TRUE;
+
+	setDescriptorValue(&newValue);
+}
+
+void BleGattDescriptor::clearIsSubscribeToNotification()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToNotification = FALSE;
+
+	setDescriptorValue(&newValue);
+}
+
+void BleGattDescriptor::setIsSubscribeToIndication()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToIndication = TRUE;
+
+	setDescriptorValue(&newValue);
+}
+
+void BleGattDescriptor::clearIsSubscribeToIndication()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToIndication = FALSE;
+
+	setDescriptorValue(&newValue);
 }
