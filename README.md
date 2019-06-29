@@ -31,15 +31,33 @@ characteristic->setValue(values, 4);
 // The callback for the characteristic notification
 void HandleCallback(BleGattNotificationData& data)
 {
-    cout << "Recieved callback data: " << data.getDataSize() << endl;
+    cout << "Received callback data: " << data.getDataSize() << endl;
 }
 
-// the callback function
-const std::function<void(BleGattNotificationData&)> callback = HandleCallback;
+// Enumerate characteristic descriptors
+characteristic->enumerateBleDescriptors();
 
-// enable notifications for the characteristic IsNotifiable or IsIndicatable must be true for the characteristic or an exception will be thrown
-characteristic->enableNotifications(callback);
+// Get the list of descriptors
+list<BleGattDescriptor *> descriptors = characteristic->getBleDescriptors();
 
-// disable the notification
-characteristic->disableNotifications();
+if (descriptors.size() > 0)
+{
+    // Get the characteristic descriptor
+    BleGattDescriptor *descriptor = descriptors.front();
+
+    // The callback function
+    const std::function<void(BleGattNotificationData&)> callback = HandleCallback;
+
+    // Enable notifications for the characteristic IsNotifiable or IsIndicatable must be true for the characteristic or an exception will be thrown
+    characteristic->enableNotifications(callback);
+
+    // Enable the subscription notification for the characteristic
+    descriptor->setIsSubscribeToNotification();
+
+    // Disable the notification
+    characteristic->disableNotifications();
+
+    // Clear the subscription notification
+    descriptor->clearIsSubscribeToNotification();
+}
 ```
