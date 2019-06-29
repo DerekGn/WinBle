@@ -142,13 +142,39 @@ int main()
 
 					const std::function<void(BleGattNotificationData&)> callback = HandleCallback;
 
-					characteristic->enableNotifications(callback);
+					cout << "Enumerating Ble Descriptors" << endl;
+					
+					characteristic->enumerateBleDescriptors();
 
-					cout << "Press any key to continue" << endl;
+					//get descriptor
+					list<BleGattDescriptor *> descriptors = characteristic->getBleDescriptors();
 
-					std::cin.get();
+					if (descriptors.size() > 0)
+					{
+						BleGattDescriptor *descriptor = descriptors.front();
 
-					characteristic->disableNotifications();
+						BleGattDescriptorValue *descriptorValue = descriptor->getValue();
+
+						characteristic->registerNotificationHandler(callback);
+						
+						descriptor->setIsSubscribeToNotification();
+
+						cout << "Press any key to continue" << endl;
+
+						std::cin.get();
+
+						characteristic->unregisterNotificationHandler();
+
+						descriptor->clearIsSubscribeToNotification();
+					}
+					else
+					{
+						cout << "Unable to find descriptors for serial characteristic [" << Util.guidToString(UUID_TX_CHARACTERISTIC) << "]" << endl;
+					}
+				}
+				else
+				{
+					cout << "Unable to find serial characteristic [" << Util.guidToString(UUID_TX_CHARACTERISTIC) << "]"<< endl;
 				}
 			}
 		}

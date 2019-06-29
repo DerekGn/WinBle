@@ -49,6 +49,8 @@ class BleGattDescriptor
 
 		PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor = nullptr;
 
+		void setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE value);
+
 	public:
 		/// <summary>
 		/// Create an instance of a <see cref="BleGattDescriptor"/>
@@ -89,5 +91,25 @@ class BleGattDescriptor
 		/// Gets the descriptors value
 		/// </summary>
 		BleGattDescriptorValue* getValue();
+
+		/// <summary>
+		/// Subscribe to notifications
+		/// </summary>
+		void setIsSubscribeToNotification();
+
+		/// <summary>
+		/// Unsubscribe to notifications
+		/// </summary>
+		void clearIsSubscribeToNotification();
+
+		/// <summary>
+		/// Subscribe to indications
+		/// </summary>
+		void setIsSubscribeToIndication();
+
+		/// <summary>
+		/// Unsubscribe to indications
+		/// </summary>
+		void clearIsSubscribeToIndication();
 };
 #endif

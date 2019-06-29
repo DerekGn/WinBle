@@ -33,7 +33,32 @@ SOFTWARE.
 
 using namespace std;
 
-BleGattDescriptor::BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor) :
+void BleGattDescriptor::setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE newValue)
+{
+	FileHandleWrapper hBleService(
+		getBleInterfaceHandle(
+			mapServiceUUID(&_pGattService->ServiceUuid),
+			GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE));
+
+	HRESULT hr = BluetoothGATTSetDescriptorValue(
+		hBleService.get(),
+		_pGattDescriptor,
+		newValue,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (S_OK != hr) {
+		stringstream msg;
+		msg << "Unable to set the descriptor value. Reason: ["
+			<< Util.getLastError(hr) << "]";
+
+		throw BleException(msg.str());
+	}
+}
+
+BleGattDescriptor::BleGattDescriptor(
+	BleDeviceContext& bleDeviceContext,
+	PBTH_LE_GATT_SERVICE pGattService,
+	PBTH_LE_GATT_DESCRIPTOR pGattDescriptor) :
 	_bleDeviceContext(bleDeviceContext),
 	_pGattService(pGattService)
 {
@@ -45,7 +70,6 @@ BleGattDescriptor::BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE
 
 BleGattDescriptor::~BleGattDescriptor()
 {
-
 }
 
 USHORT BleGattDescriptor::getServiceHandle()
@@ -128,4 +152,52 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	}
 	
 	return new BleGattDescriptorValue(pDescValueBuffer);
+}
+
+void BleGattDescriptor::setIsSubscribeToNotification()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToNotification = TRUE;
+
+	setDescriptorValue(&newValue);
+}
+
+void BleGattDescriptor::clearIsSubscribeToNotification()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToNotification = FALSE;
+
+	setDescriptorValue(&newValue);
+}
+
+void BleGattDescriptor::setIsSubscribeToIndication()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToIndication = TRUE;
+
+	setDescriptorValue(&newValue);
+}
+
+void BleGattDescriptor::clearIsSubscribeToIndication()
+{
+	BTH_LE_GATT_DESCRIPTOR_VALUE newValue;
+
+	RtlZeroMemory(&newValue, sizeof(newValue));
+
+	newValue.DescriptorType = ClientCharacteristicConfiguration;
+	newValue.ClientCharacteristicConfiguration.IsSubscribeToIndication = FALSE;
+
+	setDescriptorValue(&newValue);
 }

@@ -64,19 +64,9 @@ class BleGattDescriptorValue
 		BOOLEAN getIsReliableWriteEnabled();
 
 		/// <summary>
-		/// Indicates if a descriptor is reliable write enabled
-		/// </summary>
-		void setIsReliableWriteEnabled(BOOLEAN value);
-
-		/// <summary>
 		/// Indicates if a descriptor is auxiliarie write enabled
 		/// </summary>
 		BOOLEAN getIsAuxiliariesWritable();
-
-		/// <summary>
-		/// Indicates if a descriptor is auxiliarie write enabled
-		/// </summary>
-		void setIsAuxiliariesWritable(BOOLEAN value);
 
 		/// <summary>
 		/// Indicates if a descriptor can be subscribed too for notification
@@ -84,19 +74,9 @@ class BleGattDescriptorValue
 		BOOLEAN getIsSubscribeToNotification();
 
 		/// <summary>
-		/// Indicates if a descriptor can be subscribed too for notification
-		/// </summary>
-		void setIsSubscribeToNotification(BOOLEAN value);
-		
-		/// <summary>
 		/// Indicates if a descriptor can be subscribed too for indication
 		/// </summary>
 		BOOLEAN getIsSubscribeToIndication();
-
-		/// <summary>
-		/// Indicates if a descriptor can be subscribed too for indication
-		/// </summary>
-		void setIsSubscribeToIndication(BOOLEAN value);
 
 		/// <summary>
 		/// Indicates if a descriptor is broadcast
