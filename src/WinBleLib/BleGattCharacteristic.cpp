@@ -112,7 +112,10 @@ VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE e
 	}
 }
 
-BleGattCharacteristic::BleGattCharacteristic(BleDeviceContext &bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic) :
+BleGattCharacteristic::BleGattCharacteristic(
+	BleDeviceContext &bleDeviceContext,
+	PBTH_LE_GATT_SERVICE pGattService,
+	PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic) :
 	_pGattCharacteristic(pGattCharacteristic),
 	_bleDeviceContext(bleDeviceContext),
 	_eventHandle(INVALID_HANDLE_VALUE),
@@ -192,7 +195,7 @@ BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
 	return _pGattCharacteristic->HasExtendedProperties;
 }
 
-void BleGattCharacteristic::enableNotifications(function<void(BleGattNotificationData&)> notificationHandler)
+void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNotificationData&)> notificationHandler)
 {
 	if (_callbackContext != nullptr)
 		return;
@@ -229,7 +232,7 @@ void BleGattCharacteristic::enableNotifications(function<void(BleGattNotificatio
 	}
 }
 
-void BleGattCharacteristic::disableNotifications()
+void BleGattCharacteristic::unregisterNotificationHandler()
 {
 	if (_callbackContext != nullptr)
 	{

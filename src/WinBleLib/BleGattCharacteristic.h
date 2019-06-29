@@ -157,13 +157,13 @@ class BleGattCharacteristic
 		/// </summary>
 		/// <param name="notificationHandler">The notification function that will be invoked on callback</param>
 		/// <remarks>Throws a <see cref="BleGattException"/> if the chararacteritic is not indicatable or notifiable</remarks>
-		void enableNotifications(function<void(BleGattNotificationData&)> notificationHandler);
+		void registerNotificationHandler(function<void(BleGattNotificationData&)> notificationHandler);
 
 		/// <summary>
-		/// Register the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
+		/// Unregister the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
 		/// </summary>
 		/// <remarks></remarks>
-		void disableNotifications();
+		void unregisterNotificationHandler();
 
 		/// <summary>
 		/// Reads a characteristics value
