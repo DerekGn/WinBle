@@ -137,10 +137,9 @@ void BleGattService::enumerateBleCharacteristics()
 
 	_pGattCharacteristics = getGattCharacteristics(_bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
 
-	_hBleService = getBleInterfaceHandle(
+	_hBleService = openBleInterfaceHandle(
 		mapServiceUUID(&_pGattService->ServiceUuid),
-		GENERIC_READ,
-		FILE_SHARE_READ | FILE_SHARE_WRITE);
+		GENERIC_READ);
 
 	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
 		_bleGattCharacteristics.push_back(new BleGattCharacteristic(_bleDeviceContext, _pGattService, &_pGattCharacteristics[i]));

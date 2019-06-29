@@ -36,9 +36,9 @@ using namespace std;
 void BleGattDescriptor::setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE newValue)
 {
 	FileHandleWrapper hBleService(
-		getBleInterfaceHandle(
+		openBleInterfaceHandle(
 			mapServiceUUID(&_pGattService->ServiceUuid),
-			GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE));
+			GENERIC_READ | GENERIC_WRITE));
 
 	HRESULT hr = BluetoothGATTSetDescriptorValue(
 		hBleService.get(),
@@ -102,9 +102,9 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	USHORT descValueDataSize;
 
 	FileHandleWrapper hBleService(
-		getBleInterfaceHandle(
+		openBleInterfaceHandle(
 			mapServiceUUID(&_pGattService->ServiceUuid), 
-			GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE));
+			GENERIC_READ));
 
 	HRESULT hr = BluetoothGATTGetDescriptorValue(
 		hBleService.get(),

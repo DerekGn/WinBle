@@ -209,10 +209,9 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 		_callbackContext = new CallbackContext(notificationHandler, _pGattCharacteristic);
 
 		FileHandleWrapper hBleService(
-			getBleInterfaceHandle(
+			openBleInterfaceHandle(
 				mapServiceUUID(&_pGattService->ServiceUuid), 
-				GENERIC_READ | GENERIC_WRITE,
-				FILE_SHARE_READ | FILE_SHARE_WRITE));
+				GENERIC_READ | GENERIC_WRITE));
 
 		HRESULT hr = BluetoothGATTRegisterEvent(hBleService.get(), CharacteristicValueChangedEvent,
 			&registration, &NotificationCallback, _callbackContext, &_eventHandle, BLUETOOTH_GATT_FLAG_NONE);
@@ -260,7 +259,9 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 	if (_pGattCharacteristic->IsReadable) 
 	{
-		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE));
+		FileHandleWrapper hBleService(
+			openBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid),
+				GENERIC_READ));
 
 		HRESULT hr = BluetoothGATTGetCharacteristicValue(
 			hBleService.get(),
@@ -328,7 +329,9 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 		gatt_value->DataSize = (ULONG)size;
 		memcpy(gatt_value->Data, data, size);
 
-		FileHandleWrapper hBleService(getBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE));
+		FileHandleWrapper hBleService(
+			openBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid),
+			GENERIC_WRITE));
 
 		HRESULT hr = BluetoothGATTSetCharacteristicValue(hBleService.get(), _pGattCharacteristic, gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
 

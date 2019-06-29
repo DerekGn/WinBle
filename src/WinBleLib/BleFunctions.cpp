@@ -49,7 +49,7 @@ GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID)
 	}
 }
 
-HANDLE getBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess, DWORD dwShareMode)
+HANDLE openBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess)
 {
 	HDEVINFO hDI;
 	SP_DEVICE_INTERFACE_DATA did;
@@ -96,7 +96,7 @@ HANDLE getBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess, DWORD dw
 			hComm = CreateFile(
 				pInterfaceDetailData->DevicePath,
 				dwDesiredAccess,
-				dwShareMode,
+				FILE_SHARE_READ | FILE_SHARE_WRITE,
 				NULL,
 				OPEN_EXISTING,
 				0,
