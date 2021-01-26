@@ -42,7 +42,12 @@ BleDeviceEnumerator BleEnumerator;
 
 inline std::wstring& rtrim_null(std::wstring& s)
 {
-	s.erase(s.find_first_of(L'\0', 0));
+	auto find_first_null = s.find_first_of(L'\0', 0);
+	if (find_first_null == -1)
+	{
+		return s;
+	}
+	s.erase(find_first_null);
 	return s;
 }
 
