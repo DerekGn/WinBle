@@ -25,23 +25,54 @@ SOFTWARE.
 
 #include "CallbackContext.h"
 
-CallbackContext::CallbackContext(function<void(BleGattNotificationData&)> notificationHandler, 
-	PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic) :
-	_notificationHandler(notificationHandler),
-	_pGattCharacteristic(pGattCharacteristic)
+void CallbackContext::Register(
+	function<void(BleGattNotificationData&)> notificationHandler, 
+	PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic) 
 {	
+	_notificationHandler = std::move(notificationHandler);
+	_pGattCharacteristic = pGattCharacteristic;
+
+	std::lock_guard<std::mutex> lock(_unRegisterMutex);
+	_isRegistered = true;
 }
 
-CallbackContext::~CallbackContext()
+void CallbackContext::Unregister()
 {
+	{
+		std::lock_guard<std::mutex> lock(_unRegisterMutex);
+		_isRegistered = false;
+	}
+	{
+		std::unique_lock<std::mutex> lock(_isInCallbackMutex);
+		_isInCallbackCondition.wait(lock, [this] { return !_isInCallback;  });
+	}
 }
 
-function<void(BleGattNotificationData&)> CallbackContext::getNotificationHandler()
+bool CallbackContext::IsRegistered()
+{
+	std::lock_guard<std::mutex> lock(_unRegisterMutex);
+	return _isRegistered;
+}
+
+void CallbackContext::SetInCallback()
+{
+	std::unique_lock<std::mutex> lock(_isInCallbackMutex);
+	_isInCallback = true;
+}
+
+void CallbackContext::UnsetInCallback()
+{
+	std::unique_lock<std::mutex> lock(_isInCallbackMutex);
+	_isInCallback = false;
+	_isInCallbackCondition.notify_one();
+}
+
+function<void(BleGattNotificationData&)> CallbackContext::getNotificationHandler() const
 {
 	return _notificationHandler;
 }
 
-PBTH_LE_GATT_CHARACTERISTIC CallbackContext::getGattCharacteristic()
+PBTH_LE_GATT_CHARACTERISTIC CallbackContext::getGattCharacteristic() const
 {
 	return _pGattCharacteristic;
 }

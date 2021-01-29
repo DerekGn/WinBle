@@ -24,6 +24,7 @@ SOFTWARE.
 */
 
 #include "BleGattCharacteristic.h"
+#include "CallbackScope.h"
 #include "FileHandleWrapper.h"
 #include "BleFunctions.h"
 #include "BleException.h"
@@ -102,6 +103,19 @@ VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE e
 {
 	BLUETOOTH_GATT_VALUE_CHANGED_EVENT *pEvent = (BLUETOOTH_GATT_VALUE_CHANGED_EVENT *)eventOutParameter;
 	CallbackContext* callbackContext = static_cast<CallbackContext*>(context);
+
+	// Assures that after unregisterNotificationHandler is called, no more callbacks will be invoked.
+
+	if (! callbackContext->IsRegistered())
+	{
+		return;
+	}
+
+	// Assures that unregisterNotificationHandler will wait until the last invocation of the callback
+	// has completed
+
+	CallbackScope callScope(*callbackContext);
+	
 	if (pEvent->ChangedAttributeHandle == callbackContext->getGattCharacteristic()->AttributeHandle)
 	{
 		PBYTE p = (PBYTE) malloc(pEvent->CharacteristicValue->DataSize);
@@ -197,7 +211,7 @@ BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
 
 void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNotificationData&)> notificationHandler)
 {
-	if (_callbackContext != nullptr)
+	if (_callbackContext.IsRegistered())
 		return;
 
 	if (_pGattCharacteristic->IsNotifiable || _pGattCharacteristic->IsIndicatable)
@@ -206,7 +220,7 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 		registration.NumCharacteristics = 1;
 		registration.Characteristics[0] = *_pGattCharacteristic;
 
-		_callbackContext = new CallbackContext(notificationHandler, _pGattCharacteristic);
+		_callbackContext.Register(std::move(notificationHandler), _pGattCharacteristic);
 
 		FileHandleWrapper hBleService(
 			openBleInterfaceHandle(
@@ -214,7 +228,7 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 				GENERIC_READ | GENERIC_WRITE));
 
 		HRESULT hr = BluetoothGATTRegisterEvent(hBleService.get(), CharacteristicValueChangedEvent,
-			&registration, &NotificationCallback, _callbackContext, &_eventHandle, BLUETOOTH_GATT_FLAG_NONE);
+			&registration, &NotificationCallback, &_callbackContext, &_eventHandle, BLUETOOTH_GATT_FLAG_NONE);
 
 		if (S_OK != hr)
 		{
@@ -233,13 +247,13 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 
 void BleGattCharacteristic::unregisterNotificationHandler()
 {
-	if (_callbackContext != nullptr)
+	if (_callbackContext.IsRegistered())
 	{
 		HRESULT hr = BluetoothGATTUnregisterEvent(_eventHandle, BLUETOOTH_GATT_FLAG_NONE);
 
-		delete _callbackContext;
-
-		_callbackContext = nullptr;
+		// Waits until the last invocation of the callback has completed
+		
+		_callbackContext.Unregister();
 
 		if (S_OK != hr)
 		{

@@ -50,7 +50,7 @@ class BleGattCharacteristic
 
 		USHORT _gattDescriptorsCount = 0;
 
-		CallbackContext* _callbackContext;
+		CallbackContext _callbackContext;
 
 		BleDeviceContext& _bleDeviceContext;
 
@@ -160,7 +160,8 @@ class BleGattCharacteristic
 		void registerNotificationHandler(function<void(BleGattNotificationData&)> notificationHandler);
 
 		/// <summary>
-		/// Unregister the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
+		/// Unregister the notification callback for this <see cref="BleGattCharacteristic"/> and end notifications
+		/// After this function returns, no more callbacks will be invoked.
 		/// </summary>
 		/// <remarks></remarks>
 		void unregisterNotificationHandler();
