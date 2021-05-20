@@ -27,28 +27,52 @@ SOFTWARE.
 #define CALLBACKCONTEXT_H
 
 #include <Windows.h>
+#include <mutex>
+
 #include <Bluetoothleapis.h>
 #include "BleGattNotificationData.h"
 
 using namespace std;
 
 #include <functional>
+#include <condition_variable>
 
 class CallbackContext
 {
 	private:
+
+		bool _isRegistered{};
+		std::mutex _unRegisterMutex;
+	
+		bool _isInCallback{};
+		std::mutex _isInCallbackMutex;
+		condition_variable _isInCallbackCondition;
+
 		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic;
 
 		function<void(BleGattNotificationData&)> _notificationHandler;
 
+		void SetInCallback();
+		void UnsetInCallback();
+
+		friend class CallbackScope;
+
 	public:
-		CallbackContext(function<void(BleGattNotificationData&)> notificationHandler, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		// Stores arguments and atomically sets _isRegistered
+	
+		void Register(
+			function<void(BleGattNotificationData&)> notificationHandler, 
+			PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 
-		~CallbackContext();
+		// Atomically unsets _isRegistered and waits for any pending callback to complete
+	
+		void Unregister();
 
-		function<void(BleGattNotificationData&)> getNotificationHandler();
+		bool IsRegistered();
+	
+		function<void(BleGattNotificationData&)> getNotificationHandler() const;
 
-		PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristic();
+		PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristic() const;
 };
 
 #endif
