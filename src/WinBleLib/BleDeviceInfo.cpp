@@ -27,7 +27,7 @@ SOFTWARE.
 
 BleDeviceInfo::BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId)
 {
-	_name = _name;
+	_name = name;
 	_hardwareId = hardwareId;
 	_instanceId = instanceId;
 }
