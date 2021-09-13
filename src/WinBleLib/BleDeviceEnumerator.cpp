@@ -87,7 +87,7 @@ void BleDeviceEnumerator::enumerate()
 {
 	_bleEnumeratedDevices.clear();
 
-	SP_DEVINFO_DATA did;
+	SP_DEVINFO_DATA did{};
 	DWORD i;
 
 	HDEVINFO hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);

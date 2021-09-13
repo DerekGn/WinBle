@@ -58,7 +58,7 @@ class BleGattService
 		/// Get the list of characteristics for a service
 		/// </summary>
 		/// <param name="hBleDeviceHandle">The device handle</param>
-		/// <param name="pGattService">The service to retrive characteristics</param>
+		/// <param name="pGattService">The service to retrieve characteristics</param>
 		/// <param name="pGattCharcteristicsCount">The characteristic count</param>
 		/// <returns>A pointer to the first <see cref="PBTH_LE_GATT_CHARACTERISTIC"/> in the list</returns>
 		static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(HANDLE hBleDeviceHandle, 
@@ -87,7 +87,7 @@ class BleGattService
 		/// <summary>
 		/// Enumerate this services list of ble characteristics
 		/// </summary>
-		/// <remarks>must be called prior to calling get charateristics</remarks>
+		/// <remarks>must be called prior to calling get characteristics</remarks>
 		void enumerateBleCharacteristics();
 
 		typedef list<BleGattCharacteristic*> BleGattCharacteristics;

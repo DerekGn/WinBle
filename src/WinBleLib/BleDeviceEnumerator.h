@@ -46,7 +46,7 @@ class BleDeviceEnumerator
 		/// Reads a string from the device registry
 		/// </summary>
 		/// <param name="hDI">The device info handle</param>
-		/// <param name="did">The deviec info data</param>
+		/// <param name="did">The device info data</param>
 		/// <param name="property">The property identifier</param>
 		/// <returns>The device registry string value</returns>
 		wstring getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property);

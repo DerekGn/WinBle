@@ -27,23 +27,18 @@ SOFTWARE.
 #define BLEGATTNOTIFICATION_H
 
 #include <Windows.h>
+#include "BleGattCharacteristicValue.h"
 
 /// <summary>
-/// 
-/// </summary>
-class BleGattNotificationData
+/// Represents a bluetooth low energy characteristic notification characteristic data from a ble device
+/// </summary
+class BleGattNotificationData : public BleGattCharacteristicValue
 {
-	private:
-		ULONG _dataSize;
-
-		PBYTE _bytes;
-	public:
-		BleGattNotificationData(ULONG dataSize, PBYTE bytes);
-		
-		~BleGattNotificationData();
-		
-		ULONG getDataSize();
-
-		const PBYTE getBytes();
+public:
+	/// <summary>
+	/// Creates an instance of a bluetooth low energy gatt notification data
+	/// </summary>
+	/// <param name="pGattCharacteristicValue">The underlying characteristic value</param>
+	BleGattNotificationData(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
 };
 #endif
