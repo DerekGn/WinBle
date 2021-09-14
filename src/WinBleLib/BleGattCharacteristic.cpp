@@ -118,8 +118,6 @@ VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE e
 	
 	if (pEvent->ChangedAttributeHandle == callbackContext->getGattCharacteristic()->AttributeHandle)
 	{
-		PBYTE p = (PBYTE) malloc(pEvent->CharacteristicValue->DataSize);
-
 		BleGattNotificationData* notification = new BleGattNotificationData(pEvent->CharacteristicValue);
 
 		callbackContext->getNotificationHandler()(*notification);
