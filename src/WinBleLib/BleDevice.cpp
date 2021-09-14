@@ -42,8 +42,8 @@ using namespace std;
 HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 {
 	HDEVINFO hDI;
-	SP_DEVICE_INTERFACE_DATA did;
-	SP_DEVINFO_DATA dd;
+	SP_DEVICE_INTERFACE_DATA did{};
+	SP_DEVINFO_DATA dd{};
 	HANDLE hComm = NULL;
 
 	hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, deviceInstanceId.c_str(), NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
@@ -65,7 +65,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 
 	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &GUID_BLUETOOTHLE_DEVICE_INTERFACE, i, &did); i++)
 	{
-		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData;
+		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData{};
 
 		DeviceInterfaceDetailData.cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
@@ -79,21 +79,28 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 
 			PSP_DEVICE_INTERFACE_DETAIL_DATA pInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)GlobalAlloc(GPTR, size);
 
-			pInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
+			if (pInterfaceDetailData != NULL)
+			{
+				pInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
-			if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, pInterfaceDetailData, size, &size, &dd))
-				break;
+				if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, pInterfaceDetailData, size, &size, &dd))
+					break;
 
-			hComm = CreateFile(
-				pInterfaceDetailData->DevicePath,
-				GENERIC_WRITE | GENERIC_READ,
-				FILE_SHARE_READ | FILE_SHARE_WRITE,
-				NULL,
-				OPEN_EXISTING,
-				0,
-				NULL);
+				hComm = CreateFile(
+					pInterfaceDetailData->DevicePath,
+					GENERIC_WRITE | GENERIC_READ,
+					FILE_SHARE_READ | FILE_SHARE_WRITE,
+					NULL,
+					OPEN_EXISTING,
+					0,
+					NULL);
 
-			GlobalFree(pInterfaceDetailData);
+				GlobalFree(pInterfaceDetailData);
+			}
+			else
+			{
+				throw BleException("Unable to allocate device interface detail data");
+			}
 		}
 	}
 

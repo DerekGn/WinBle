@@ -64,7 +64,7 @@ class CallbackContext
 			function<void(BleGattNotificationData&)> notificationHandler, 
 			PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 
-		// Atomically unsets _isRegistered and waits for any pending callback to complete
+		// Atomically unset _isRegistered and waits for any pending callback to complete
 	
 		void Unregister();
 

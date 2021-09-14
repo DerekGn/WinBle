@@ -63,9 +63,9 @@ class BleGattCharacteristic
 		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic;
 		
 		/// <summary>
-		/// Get the list of gatt desriptors <see cref="PBTH_LE_GATT_DESCRIPTOR"/>
+		/// Get the list of gatt descriptors <see cref="PBTH_LE_GATT_DESCRIPTOR"/>
 		/// </summary>
-		/// <param name="hBleDeviceHandle">The handle to the device to retrive the descriptors</param>
+		/// <param name="hBleDeviceHandle">The handle to the device to retrieve the descriptors</param>
 		/// <param name="pGattCharacteristic">The <see cref="PBTH_LE_GATT_CHARACTERISTIC"/> to enumerate the list of descriptors</param>
 		/// <param name="pGattDescriptorsCount">The number of descriptors enumerated</param>
 		/// <returns>A pointer to the first <see cref="PBTH_LE_GATT_CHARACTERISTIC"/> in the list</returns>
@@ -113,7 +113,7 @@ class BleGattCharacteristic
 		USHORT getCharacteristicValueHandle();
 		
 		/// <summary>
-		/// Indicates if a characteristic is broadcastable
+		/// Indicates if a characteristic is broadcast-able
 		/// </summary>
 		BOOLEAN getIsBroadcastable();
 
@@ -156,7 +156,7 @@ class BleGattCharacteristic
 		/// Register the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
 		/// </summary>
 		/// <param name="notificationHandler">The notification function that will be invoked on callback</param>
-		/// <remarks>Throws a <see cref="BleGattException"/> if the chararacteritic is not indicatable or notifiable</remarks>
+		/// <remarks>Throws a <see cref="BleGattException"/> if the characteristic is not indicatable or notifiable</remarks>
 		void registerNotificationHandler(function<void(BleGattNotificationData&)> notificationHandler);
 
 		/// <summary>
@@ -181,7 +181,7 @@ class BleGattCharacteristic
 		/// <summary>
 		/// Enumerate this characteristics list of ble descriptors
 		/// </summary>
-		/// <remarks>must be called prior to calling get charateristics</remarks>
+		/// <remarks>must be called prior to calling get characteristics</remarks>
 		void enumerateBleDescriptors();
 
 		typedef list<BleGattDescriptor*> BleGattDescriptors;

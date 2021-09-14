@@ -118,9 +118,7 @@ VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE e
 	
 	if (pEvent->ChangedAttributeHandle == callbackContext->getGattCharacteristic()->AttributeHandle)
 	{
-		PBYTE p = (PBYTE) malloc(pEvent->CharacteristicValue->DataSize);
-
-		BleGattNotificationData* notification = new BleGattNotificationData(pEvent->CharacteristicValue->DataSize, p);
+		BleGattNotificationData* notification = new BleGattNotificationData(pEvent->CharacteristicValue);
 
 		callbackContext->getNotificationHandler()(*notification);
 	}
@@ -216,7 +214,7 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 
 	if (_pGattCharacteristic->IsNotifiable || _pGattCharacteristic->IsIndicatable)
 	{
-		BLUETOOTH_GATT_VALUE_CHANGED_EVENT_REGISTRATION registration;
+		BLUETOOTH_GATT_VALUE_CHANGED_EVENT_REGISTRATION registration{};
 		registration.NumCharacteristics = 1;
 		registration.Characteristics[0] = *_pGattCharacteristic;
 
@@ -288,7 +286,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr) 
 		{
 			stringstream msg;
-			msg << "Unable to determine the characeristic value size. Reason: ["
+			msg << "Unable to determine the characteristic value size. Reason: ["
 				<< Util.getLastError(hr) << "]";
 
 			throw BleException(msg.str());
@@ -316,7 +314,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		if (S_OK != hr)
 		{
 			stringstream msg;
-			msg << "Unable to read the characeristic value. Reason: ["
+			msg << "Unable to read the characteristic value. Reason: ["
 				<< Util.getLastError(hr) << "]";
 
 			throw BleException(msg.str());
@@ -338,26 +336,33 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 
 		PBTH_LE_GATT_CHARACTERISTIC_VALUE gatt_value = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(required_size);
 
-		ZeroMemory(gatt_value, required_size);
-
-		gatt_value->DataSize = (ULONG)size;
-		memcpy(gatt_value->Data, data, size);
-
-		FileHandleWrapper hBleService(
-			openBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid),
-			GENERIC_WRITE));
-
-		HRESULT hr = BluetoothGATTSetCharacteristicValue(hBleService.get(), _pGattCharacteristic, gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
-
-		delete(gatt_value);
-
-		if (HRESULT_FROM_WIN32(S_OK) != hr)
+		if (gatt_value != NULL)
 		{
-			stringstream msg;
-			msg << "Unable to write the characeristic value. Reason: ["
-				<< Util.getLastError(hr) << "]";
+			ZeroMemory(gatt_value, required_size);
 
-			throw BleException(msg.str());
+			gatt_value->DataSize = (ULONG)size;
+			memcpy(gatt_value->Data, data, size);
+
+			FileHandleWrapper hBleService(
+				openBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid),
+					GENERIC_WRITE));
+
+			HRESULT hr = BluetoothGATTSetCharacteristicValue(hBleService.get(), _pGattCharacteristic, gatt_value, NULL, BLUETOOTH_GATT_FLAG_NONE);
+
+			free(gatt_value);
+
+			if (HRESULT_FROM_WIN32(S_OK) != hr)
+			{
+				stringstream msg;
+				msg << "Unable to write the characteristic value. Reason: ["
+					<< Util.getLastError(hr) << "]";
+
+				throw BleException(msg.str());
+			}
+		}
+		else
+		{
+			throw BleException("Unable to allocate characteristic value memory");
 		}
 	}
 	else

@@ -98,7 +98,7 @@ class BleGattDescriptor
 		void setIsSubscribeToNotification();
 
 		/// <summary>
-		/// Unsubscribe to notifications
+		/// Unsubscribe from notifications
 		/// </summary>
 		void clearIsSubscribeToNotification();
 
@@ -108,7 +108,7 @@ class BleGattDescriptor
 		void setIsSubscribeToIndication();
 
 		/// <summary>
-		/// Unsubscribe to indications
+		/// Unsubscribe from indications
 		/// </summary>
 		void clearIsSubscribeToIndication();
 };

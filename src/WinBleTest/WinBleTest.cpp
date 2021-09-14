@@ -22,7 +22,7 @@ static const GUID UUID_TX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 
 
 void HandleCallback(BleGattNotificationData& data)
 {
-	cout << "Received callback data: " << data.getDataSize() << endl;
+	cout << "Received callback data: " << data.getDataSize() << "Value: " << data.getData() << endl;
 }
 
 void readCharacteristicValueAndDisplay(list<BleGattCharacteristic *> &characteristics, USHORT uuid)

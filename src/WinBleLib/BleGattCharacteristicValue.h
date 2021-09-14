@@ -41,7 +41,7 @@ class BleGattCharacteristicValue
 		/// <summary>
 		/// Creates an instance of a bluetooth low energy characteristic value
 		/// </summary>
-		/// <param name="pGattCharacteristicValue">The underlying characteristc value</param>
+		/// <param name="pGattCharacteristicValue">The underlying characteristic value</param>
 		BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
 		
 		~BleGattCharacteristicValue();

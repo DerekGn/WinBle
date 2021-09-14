@@ -52,8 +52,8 @@ GUID mapServiceUUID(const PBTH_LE_UUID serviceUUID)
 HANDLE openBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess)
 {
 	HDEVINFO hDI;
-	SP_DEVICE_INTERFACE_DATA did;
-	SP_DEVINFO_DATA dd;
+	SP_DEVICE_INTERFACE_DATA did{};
+	SP_DEVINFO_DATA dd{};
 	GUID BluetoothInterfaceGUID = interfaceUUID;
 	HANDLE hComm = NULL;
 
@@ -74,7 +74,7 @@ HANDLE openBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess)
 
 	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &BluetoothInterfaceGUID, i, &did); i++)
 	{
-		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData;
+		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData{};
 
 		DeviceInterfaceDetailData.cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
@@ -88,30 +88,37 @@ HANDLE openBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess)
 
 			PSP_DEVICE_INTERFACE_DETAIL_DATA pInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)GlobalAlloc(GPTR, size);
 
-			pInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
-
-			if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, pInterfaceDetailData, size, &size, &dd))
-				break;
-
-			hComm = CreateFile(
-				pInterfaceDetailData->DevicePath,
-				dwDesiredAccess,
-				FILE_SHARE_READ | FILE_SHARE_WRITE,
-				NULL,
-				OPEN_EXISTING,
-				0,
-				NULL);
-
-			GlobalFree(pInterfaceDetailData);
-
-			if (hComm == INVALID_HANDLE_VALUE)
+			if (pInterfaceDetailData != NULL)
 			{
-				stringstream msg;
-				msg << "Unable to file handle for interface UUID: ["
-					<< Util.guidToString(BluetoothInterfaceGUID) << "] Reason: ["
-					<< Util.getLastError(GetLastError()) << "]";
+				pInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
-				throw BleException(msg.str());
+				if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, pInterfaceDetailData, size, &size, &dd))
+					break;
+
+				hComm = CreateFile(
+					pInterfaceDetailData->DevicePath,
+					dwDesiredAccess,
+					FILE_SHARE_READ | FILE_SHARE_WRITE,
+					NULL,
+					OPEN_EXISTING,
+					0,
+					NULL);
+
+				GlobalFree(pInterfaceDetailData);
+
+				if (hComm == INVALID_HANDLE_VALUE)
+				{
+					stringstream msg;
+					msg << "Unable to file handle for interface UUID: ["
+						<< Util.guidToString(BluetoothInterfaceGUID) << "] Reason: ["
+						<< Util.getLastError(GetLastError()) << "]";
+
+					throw BleException(msg.str());
+				}
+			}
+			else
+			{
+				throw new BleException("Unable to allocate device interface detail data");
 			}
 		}
 	}

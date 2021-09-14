@@ -25,24 +25,7 @@ SOFTWARE.
 
 #include "BleGattNotificationData.h"
 
-BleGattNotificationData::BleGattNotificationData(ULONG dataSize, PBYTE bytes) :
-	_dataSize(dataSize),
-	_bytes(bytes)
+BleGattNotificationData::BleGattNotificationData(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue) 
+	: BleGattCharacteristicValue(pGattCharacteristicValue)
 {
-}
-
-BleGattNotificationData::~BleGattNotificationData()
-{
-	if(_bytes)
-		delete _bytes;
-}
-
-ULONG BleGattNotificationData::getDataSize()
-{
-	return _dataSize;
-}
-
-const PBYTE BleGattNotificationData::getBytes()
-{
-	return _bytes;
 }

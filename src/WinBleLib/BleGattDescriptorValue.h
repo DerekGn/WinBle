@@ -64,7 +64,7 @@ class BleGattDescriptorValue
 		BOOLEAN getIsReliableWriteEnabled();
 
 		/// <summary>
-		/// Indicates if a descriptor is auxiliarie write enabled
+		/// Indicates if a descriptor is auxiliaries write enabled
 		/// </summary>
 		BOOLEAN getIsAuxiliariesWritable();
 
@@ -99,7 +99,7 @@ class BleGattDescriptorValue
 		BTH_LE_UUID getUnit();
 
 		/// <summary>
-		/// Gets the descriptor namespace
+		/// Gets the descriptor name space
 		/// </summary>
 		unsigned char getNameSpace();
 
