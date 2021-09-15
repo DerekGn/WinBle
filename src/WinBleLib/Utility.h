@@ -23,6 +23,9 @@ SOFTWARE.
 
 */
 
+#ifndef UTILITY_H
+#define UTILITY_H
+
 using namespace std;
 
 #include <Windows.h>
@@ -33,33 +36,48 @@ using namespace std;
 /// </summary>
 class Utility
 {
-	public:
-		Utility();
+public:
+	Utility();
 
-		~Utility();
+	~Utility();
 
-		/// <summary>
-		/// Gets the last win32 error as a string
-		/// </summary>
-		string getLastError(DWORD errorMessageID);
+	/// <summary>
+	/// Gets the last win32 error as a string
+	/// </summary>
+	string getLastErrorString(DWORD lastError);
 
-		/// <summary>
-		/// Converts a GUID to a string
-		/// </summary>
-		/// <param name="uuid">The guid to convert</param>
-		string guidToString(GUID uuid);
+	/// <summary>
+	/// Converts a GUID to a string
+	/// </summary>
+	/// <param name="uuid">The guid to convert</param>
+	string guidToString(GUID uuid);
 
-		/// <summary>
-		/// Converts a wide string to a narrow string
-		/// </summary>
-		/// <param name="value">The string to convert</param>
-		string convertToString(wstring value);
+	/// <summary>
+	/// Converts a wide string to a narrow string
+	/// </summary>
+	/// <param name="value">The string to convert</param>
+	string convertToString(wstring value);
 
-		/// <summary>
-		/// Handles memory allocation failure
-		/// </summary>
-		/// <param name="size">The size of bytes that failed to allocate</param>
-		void handleMallocFailure(unsigned long size);
+	/// <summary>
+	/// Handles memory allocation failure
+	/// </summary>
+	/// <param name="size">The size of bytes that failed to allocate</param>
+	void handleMallocFailure(unsigned long size);
+
+	/// <summary>
+	/// Throws a ble exception with a last error code details
+	/// </summary>
+	/// <param name="message">The exception message</param>
+	void throwLastErrorException(const string& message);
+
+	/// <summary>
+	/// Throws a ble exception
+	/// </summary>
+	/// <param name="message">The exception message</param>
+	/// <param name="result">The HRESULT value</param>
+	void throwHResultException(const string& message, const HRESULT result);
 };
 
 extern Utility Util;
+
+#endif

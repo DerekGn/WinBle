@@ -40,15 +40,15 @@ Utility::~Utility()
 {
 }
 
-string Utility::getLastError(DWORD errorMessageID)
+string Utility::getLastErrorString(DWORD lastError)
 {
 
-	if (errorMessageID == 0)
+	if (lastError == 0)
 		return string();
 
 	LPSTR messageBuffer = nullptr;
 	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+		NULL, lastError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
 	string message(messageBuffer, size);
 
@@ -83,4 +83,25 @@ void Utility::handleMallocFailure(unsigned long size)
 	msg << "Unable to allocate [" << size << "] bytes";
 
 	throw BleException(msg.str());
+}
+
+void Utility::throwLastErrorException(const string& message)
+{
+	stringstream stream;
+	DWORD lasterror = GetLastError();
+	stream << message <<
+		" LastError: " << std::hex << lasterror <<
+		" Reason: [" << getLastErrorString(lasterror) << "]";
+
+	throw BleException(stream.str());
+}
+
+void Utility::throwHResultException(const string& message, const HRESULT result)
+{
+	stringstream stream;
+	stream << message <<
+		" HRESULT: " << std::hex << result <<
+		" Reason: [" << getLastErrorString(result) << "]";
+
+	throw BleException(stream.str());
 }

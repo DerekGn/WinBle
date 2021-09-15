@@ -24,8 +24,8 @@ SOFTWARE.
 */
 
 #include "BleGattCharacteristic.h"
-#include "CallbackScope.h"
 #include "FileHandleWrapper.h"
+#include "CallbackScope.h"
 #include "BleFunctions.h"
 #include "BleException.h"
 #include "Utility.h"
@@ -51,11 +51,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 	{
 		if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 		{
-			stringstream msg;
-			msg << "Unable to determine the number of gatt descriptors. Reason: ["
-				<< Util.getLastError(hr) << "]";
-
-			throw BleException(msg.str());
+			Util.throwHResultException("Unable to determine the number of gatt descriptors.", hr);
 		}
 		
 		if (expectedDescriptorBufferCount > 0)
@@ -83,11 +79,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 
 			if (S_OK != hr)
 			{
-				stringstream msg;
-				msg << "Unable to determine the number of gatt services. Reason: ["
-					<< Util.getLastError(hr) << "]";
-
-				throw BleException(msg.str());
+				Util.throwHResultException("Unable to determine the number of gatt services.", hr);
 			}
 
 			if (*pGattDescriptorsCount != expectedDescriptorBufferCount) {
@@ -230,11 +222,7 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 
 		if (S_OK != hr)
 		{
-			stringstream msg;
-			msg << "Unable to subscribe to the characteristic. Reason: ["
-				<< Util.getLastError(hr) << "]";
-
-			throw BleException(msg.str());
+			Util.throwHResultException("Unable to subscribe to the characteristic.", hr);
 		}
 	}
 	else
@@ -255,11 +243,7 @@ void BleGattCharacteristic::unregisterNotificationHandler()
 
 		if (S_OK != hr)
 		{
-			stringstream msg;
-			msg << "Unable to unsubscribe from the characteristic. Reason: ["
-				<< Util.getLastError(hr) << "]";
-
-			throw BleException(msg.str());
+			Util.throwHResultException("Unable to unsubscribe from the characteristic.", hr);
 		}
 	}
 }
@@ -285,11 +269,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 		if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr) 
 		{
-			stringstream msg;
-			msg << "Unable to determine the characteristic value size. Reason: ["
-				<< Util.getLastError(hr) << "]";
-
-			throw BleException(msg.str());
+			Util.throwHResultException("Unable to determine the characteristic value size.", hr);
 		}
 
 		pCharValueBuffer = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(charValueDataSize);
@@ -313,11 +293,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 		if (S_OK != hr)
 		{
-			stringstream msg;
-			msg << "Unable to read the characteristic value. Reason: ["
-				<< Util.getLastError(hr) << "]";
-
-			throw BleException(msg.str());
+			Util.throwHResultException("Unable to read the characteristic value.", hr);
 		}
 	}
 	else
@@ -353,11 +329,7 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 
 			if (HRESULT_FROM_WIN32(S_OK) != hr)
 			{
-				stringstream msg;
-				msg << "Unable to write the characteristic value. Reason: ["
-					<< Util.getLastError(hr) << "]";
-
-				throw BleException(msg.str());
+				Util.throwHResultException("Unable to read the characteristic value.", hr);
 			}
 		}
 		else

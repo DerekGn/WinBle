@@ -50,12 +50,11 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 
 	if (hDI == INVALID_HANDLE_VALUE)
 	{
-		stringstream msg;
-		msg << "Unable to open device information set for device interface UUID: ["
-			<< Util.convertToString(deviceInstanceId) << "] Reason: ["
-			<< Util.getLastError(GetLastError()) << "]";
+		stringstream stream;
+		stream << "Unable to open device information set for device interface UUID: ["
+			<< Util.convertToString(deviceInstanceId) << "]";
 
-		throw BleException(msg.str());
+		Util.throwLastErrorException(stream.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -131,7 +130,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	{
 		stringstream msg;
 		msg << "Unable to determine the number of gatt services. Reason: ["
-			<< Util.getLastError(hr) << "]";
+			<< Util.getLastErrorString(hr) << "]";
 
 		throw BleException(msg.str());
 	}
@@ -161,11 +160,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 
 	if (S_OK != hr)
 	{
-		stringstream msg;
-		msg << "Unable to determine the number of gatt services. Reason: ["
-			<< Util.getLastError(hr) << "]";
-
-		throw BleException(msg.str());
+		Util.throwHResultException("Unable to determine the number of gatt services.", hr);
 	}
 
 	return pServiceBuffer;
@@ -185,7 +180,7 @@ BleDevice::~BleDevice()
 		free(_pGattServiceBuffer);
 
 	if (_hBleDevice)
-		CloseHandle(_hBleDevice);
+		delete(_hBleDevice);
 }
 
 wstring BleDevice::getDeviceIntstanceId()

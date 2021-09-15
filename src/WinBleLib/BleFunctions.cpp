@@ -59,12 +59,12 @@ HANDLE openBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess)
 
 	if ((hDI = SetupDiGetClassDevs(&BluetoothInterfaceGUID, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT)) == INVALID_HANDLE_VALUE)
 	{
-		stringstream msg;
-		msg << "Unable to open device information set for device interface UUID: ["
-			<< Util.guidToString(BluetoothInterfaceGUID) << "] Reason: ["
-			<< Util.getLastError(GetLastError()) << "]";
+		stringstream stream;
+		stream << "Unable to open device information set for device interface UUID: ["
+			<< Util.guidToString(BluetoothInterfaceGUID) << "]";
 
-		throw BleException(msg.str());
+		Util.throwLastErrorException(stream.str());
+
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -108,12 +108,11 @@ HANDLE openBleInterfaceHandle(GUID interfaceUUID, DWORD dwDesiredAccess)
 
 				if (hComm == INVALID_HANDLE_VALUE)
 				{
-					stringstream msg;
-					msg << "Unable to file handle for interface UUID: ["
-						<< Util.guidToString(BluetoothInterfaceGUID) << "] Reason: ["
-						<< Util.getLastError(GetLastError()) << "]";
+					stringstream stream;
+					stream << "Unable to file handle for interface UUID: ["
+						<< Util.guidToString(BluetoothInterfaceGUID) << "]";
 
-					throw BleException(msg.str());
+					throw BleException(stream.str());
 				}
 			}
 			else

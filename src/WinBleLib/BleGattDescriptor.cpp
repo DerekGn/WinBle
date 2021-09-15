@@ -47,11 +47,7 @@ void BleGattDescriptor::setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE newValu
 		BLUETOOTH_GATT_FLAG_NONE);
 
 	if (S_OK != hr) {
-		stringstream msg;
-		msg << "Unable to set the descriptor value. Reason: ["
-			<< Util.getLastError(hr) << "]";
-
-		throw BleException(msg.str());
+		Util.throwHResultException("Unable to set the descriptor value.", hr);
 	}
 }
 
@@ -116,11 +112,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 
 	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 	{
-		stringstream msg;
-		msg << "Unable to determine the descriptor value size. Reason: ["
-			<< Util.getLastError(hr) << "]";
-
-		throw BleException(msg.str());
+		Util.throwHResultException("Unable to determine the descriptor value size.", hr);
 	}
 
 	PBTH_LE_GATT_DESCRIPTOR_VALUE pDescValueBuffer = (PBTH_LE_GATT_DESCRIPTOR_VALUE)malloc(descValueDataSize);
@@ -144,11 +136,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 
 	if (S_OK != hr)
 	{
-		stringstream msg;
-		msg << "Unable to read the descriptor value size. Reason: ["
-			<< Util.getLastError(hr) << "]";
-
-		throw BleException(msg.str());
+		Util.throwHResultException("Unable to read the descriptor value size.", hr);
 	}
 	
 	return new BleGattDescriptorValue(pDescValueBuffer);

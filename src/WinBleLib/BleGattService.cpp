@@ -51,11 +51,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 	{
 		if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 		{
-			stringstream msg;
-			msg << "Unable to determine the number of gatt characteristics. Reason: ["
-				<< Util.getLastError(hr) << "]";
-
-			throw BleException(msg.str());
+			Util.throwHResultException("Unable to determine the number of gatt characteristics.", hr);
 		}
 
 		if (expectedCharBufferCount > 0)
@@ -83,11 +79,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 
 			if (S_OK != hr)
 			{
-				stringstream msg;
-				msg << "Unable to determine the number of gatt characteristics. Reason: ["
-					<< Util.getLastError(hr) << "]";
-
-				throw BleException(msg.str());
+				Util.throwHResultException("Unable to determine the number of gatt characteristics.", hr);
 			}
 
 			if (*pGattCharcteristicsCount != expectedCharBufferCount)
