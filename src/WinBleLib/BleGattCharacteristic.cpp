@@ -27,7 +27,7 @@ SOFTWARE.
 #include "CallbackScope.h"
 #include "FileHandleWrapper.h"
 #include "BleFunctions.h"
-#include "BleException.h"
+#include "WinBleException.h"
 #include "Utility.h"
 
 #include <sstream>
@@ -53,9 +53,9 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 		{
 			stringstream msg;
 			msg << "Unable to determine the number of gatt descriptors. Reason: ["
-				<< Util.getLastError(hr) << "]";
+				<< Util.getLastErrorString(hr) << "]";
 
-			throw BleException(msg.str());
+			throw WinBleException(msg.str());
 		}
 		
 		if (expectedDescriptorBufferCount > 0)
@@ -83,15 +83,11 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 
 			if (S_OK != hr)
 			{
-				stringstream msg;
-				msg << "Unable to determine the number of gatt services. Reason: ["
-					<< Util.getLastError(hr) << "]";
-
-				throw BleException(msg.str());
+				Util.throwLastErrorException("Unable to determine the number of gatt services.");
 			}
 
 			if (*pGattDescriptorsCount != expectedDescriptorBufferCount) {
-				throw BleException("descriptor count expected and descriptor count actual mismatch");
+				throw WinBleException("descriptor count expected and descriptor count actual mismatch");
 			}
 		}
 	}
@@ -232,14 +228,14 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 		{
 			stringstream msg;
 			msg << "Unable to subscribe to the characteristic. Reason: ["
-				<< Util.getLastError(hr) << "]";
+				<< Util.getLastErrorString(hr) << "]";
 
-			throw BleException(msg.str());
+			throw WinBleException(msg.str());
 		}
 	}
 	else
 	{
-		throw BleException("characteristic is not notifiable or indicatable");
+		throw WinBleException("characteristic is not notifiable or indicatable");
 	}
 }
 
@@ -257,9 +253,9 @@ void BleGattCharacteristic::unregisterNotificationHandler()
 		{
 			stringstream msg;
 			msg << "Unable to unsubscribe from the characteristic. Reason: ["
-				<< Util.getLastError(hr) << "]";
+				<< Util.getLastErrorString(hr) << "]";
 
-			throw BleException(msg.str());
+			throw WinBleException(msg.str());
 		}
 	}
 }
@@ -287,9 +283,9 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		{
 			stringstream msg;
 			msg << "Unable to determine the characteristic value size. Reason: ["
-				<< Util.getLastError(hr) << "]";
+				<< Util.getLastErrorString(hr) << "]";
 
-			throw BleException(msg.str());
+			throw WinBleException(msg.str());
 		}
 
 		pCharValueBuffer = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(charValueDataSize);
@@ -315,14 +311,14 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		{
 			stringstream msg;
 			msg << "Unable to read the characteristic value. Reason: ["
-				<< Util.getLastError(hr) << "]";
+				<< Util.getLastErrorString(hr) << "]";
 
-			throw BleException(msg.str());
+			throw WinBleException(msg.str());
 		}
 	}
 	else
 	{
-		throw BleException("characteristic is not readable");
+		throw WinBleException("characteristic is not readable");
 	}
 
 	return BleGattCharacteristicValue(pCharValueBuffer);
@@ -355,19 +351,19 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 			{
 				stringstream msg;
 				msg << "Unable to write the characteristic value. Reason: ["
-					<< Util.getLastError(hr) << "]";
+					<< Util.getLastErrorString(hr) << "]";
 
-				throw BleException(msg.str());
+				throw WinBleException(msg.str());
 			}
 		}
 		else
 		{
-			throw BleException("Unable to allocate characteristic value memory");
+			throw WinBleException("Unable to allocate characteristic value memory");
 		}
 	}
 	else
 	{
-		throw BleException("characteristic is not writable");
+		throw WinBleException("characteristic is not writable");
 	}
 }
 

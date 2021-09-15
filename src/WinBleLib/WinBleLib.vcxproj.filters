@@ -51,7 +51,7 @@
     <ClInclude Include="BleGattServices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BleException.h">
+    <ClInclude Include="WinBleException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utility.h">
@@ -70,6 +70,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CallbackScope.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BluetoothRadioEnumerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BluetoothRadio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,7 +110,7 @@
     <ClCompile Include="BleGattService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BleException.cpp">
+    <ClCompile Include="WinBleException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utility.cpp">
@@ -117,6 +123,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileHandleWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BluetoothRadioEnumerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BluetoothRadio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,7 +26,7 @@ SOFTWARE.
 #include "BleGattDescriptor.h"
 #include "FileHandleWrapper.h"
 #include "BleFunctions.h"
-#include "BleException.h"
+#include "WinBleException.h"
 #include "Utility.h"
 
 #include <sstream>
@@ -49,9 +49,9 @@ void BleGattDescriptor::setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE newValu
 	if (S_OK != hr) {
 		stringstream msg;
 		msg << "Unable to set the descriptor value. Reason: ["
-			<< Util.getLastError(hr) << "]";
+			<< Util.getLastErrorString(hr) << "]";
 
-		throw BleException(msg.str());
+		throw WinBleException(msg.str());
 	}
 }
 
@@ -63,7 +63,7 @@ BleGattDescriptor::BleGattDescriptor(
 	_pGattService(pGattService)
 {
 	if (!pGattDescriptor)
-		throw BleException("pGattDescriptor is nullptr");
+		throw WinBleException("pGattDescriptor is nullptr");
 	
 	_pGattDescriptor = pGattDescriptor;
 }
@@ -118,9 +118,9 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	{
 		stringstream msg;
 		msg << "Unable to determine the descriptor value size. Reason: ["
-			<< Util.getLastError(hr) << "]";
+			<< Util.getLastErrorString(hr) << "]";
 
-		throw BleException(msg.str());
+		throw WinBleException(msg.str());
 	}
 
 	PBTH_LE_GATT_DESCRIPTOR_VALUE pDescValueBuffer = (PBTH_LE_GATT_DESCRIPTOR_VALUE)malloc(descValueDataSize);
@@ -146,9 +146,9 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	{
 		stringstream msg;
 		msg << "Unable to read the descriptor value size. Reason: ["
-			<< Util.getLastError(hr) << "]";
+			<< Util.getLastErrorString(hr) << "]";
 
-		throw BleException(msg.str());
+		throw WinBleException(msg.str());
 	}
 	
 	return new BleGattDescriptorValue(pDescValueBuffer);

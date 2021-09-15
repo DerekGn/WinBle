@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "BleGattService.h"
 #include "BleFunctions.h"
-#include "BleException.h"
+#include "WinBleException.h"
 #include "Utility.h"
 
 #include <sstream>
@@ -53,9 +53,9 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 		{
 			stringstream msg;
 			msg << "Unable to determine the number of gatt characteristics. Reason: ["
-				<< Util.getLastError(hr) << "]";
+				<< Util.getLastErrorString(hr) << "]";
 
-			throw BleException(msg.str());
+			throw WinBleException(msg.str());
 		}
 
 		if (expectedCharBufferCount > 0)
@@ -85,14 +85,14 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 			{
 				stringstream msg;
 				msg << "Unable to determine the number of gatt characteristics. Reason: ["
-					<< Util.getLastError(hr) << "]";
+					<< Util.getLastErrorString(hr) << "]";
 
-				throw BleException(msg.str());
+				throw WinBleException(msg.str());
 			}
 
 			if (*pGattCharcteristicsCount != expectedCharBufferCount)
 			{
-				throw BleException("characteristic count expected and characteristic count actual mismatch");
+				throw WinBleException("characteristic count expected and characteristic count actual mismatch");
 			}
 		}
 	}
@@ -103,7 +103,7 @@ BleGattService::BleGattService(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_
 	:_bleDeviceContext(bleDeviceContext)
 {
 	if (!pGattService)
-		throw BleException("pGattService is nullptr");
+		throw WinBleException("pGattService is nullptr");
 
 	_pGattService = pGattService;
 }

@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2021
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -23,54 +23,59 @@ SOFTWARE.
 
 */
 
-#ifndef UTILITY_H
-#define UTILITY_H
-
-using namespace std;
+#ifndef BLERADIOS_H
+#define BLERADIOS_H
 
 #include <Windows.h>
-#include <string>
 
-/// <summary>
-/// A utility class of helper methods
-/// </summary>
-class Utility
+class BluetoothRadio
 {
+	private:
+		HANDLE _hBluetoothRadio = nullptr;
+
+		BLUETOOTH_RADIO_INFO _radio_info{ sizeof(BLUETOOTH_RADIO_INFO)};
+
+		void getRadioInformation();
+
 	public:
-		Utility();
-
-		~Utility();
+		/// <summary>
+		/// Constructs an instance of a <see cref="BluetoothRadio"/>
+		/// </summary>
+		/// <param name="hBluetoothRadio">The bluetooth radio handle</param>
+		BluetoothRadio(HANDLE hBluetoothRadio);
 
 		/// <summary>
-		/// Gets the last win32 error as a string
+		/// Destructor
 		/// </summary>
-		string getLastErrorString(DWORD lastError);
+		~BluetoothRadio();
 
 		/// <summary>
-		/// Converts a GUID to a string
+		/// Get the bluetooth radios address
 		/// </summary>
-		/// <param name="uuid">The guid to convert</param>
-		string guidToString(GUID uuid);
+		/// <returns>The bluetooth address</returns>
+		BLUETOOTH_ADDRESS getAddress();
 
 		/// <summary>
-		/// Converts a wide string to a narrow string
+		/// Get the bluetooth radios name
 		/// </summary>
-		/// <param name="value">The string to convert</param>
-		string convertToString(wstring value);
+		/// <returns></returns>
+		wstring getName();
 
 		/// <summary>
-		/// Handles memory allocation failure
+		/// Get the bluetooth class of device
 		/// </summary>
-		/// <param name="size">The size of bytes that failed to allocate</param>
-		void handleMallocFailure(unsigned long size);
+		ULONG getClassOfDevice();
 
 		/// <summary>
-		/// Throws a win ble exception with a last error code
+		/// Get the Lmp sub version
 		/// </summary>
-		/// <param name="message">The exception message</param>
-		void throwLastErrorException(const string& message);
+		/// <returns></returns>
+		USHORT getLmpSubVersion();
+
+		/// <summary>
+		/// Get the manufacturers Id
+		/// </summary>
+		/// <returns></returns>
+		USHORT getManufacturer();
 };
-
-extern Utility Util;
-
 #endif

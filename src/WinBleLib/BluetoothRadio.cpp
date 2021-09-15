@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2021
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -23,29 +23,66 @@ SOFTWARE.
 
 */
 
-#include "BleGattCharacteristicValue.h"
+#include <windows.h>
+#include <bluetoothapis.h>
+
+#include "Utility.h"
+#include "BluetoothRadio.h"
 #include "WinBleException.h"
 
-BleGattCharacteristicValue::BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE _pGattCharacteristicValue)
-{
-	if (!_pGattCharacteristicValue)
-		throw WinBleException("_pGattCharacteristicValue is nullptr");
+#include <sstream>
 
-	pGattCharacteristicValue = _pGattCharacteristicValue;
+using namespace std;
+
+void BluetoothRadio::getRadioInformation()
+{
+	if (BluetoothGetRadioInfo(_hBluetoothRadio, &_radio_info) != ERROR_SUCCESS)
+	{
+		Util.throwLastErrorException("Unable to get handle to bluetooth radio info.");
+	}
 }
 
-BleGattCharacteristicValue::~BleGattCharacteristicValue()
+BluetoothRadio::BluetoothRadio(HANDLE hBluetoothRadio)
 {
-	if(pGattCharacteristicValue)
-		free(pGattCharacteristicValue);
+	if (hBluetoothRadio == NULL)
+	{
+		throw WinBleException("Handle cannot be NULL");
+	}
+
+	_hBluetoothRadio = hBluetoothRadio;
+
+	getRadioInformation();
 }
 
-unsigned long BleGattCharacteristicValue::getDataSize()
+BluetoothRadio::~BluetoothRadio()
 {
-	return pGattCharacteristicValue ? pGattCharacteristicValue->DataSize : 0;
+	if (_hBluetoothRadio != NULL)
+	{
+		CloseHandle(_hBluetoothRadio);
+	}
 }
 
-const unsigned char* BleGattCharacteristicValue::getData()
+BLUETOOTH_ADDRESS BluetoothRadio::getAddress()
 {
-	return pGattCharacteristicValue ? pGattCharacteristicValue->Data : nullptr;
+	return _radio_info.address;
+}
+
+wstring BluetoothRadio::getName()
+{
+	return _radio_info.szName;
+}
+
+ULONG BluetoothRadio::getClassOfDevice()
+{
+	return _radio_info.ulClassofDevice;
+}
+
+USHORT BluetoothRadio::getLmpSubVersion()
+{
+	return _radio_info.lmpSubversion;
+}
+
+USHORT BluetoothRadio::getManufacturer()
+{
+	return _radio_info.manufacturer;
 }

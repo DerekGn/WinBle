@@ -18,8 +18,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef BLEEXCEPTION_H
-#define BLEEXCEPTION_H
+#ifndef WINBLEEXCEPTION_H
+#define WINBLEEXCEPTION_H
 
 using namespace std;
 
@@ -30,14 +30,14 @@ using namespace std;
 /// <summary>
 /// An exception class throw when errors occur interacting with the ble device classes
 /// </summary>
-class BleException : public runtime_error
+class WinBleException : public runtime_error
 {
 public:
 	/// <summary>
 	/// Construct an instance of a <see cref="BleException"/> class
 	/// </summary>
 	/// <param name="_Message">The exception message</param>
-	BleException(const string & _Message);
+	WinBleException(const string & _Message);
 };
 
 #endif

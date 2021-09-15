@@ -148,7 +148,7 @@
     <ClInclude Include="BleDeviceContext.h" />
     <ClInclude Include="BleDeviceEnumerator.h" />
     <ClInclude Include="BleDeviceInfo.h" />
-    <ClInclude Include="BleException.h" />
+    <ClInclude Include="WinBleException.h" />
     <ClInclude Include="BleFunctions.h" />
     <ClInclude Include="BleGattCharacteristic.h" />
     <ClInclude Include="BleGattCharacteristicValue.h" />
@@ -157,6 +157,8 @@
     <ClInclude Include="BleGattNotificationData.h" />
     <ClInclude Include="BleGattService.h" />
     <ClInclude Include="BleGattServices.h" />
+    <ClInclude Include="BluetoothRadio.h" />
+    <ClInclude Include="BluetoothRadioEnumerator.h" />
     <ClInclude Include="CallbackContext.h" />
     <ClInclude Include="CallbackScope.h" />
     <ClInclude Include="FileHandleWrapper.h" />
@@ -169,7 +171,7 @@
     <ClCompile Include="BleDeviceContext.cpp" />
     <ClCompile Include="BleDeviceEnumerator.cpp" />
     <ClCompile Include="BleDeviceInfo.cpp" />
-    <ClCompile Include="BleException.cpp" />
+    <ClCompile Include="WinBleException.cpp" />
     <ClCompile Include="BleFunctions.cpp" />
     <ClCompile Include="BleGattCharacteristic.cpp" />
     <ClCompile Include="BleGattCharacteristicValue.cpp" />
@@ -177,6 +179,8 @@
     <ClCompile Include="BleGattDescriptorValue.cpp" />
     <ClCompile Include="BleGattNotificationData.cpp" />
     <ClCompile Include="BleGattService.cpp" />
+    <ClCompile Include="BluetoothRadio.cpp" />
+    <ClCompile Include="BluetoothRadioEnumerator.cpp" />
     <ClCompile Include="CallbackContext.cpp" />
     <ClCompile Include="FileHandleWrapper.cpp" />
     <ClCompile Include="Utility.cpp" />

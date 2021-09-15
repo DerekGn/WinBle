@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2017
+Copyright(c) Derek Goslin 2021
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -23,29 +23,41 @@ SOFTWARE.
 
 */
 
-#include "BleGattCharacteristicValue.h"
-#include "WinBleException.h"
+#ifndef BLERADIOENUMERATOR_H
+#define BLERADIOENUMERATOR_H
 
-BleGattCharacteristicValue::BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE _pGattCharacteristicValue)
+#include <list>
+#include "BluetoothRadio.h"
+
+using namespace std;
+
+class BluetoothRadioEnumerator
 {
-	if (!_pGattCharacteristicValue)
-		throw WinBleException("_pGattCharacteristicValue is nullptr");
+private:
+	list<BluetoothRadio*> _enumeratedRadios;
 
-	pGattCharacteristicValue = _pGattCharacteristicValue;
-}
+	public:
+		/// <summary>
+		/// The bluetooth radio enumerator class
+		/// </summary>
+		BluetoothRadioEnumerator();
 
-BleGattCharacteristicValue::~BleGattCharacteristicValue()
-{
-	if(pGattCharacteristicValue)
-		free(pGattCharacteristicValue);
-}
+		~BluetoothRadioEnumerator();
 
-unsigned long BleGattCharacteristicValue::getDataSize()
-{
-	return pGattCharacteristicValue ? pGattCharacteristicValue->DataSize : 0;
-}
+		/// <summary>
+		/// Enumerate the bluetooth radios
+		/// </summary>
+		void enumerate();
 
-const unsigned char* BleGattCharacteristicValue::getData()
-{
-	return pGattCharacteristicValue ? pGattCharacteristicValue->Data : nullptr;
-}
+		typedef list<BluetoothRadio*> BluetoothRadios;
+
+		/// <summary>
+		/// Gets the enumerated radios
+		/// </summary>
+		/// <returns>A list of bluetooth radios enumerated after the call to enumerate</returns>
+		const BluetoothRadios& getBluetoothRadios();
+};
+
+extern BluetoothRadioEnumerator RadioEnumerator;
+
+#endif

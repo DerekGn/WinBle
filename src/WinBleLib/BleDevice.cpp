@@ -31,7 +31,7 @@ SOFTWARE.
 #pragma comment(lib, "SetupAPI")
 #pragma comment(lib, "BluetoothAPIs")
 
-#include "BleException.h"
+#include "WinBleException.h"
 #include "BleDevice.h"
 #include "Utility.h"
 
@@ -50,12 +50,11 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 
 	if (hDI == INVALID_HANDLE_VALUE)
 	{
-		stringstream msg;
-		msg << "Unable to open device information set for device interface UUID: ["
-			<< Util.convertToString(deviceInstanceId) << "] Reason: ["
-			<< Util.getLastError(GetLastError()) << "]";
+		stringstream stream;
+		stream << "Unable to open device information set for device interface UUID: ["
+			<< Util.convertToString(deviceInstanceId) << "]";
 
-		throw BleException(msg.str());
+		Util.throwLastErrorException(stream.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -99,7 +98,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 			}
 			else
 			{
-				throw BleException("Unable to allocate device interface detail data");
+				throw WinBleException("Unable to allocate device interface detail data");
 			}
 		}
 	}
@@ -112,7 +111,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 		msg << "Device interface UUID: ["
 			<< Util.convertToString(deviceInstanceId) << "] not found";
 
-		throw BleException(msg.str());
+		throw WinBleException(msg.str());
 	}
 
 	return hComm;
@@ -129,11 +128,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 
 	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 	{
-		stringstream msg;
-		msg << "Unable to determine the number of gatt services. Reason: ["
-			<< Util.getLastError(hr) << "]";
-
-		throw BleException(msg.str());
+		Util.throwLastErrorException("Unable to determine the number of gatt services.");
 	}
 
 	hr = BluetoothGATTGetServices(
@@ -161,11 +156,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 
 	if (S_OK != hr)
 	{
-		stringstream msg;
-		msg << "Unable to determine the number of gatt services. Reason: ["
-			<< Util.getLastError(hr) << "]";
-
-		throw BleException(msg.str());
+		Util.throwLastErrorException("Unable to determine the number of gatt services.");
 	}
 
 	return pServiceBuffer;

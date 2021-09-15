@@ -24,13 +24,13 @@ SOFTWARE.
 */
 
 #include "BleGattDescriptorValue.h"
-#include "BleException.h"
+#include "WinBleException.h"
 #include "Utility.h"
 
 BleGattDescriptorValue::BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue)
 {
 	if (!pGattDescriptorValue)
-		throw BleException("pGattDescriptorValue is nullptr");
+		throw WinBleException("pGattDescriptorValue is nullptr");
 
 	_pGattDescriptorValue = pGattDescriptorValue;
 }

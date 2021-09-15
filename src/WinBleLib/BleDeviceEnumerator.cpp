@@ -30,7 +30,7 @@ SOFTWARE.
 #include <bluetoothleapis.h>
 
 #include "BleDeviceEnumerator.h"
-#include "BleException.h"
+#include "WinBleException.h"
 #include "Utility.h"
 
 #include <sstream>
@@ -94,11 +94,7 @@ void BleDeviceEnumerator::enumerate()
 
 	if (INVALID_HANDLE_VALUE == hDI)
 	{
-		stringstream msg;
-		msg << "Unable to get handle to device information elements. Reason: ["
-			<< Util.getLastError(GetLastError()) << "]";
-
-		throw BleException(msg.str());
+		Util.throwLastErrorException("Unable to get handle to device information elements.");
 	}
 
 	did.cbSize = sizeof(SP_DEVINFO_DATA);
