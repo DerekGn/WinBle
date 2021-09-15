@@ -24,7 +24,7 @@ SOFTWARE.
 */
 
 #include "BleGattCharacteristic.h"
-#include "FileHandleWrapper.h"
+#include "HandleWrapper.h"
 #include "CallbackScope.h"
 #include "BleFunctions.h"
 #include "BleException.h"
@@ -212,7 +212,7 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 
 		_callbackContext.Register(std::move(notificationHandler), _pGattCharacteristic);
 
-		FileHandleWrapper hBleService(
+		HandleWrapper hBleService(
 			openBleInterfaceHandle(
 				mapServiceUUID(&_pGattService->ServiceUuid), 
 				GENERIC_READ | GENERIC_WRITE));
@@ -255,7 +255,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 	if (_pGattCharacteristic->IsReadable) 
 	{
-		FileHandleWrapper hBleService(
+		HandleWrapper hBleService(
 			openBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid),
 				GENERIC_READ));
 
@@ -319,7 +319,7 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 			gatt_value->DataSize = (ULONG)size;
 			memcpy(gatt_value->Data, data, size);
 
-			FileHandleWrapper hBleService(
+			HandleWrapper hBleService(
 				openBleInterfaceHandle(mapServiceUUID(&_pGattService->ServiceUuid),
 					GENERIC_WRITE));
 

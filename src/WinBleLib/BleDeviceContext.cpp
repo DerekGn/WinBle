@@ -34,6 +34,9 @@ BleDeviceContext::BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId)
 
 BleDeviceContext::~BleDeviceContext()
 {
+	// The handle will be cleaned up by the ble device destructor
+	_hBleDevice = nullptr;
+	_deviceInstanceId.clear();
 }
 
 HANDLE BleDeviceContext::getBleDeviceHandle()

@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright(c) Derek Goslin 2019
+Copyright(c) Derek Goslin 2017
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files(the "Software"), to deal
@@ -23,29 +23,23 @@ SOFTWARE.
 
 */
 
-#ifndef FILEHANDLEWRAPPER_H
-#define FILEHANDLEWRAPPER_H
+#include "HandleWrapper.h"
 
-#include <windows.h>
 
-/// <summary>
-/// A class for wrapping windows handles created with CreateFile
-/// </summary>
-class FileHandleWrapper
+HandleWrapper::HandleWrapper(HANDLE handle) : _handle(handle)
 {
-private:
-	HANDLE _handle = nullptr;
+}
 
-	FileHandleWrapper(const FileHandleWrapper &obj);
 
-	FileHandleWrapper& FileHandleWrapper::operator=(const FileHandleWrapper& other);
+HandleWrapper::~HandleWrapper()
+{
+	if (_handle)
+	{
+		CloseHandle(_handle);
+	}
+}
 
-public:
-	FileHandleWrapper(HANDLE handle);
-
-	~FileHandleWrapper();
-
-	HANDLE get();
-};
-
-#endif
+HANDLE HandleWrapper::get()
+{
+	return _handle;
+}

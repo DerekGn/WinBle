@@ -35,6 +35,7 @@ using namespace std;
 #include <string>
 
 #include "BleGattService.h"
+#include "HandleWrapper.h"
 
 /// <summary>
 /// Represents a paired connected bluetooth low energy device
@@ -42,7 +43,7 @@ using namespace std;
 class BleDevice
 {
 	private:
-		HANDLE _hBleDevice = nullptr;
+		HandleWrapper* _hBleDevice = nullptr;
 
 		wstring _deviceInstanceId;
 

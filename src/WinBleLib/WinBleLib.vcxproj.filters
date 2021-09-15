@@ -69,7 +69,7 @@
     <ClInclude Include="CallbackScope.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileHandleWrapper.h">
+    <ClInclude Include="HandleWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,7 +116,7 @@
     <ClCompile Include="BleGattNotificationData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileHandleWrapper.cpp">
+    <ClCompile Include="HandleWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

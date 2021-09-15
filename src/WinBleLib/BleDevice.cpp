@@ -44,7 +44,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 	HDEVINFO hDI;
 	SP_DEVICE_INTERFACE_DATA did{};
 	SP_DEVINFO_DATA dd{};
-	HANDLE hComm = NULL;
+	HANDLE handle = NULL;
 
 	hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, deviceInstanceId.c_str(), NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
 
@@ -85,7 +85,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 				if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, pInterfaceDetailData, size, &size, &dd))
 					break;
 
-				hComm = CreateFile(
+				handle = CreateFile(
 					pInterfaceDetailData->DevicePath,
 					GENERIC_WRITE | GENERIC_READ,
 					FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -114,7 +114,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 		throw BleException(msg.str());
 	}
 
-	return hComm;
+	return new HandleWrapper(handle);
 }
 
 PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT * _pGattServiceCount)
@@ -166,7 +166,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	return pServiceBuffer;
 }
 
-BleDevice::BleDevice(wstring deviceInstanceId) : _hBleDevice(getBleDeviceHandle(deviceInstanceId)), _deviceContext(_hBleDevice, deviceInstanceId)
+BleDevice::BleDevice(wstring deviceInstanceId) : _hBleDevice(new HandleWrapper(getBleDeviceHandle(deviceInstanceId))), _deviceContext(_hBleDevice->get(), deviceInstanceId)
 {
 	_deviceInstanceId = deviceInstanceId;
 }
@@ -198,7 +198,7 @@ void BleDevice::enumerateBleServices()
 	if (_pGattServiceBuffer)
 		free(_pGattServiceBuffer);
 
-	_pGattServiceBuffer = getGattServices(_hBleDevice, &_gattServiceCount);
+	_pGattServiceBuffer = getGattServices(_hBleDevice->get(), &_gattServiceCount);
 
 	for (size_t i = 0; i < _gattServiceCount; i++)
 		_bleGattServices.push_back(new BleGattService(_deviceContext, &_pGattServiceBuffer[i]));

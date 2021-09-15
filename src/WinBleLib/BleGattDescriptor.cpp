@@ -24,7 +24,7 @@ SOFTWARE.
 */
 
 #include "BleGattDescriptor.h"
-#include "FileHandleWrapper.h"
+#include "HandleWrapper.h"
 #include "BleFunctions.h"
 #include "BleException.h"
 #include "Utility.h"
@@ -35,7 +35,7 @@ using namespace std;
 
 void BleGattDescriptor::setDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE newValue)
 {
-	FileHandleWrapper hBleService(
+	HandleWrapper hBleService(
 		openBleInterfaceHandle(
 			mapServiceUUID(&_pGattService->ServiceUuid),
 			GENERIC_READ | GENERIC_WRITE));
@@ -97,7 +97,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 {
 	USHORT descValueDataSize;
 
-	FileHandleWrapper hBleService(
+	HandleWrapper hBleService(
 		openBleInterfaceHandle(
 			mapServiceUUID(&_pGattService->ServiceUuid), 
 			GENERIC_READ));
