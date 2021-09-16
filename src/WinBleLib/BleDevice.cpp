@@ -114,7 +114,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 		throw BleException(msg.str());
 	}
 
-	return new HandleWrapper(handle);
+	return handle;
 }
 
 PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT * _pGattServiceCount)
