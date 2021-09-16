@@ -38,7 +38,7 @@ public:
 	CallbackScope& operator=(const CallbackScope&) = delete;
 	CallbackScope& operator=(CallbackScope&&) = delete;
 
-	CallbackScope(CallbackContext& context) : _context(context)
+	explicit CallbackScope(CallbackContext& context) : _context(context)
 	{
 		_context.SetInCallback();
 	}

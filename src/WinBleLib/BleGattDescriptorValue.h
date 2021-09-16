@@ -27,7 +27,7 @@ SOFTWARE.
 #define BLEGATTDESCRIPTORVALUE_H
 
 #include <Windows.h>
-#include <Bluetoothleapis.h>
+#include <bluetoothleapis.h>
 
 using namespace std;
 
@@ -44,7 +44,7 @@ class BleGattDescriptorValue
 		/// Create an instance of a <see cref="BleGattDescriptor"/>
 		/// </summary>
 		/// <param name="pGattDescriptorValue">The contained <see cref="PBTH_LE_GATT_DESCRIPTOR_VALUE"/></param>
-		BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue);
+		explicit BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue);
 
 		~BleGattDescriptorValue();
 

@@ -39,6 +39,6 @@ public:
 	/// Creates an instance of a bluetooth low energy gatt notification data
 	/// </summary>
 	/// <param name="pGattCharacteristicValue">The underlying characteristic value</param>
-	BleGattNotificationData(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
+	explicit BleGattNotificationData(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
 };
 #endif

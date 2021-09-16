@@ -21,11 +21,11 @@ SOFTWARE.
 #ifndef BLEEXCEPTION_H
 #define BLEEXCEPTION_H
 
-using namespace std;
-
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+
+using namespace std;
 
 /// <summary>
 /// An exception class throw when errors occur interacting with the ble device classes
@@ -37,7 +37,7 @@ public:
 	/// Construct an instance of a <see cref="BleException"/> class
 	/// </summary>
 	/// <param name="_Message">The exception message</param>
-	BleException(const string & _Message);
+	explicit BleException(const string & _Message);
 };
 
 #endif

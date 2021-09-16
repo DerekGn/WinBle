@@ -26,16 +26,16 @@ SOFTWARE.
 #ifndef BLEDEVICE_H
 #define BLEDEVICE_H
 
-using namespace std;
-
-#include <Rpc.h>
-#include <BluetoothAPIs.h>
+#include <rpc.h>
+#include <bluetoothapis.h>
 
 #include <list>
 #include <string>
 
 #include "BleGattService.h"
 #include "HandleWrapper.h"
+
+using namespace std;
 
 /// <summary>
 /// Represents a paired connected bluetooth low energy device
@@ -55,7 +55,7 @@ class BleDevice
 
 		PBTH_LE_GATT_SERVICE _pGattServiceBuffer = nullptr;
 	
-		static HANDLE getBleDeviceHandle(wstring deviceInstanceId);
+		static HANDLE getBleDeviceHandle(const wstring & deviceInstanceId);
 
 		static PBTH_LE_GATT_SERVICE getGattServices(HANDLE hBleDeviceHandle, 
 			USHORT * pGattServiceCount);
@@ -65,7 +65,7 @@ class BleDevice
 		/// Constructs an instance of a <see cref="BleDevice"/>
 		/// </summary>
 		/// <param name="deviceInstanceId">The device instance name</param>
-		BleDevice(wstring deviceInstanceId);
+		explicit BleDevice(const wstring& deviceInstanceId);
 
 		/// <summary>
 		/// Destructor
@@ -75,7 +75,7 @@ class BleDevice
 		/// <summary>
 		/// Gets the device instance name
 		/// </summary>
-		wstring getDeviceIntstanceId();
+		wstring getDeviceIntstanceId() const;
 
 		/// <summary>
 		/// Enumerate this devices list of ble services
@@ -83,11 +83,11 @@ class BleDevice
 		/// <remarks>must be called prior to calling get services</remarks>
 		void enumerateBleServices();
 
-		typedef list<BleGattService*> BleGattServices;
+		using BleGattServices = list<BleGattService*>;
 
 		/// <summary>
 		/// Get the list of <see cref="BleGattServices"/>
 		/// </summary>
-		const BleGattServices& getBleGattServices();
+		const BleGattServices& getBleGattServices() const;
 };
 #endif

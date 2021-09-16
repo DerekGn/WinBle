@@ -27,17 +27,17 @@ SOFTWARE.
 #define BLEGATTCHARACTERISTIC_H
 
 #include <Windows.h>
-#include <Bluetoothleapis.h>
+#include <bluetoothleapis.h>
 
 #include "CallbackContext.h"
 #include "BleGattDescriptor.h"
 #include "BleGattNotificationData.h"
 #include "BleGattCharacteristicValue.h"
 
-using namespace std;
-
 #include <list>
 #include <functional>
+
+using namespace std;
 
 /// <summary>
 /// Represents a characteristic of a bluetooth low energy device
@@ -88,69 +88,69 @@ class BleGattCharacteristic
 		/// <param name="bleDeviceContext">The parent ble device context</param>
 		/// <param name="hBleService">The Gatt service handle</parma>
 		/// <param name="pGattCharacteristic">The contained <see cref="PBTH_LE_GATT_CHARACTERISTIC"/></param>
-		BleGattCharacteristic(BleDeviceContext &bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		explicit BleGattCharacteristic(BleDeviceContext &bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 
 		/// <summary>
 		/// Get the service handle
 		/// </summary>
-		USHORT getServiceHandle();
+		USHORT getServiceHandle() const;
 
 		/// <summary>
 		/// Gets the characteristics UUID
 		/// </summary>
-		BTH_LE_UUID getCharacteristicUuid();
+		BTH_LE_UUID getCharacteristicUuid() const;
 
 		/// <summary>
 		/// Gets the characteristics attribute handle
 		/// </summary>
-		USHORT getAttributeHandle();
+		USHORT getAttributeHandle() const;
 		
 		/// <summary>
 		/// Gets the characteristics value handle
 		/// </summary>
-		USHORT getCharacteristicValueHandle();
+		USHORT getCharacteristicValueHandle() const;
 		
 		/// <summary>
 		/// Indicates if a characteristic is broadcast-able
 		/// </summary>
-		BOOLEAN getIsBroadcastable();
+		BOOLEAN getIsBroadcastable() const;
 
 		/// <summary>
 		/// Indicates if a characteristic is readable
 		/// </summary>
-		BOOLEAN getIsReadable();
+		BOOLEAN getIsReadable() const;
 
 		/// <summary>
 		/// Indicates if a characteristic is writable
 		/// </summary>
-		BOOLEAN getIsWritable();
+		BOOLEAN getIsWritable() const;
 
 		/// <summary>
 		/// Indicates if a characteristic is writable without a response
 		/// </summary>
-		BOOLEAN getIsWritableWithoutResponse();
+		BOOLEAN getIsWritableWithoutResponse() const;
 
 		/// <summary>
 		/// Indicates if a characteristic is signed writable
 		/// </summary>
-		BOOLEAN getIsSignedWritable();
+		BOOLEAN getIsSignedWritable() const;
 
 		/// <summary>
 		/// Indicates if a characteristic is notifiable
 		/// </summary>
-		BOOLEAN getIsNotifiable();
+		BOOLEAN getIsNotifiable() const;
 
 		/// <summary>
 		/// Indicates if a characteristic is indicatable
 		/// </summary>
-		BOOLEAN getIsIndicatable();
+		BOOLEAN getIsIndicatable() const;
 
 		/// <summary>
 		/// Indicates if a characteristic has extended properties
 		/// </summary>
-		BOOLEAN getHasExtendedProperties();
+		BOOLEAN getHasExtendedProperties() const;
 
 		/// <summary>
 		/// Register the notification callback for this <see cref="BleGattCharacteristic"/> and start notifications
@@ -184,11 +184,11 @@ class BleGattCharacteristic
 		/// <remarks>must be called prior to calling get characteristics</remarks>
 		void enumerateBleDescriptors();
 
-		typedef list<BleGattDescriptor*> BleGattDescriptors;
+		using BleGattDescriptors = list<BleGattDescriptor*>;
 
 		/// <summary>
 		/// Gets a list of <see cref="BleDescriptors"/> associated with this characteristic
 		/// </summary>
-		const BleGattDescriptors& getBleDescriptors();
+		const BleGattDescriptors& getBleDescriptors() const;
 };
 #endif

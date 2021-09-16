@@ -1,4 +1,27 @@
-using namespace std;
+/*
+MIT License
+
+Copyright(c) Derek Goslin 2017
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files(the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions :
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
 
 #include <Utility.h>
 #include <BleDevice.h>
@@ -10,6 +33,8 @@ using namespace std;
 #include <iostream>
 #include <iomanip>
 #include "WinBleTest.h"
+
+using namespace std;
 
 //{49535343-FE7D-4AE5-8FA9-9FAFD205E455}
 static const GUID UUID_SERIAL_SERVICE = { 0x49535343, 0xFE7D, 0x4AE5,{ 0x8F, 0xA9, 0x9F, 0xAF, 0xD2, 0x05, 0xE4, 0x55 } };
@@ -34,7 +59,7 @@ void readCharacteristicValueAndDisplay(list<BleGattCharacteristic *> &characteri
 
 	if (cit != characteristics.end())
 	{
-		BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*cit);
+		auto * characteristic = *cit;
 
 		BleGattCharacteristicValue value = characteristic->getValue();
 
@@ -57,7 +82,7 @@ int main()
 		{
 			cout << "Opening device" << endl;
 
-			BleDevice bleDevice = BleDevice(BleEnumerator.getBleDevices().front()->getInstanceId());
+			auto bleDevice = BleDevice(BleEnumerator.getBleDevices().front()->getInstanceId());
 
 			bleDevice.enumerateBleServices();
 
@@ -98,7 +123,7 @@ int main()
 
 			if (it != services.end())
 			{
-				BleGattService* service = ((BleGattService*)*it);
+				auto* service = *it;
 
 				cout << "Found Device Information Service: [" << service->getServiceUuid().Value.ShortUuid << "]" << endl;
 				list<BleGattCharacteristic *> characteristics = service->getBleCharacteristics();
@@ -117,7 +142,7 @@ int main()
 
 			if (it != services.end())
 			{
-				BleGattService* service = ((BleGattService*)*it);
+				auto* service = *it;
 
 				cout << "Found Serial Service: [" << setbase(16) << Util.guidToString(service->getServiceUuid().Value.LongUuid) << "]" << endl;
 
@@ -130,7 +155,7 @@ int main()
 
 				if (txit != characteristics.end())
 				{
-					BleGattCharacteristic * characteristic = ((BleGattCharacteristic*)*txit);
+					auto characteristic = *txit;
 
 					cout << "Found Serial Rx characteristic: "
 						<< setbase(16) << "["

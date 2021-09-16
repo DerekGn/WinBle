@@ -26,10 +26,10 @@ SOFTWARE.
 #ifndef UTILITY_H
 #define UTILITY_H
 
-using namespace std;
-
 #include <Windows.h>
 #include <string>
+
+using namespace std;
 
 /// <summary>
 /// A utility class of helper methods

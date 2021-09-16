@@ -64,31 +64,27 @@ BleGattDescriptor::BleGattDescriptor(
 	_pGattDescriptor = pGattDescriptor;
 }
 
-BleGattDescriptor::~BleGattDescriptor()
-{
-}
-
-USHORT BleGattDescriptor::getServiceHandle()
+USHORT BleGattDescriptor::getServiceHandle() const
 {
 	return _pGattDescriptor->ServiceHandle;
 }
 
-USHORT BleGattDescriptor::getCharacteristicHandle()
+USHORT BleGattDescriptor::getCharacteristicHandle() const
 {
 	return _pGattDescriptor->CharacteristicHandle;
 }
 
-BTH_LE_GATT_DESCRIPTOR_TYPE BleGattDescriptor::getDescriptorType()
+BTH_LE_GATT_DESCRIPTOR_TYPE BleGattDescriptor::getDescriptorType() const
 {
 	return _pGattDescriptor->DescriptorType;
 }
 
-BTH_LE_UUID BleGattDescriptor::getDescriptorUuid()
+BTH_LE_UUID BleGattDescriptor::getDescriptorUuid() const
 {
 	return _pGattDescriptor->DescriptorUuid;
 }
 
-USHORT BleGattDescriptor::getAttributeHandle()
+USHORT BleGattDescriptor::getAttributeHandle() const
 {
 	return _pGattDescriptor->AttributeHandle;
 }
@@ -106,7 +102,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 		hBleService.get(),
 		_pGattDescriptor,
 		0,
-		NULL,
+		nullptr,
 		&descValueDataSize,
 		BLUETOOTH_GATT_FLAG_NONE);
 
@@ -115,9 +111,9 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 		Util.throwHResultException("Unable to determine the descriptor value size.", hr);
 	}
 
-	PBTH_LE_GATT_DESCRIPTOR_VALUE pDescValueBuffer = (PBTH_LE_GATT_DESCRIPTOR_VALUE)malloc(descValueDataSize);
+	auto pDescValueBuffer = (PBTH_LE_GATT_DESCRIPTOR_VALUE)malloc(descValueDataSize);
 
-	if (NULL == pDescValueBuffer)
+	if (pDescValueBuffer == nullptr)
 	{
 		Util.handleMallocFailure(descValueDataSize);
 	}
@@ -131,10 +127,10 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 		_pGattDescriptor,
 		(ULONG)descValueDataSize,
 		pDescValueBuffer,
-		NULL,
+		nullptr,
 		BLUETOOTH_GATT_FLAG_NONE);
 
-	if (S_OK != hr)
+	if (hr != S_OK)
 	{
 		Util.throwHResultException("Unable to read the descriptor value size.", hr);
 	}

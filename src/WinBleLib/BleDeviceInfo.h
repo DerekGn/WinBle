@@ -49,24 +49,24 @@ class BleDeviceInfo
 		/// <param name="name">The device name</param>
 		/// <param name="hardwareId">The devices hardware Id</param>
 		/// <param name="instanceId">The devices instance Id</param>
-		BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId);
+		explicit BleDeviceInfo(const wstring& name, const wstring& hardwareId, const wstring& instanceId);
 
-		~BleDeviceInfo();
+		~BleDeviceInfo() = default;
 
 		/// <summary>
 		/// Gets the devices name
 		/// </summary>
-		wstring getName();
+		wstring getName() const;
 
 		/// <summary>
 		/// Gets the devices hardware Id
 		/// </summary>
-		wstring getHardwareId();
+		wstring getHardwareId() const;
 
 		/// <summary>
 		/// Gets the devices instance Id
 		/// </summary>
-		wstring getInstanceId();
+		wstring getInstanceId() const;
 };
 
 #endif

@@ -49,14 +49,9 @@ class BleDeviceEnumerator
 		/// <param name="did">The device info data</param>
 		/// <param name="property">The property identifier</param>
 		/// <returns>The device registry string value</returns>
-		wstring getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property);
+		wstring getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property) const;
 
 	public:
-		/// <summary>
-		/// The ble device enumerator class
-		/// </summary>
-		BleDeviceEnumerator();
-
 		~BleDeviceEnumerator();
 
 		/// <summary>

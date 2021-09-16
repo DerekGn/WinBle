@@ -43,7 +43,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 		hBleDeviceHandle,
 		pGattCharacteristic,
 		0,
-		NULL,
+		nullptr,
 		&expectedDescriptorBufferCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
@@ -60,7 +60,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 				malloc(expectedDescriptorBufferCount
 					* sizeof(BTH_LE_GATT_DESCRIPTOR));
 
-			if (NULL == pDescriptorBuffer)
+			if (pDescriptorBuffer == nullptr)
 			{
 				Util.handleMallocFailure(sizeof(PBTH_LE_GATT_DESCRIPTOR) * expectedDescriptorBufferCount);
 			}
@@ -91,10 +91,10 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 	return pDescriptorBuffer;
 }
 
-VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE eventType, PVOID eventOutParameter, PVOID context)
+VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE, PVOID eventOutParameter, PVOID context)
 {
-	BLUETOOTH_GATT_VALUE_CHANGED_EVENT *pEvent = (BLUETOOTH_GATT_VALUE_CHANGED_EVENT *)eventOutParameter;
-	CallbackContext* callbackContext = static_cast<CallbackContext*>(context);
+	auto *pEvent = (BLUETOOTH_GATT_VALUE_CHANGED_EVENT *)eventOutParameter;
+	auto* callbackContext = static_cast<CallbackContext*>(context);
 
 	// Assures that after unregisterNotificationHandler is called, no more callbacks will be invoked.
 
@@ -110,7 +110,7 @@ VOID WINAPI BleGattCharacteristic::NotificationCallback(BTH_LE_GATT_EVENT_TYPE e
 	
 	if (pEvent->ChangedAttributeHandle == callbackContext->getGattCharacteristic()->AttributeHandle)
 	{
-		BleGattNotificationData* notification = new BleGattNotificationData(pEvent->CharacteristicValue);
+		auto notification = new BleGattNotificationData(pEvent->CharacteristicValue);
 
 		callbackContext->getNotificationHandler()(*notification);
 	}
@@ -139,62 +139,62 @@ BleGattCharacteristic::~BleGattCharacteristic()
 		free(_pGattDescriptors);
 }
 
-USHORT BleGattCharacteristic::getServiceHandle()
+USHORT BleGattCharacteristic::getServiceHandle() const
 {
 	return _pGattCharacteristic->ServiceHandle;
 }
 
-BTH_LE_UUID BleGattCharacteristic::getCharacteristicUuid()
+BTH_LE_UUID BleGattCharacteristic::getCharacteristicUuid() const
 {
 	return _pGattCharacteristic->CharacteristicUuid;
 }
 
-USHORT BleGattCharacteristic::getAttributeHandle()
+USHORT BleGattCharacteristic::getAttributeHandle() const
 {
 	return _pGattCharacteristic->AttributeHandle;
 }
 
-USHORT BleGattCharacteristic::getCharacteristicValueHandle()
+USHORT BleGattCharacteristic::getCharacteristicValueHandle() const
 {
 	return _pGattCharacteristic->CharacteristicValueHandle;
 }
 
-BOOLEAN BleGattCharacteristic::getIsBroadcastable()
+BOOLEAN BleGattCharacteristic::getIsBroadcastable() const
 {
 	return _pGattCharacteristic->IsBroadcastable;
 }
 
-BOOLEAN BleGattCharacteristic::getIsReadable()
+BOOLEAN BleGattCharacteristic::getIsReadable() const
 {
 	return _pGattCharacteristic->IsReadable;
 }
 
-BOOLEAN BleGattCharacteristic::getIsWritable()
+BOOLEAN BleGattCharacteristic::getIsWritable() const
 {
 	return _pGattCharacteristic->IsWritable;
 }
 
-BOOLEAN BleGattCharacteristic::getIsWritableWithoutResponse()
+BOOLEAN BleGattCharacteristic::getIsWritableWithoutResponse() const
 {
 	return _pGattCharacteristic->IsWritableWithoutResponse;
 }
 
-BOOLEAN BleGattCharacteristic::getIsSignedWritable()
+BOOLEAN BleGattCharacteristic::getIsSignedWritable() const
 {
 	return _pGattCharacteristic->IsSignedWritable;
 }
 
-BOOLEAN BleGattCharacteristic::getIsNotifiable()
+BOOLEAN BleGattCharacteristic::getIsNotifiable() const
 {
 	return _pGattCharacteristic->IsNotifiable;
 }
 
-BOOLEAN BleGattCharacteristic::getIsIndicatable()
+BOOLEAN BleGattCharacteristic::getIsIndicatable() const
 {
 	return _pGattCharacteristic->IsIndicatable;
 }
 
-BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
+BOOLEAN BleGattCharacteristic::getHasExtendedProperties() const
 {
 	return _pGattCharacteristic->HasExtendedProperties;
 }
@@ -220,7 +220,7 @@ void BleGattCharacteristic::registerNotificationHandler(function<void(BleGattNot
 		HRESULT hr = BluetoothGATTRegisterEvent(hBleService.get(), CharacteristicValueChangedEvent,
 			&registration, &NotificationCallback, &_callbackContext, &_eventHandle, BLUETOOTH_GATT_FLAG_NONE);
 
-		if (S_OK != hr)
+		if (hr != S_OK)
 		{
 			Util.throwHResultException("Unable to subscribe to the characteristic.", hr);
 		}
@@ -263,7 +263,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 			hBleService.get(),
 			_pGattCharacteristic,
 			0,
-			NULL,
+			nullptr,
 			&charValueDataSize,
 			BLUETOOTH_GATT_FLAG_NONE);
 
@@ -274,7 +274,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 		pCharValueBuffer = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(charValueDataSize);
 
-		if (NULL == pCharValueBuffer) 
+		if (pCharValueBuffer == nullptr) 
 		{
 			Util.handleMallocFailure(charValueDataSize);
 		}
@@ -288,7 +288,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 			_pGattCharacteristic,
 			(ULONG)charValueDataSize,
 			pCharValueBuffer,
-			NULL,
+			nullptr,
 			BLUETOOTH_GATT_FLAG_NONE);
 
 		if (S_OK != hr)
@@ -310,9 +310,9 @@ void BleGattCharacteristic::setValue(UCHAR * data, ULONG size)
 	{
 		size_t required_size = sizeof(BTH_LE_GATT_CHARACTERISTIC_VALUE) + size;
 
-		PBTH_LE_GATT_CHARACTERISTIC_VALUE gatt_value = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(required_size);
+		auto gatt_value = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(required_size);
 
-		if (gatt_value != NULL)
+		if (gatt_value != nullptr)
 		{
 			ZeroMemory(gatt_value, required_size);
 
@@ -359,7 +359,7 @@ void BleGattCharacteristic::enumerateBleDescriptors()
 
 }
 
-const BleGattCharacteristic::BleGattDescriptors& BleGattCharacteristic::getBleDescriptors()
+const BleGattCharacteristic::BleGattDescriptors& BleGattCharacteristic::getBleDescriptors() const
 {
 	return _bleGattDescriptors;
 }

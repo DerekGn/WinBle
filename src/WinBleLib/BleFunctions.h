@@ -27,7 +27,7 @@ SOFTWARE.
 #define BLEFUNCTIONS_H
 
 #include <Windows.h>
-#include <Bluetoothleapis.h>
+#include <bluetoothleapis.h>
 
 #include <string>
 

@@ -27,7 +27,7 @@ SOFTWARE.
 #define BLEGATTCHARACTERISTICVALUE_H
 
 #include <Windows.h>
-#include <Bluetoothleapis.h>
+#include <bluetoothleapis.h>
 
 /// <summary>
 /// Represents a bluetooth low energy characteristic value read from a device
@@ -42,7 +42,7 @@ class BleGattCharacteristicValue
 		/// Creates an instance of a bluetooth low energy characteristic value
 		/// </summary>
 		/// <param name="pGattCharacteristicValue">The underlying characteristic value</param>
-		BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
+		explicit BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
 		
 		~BleGattCharacteristicValue();
 

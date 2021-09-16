@@ -26,7 +26,7 @@ SOFTWARE.
 #ifndef HANDLEWRAPPER_H
 #define HANDLEWRAPPER_H
 
-#include <windows.h>
+#include <Windows.h>
 
 /// <summary>
 /// A class for wrapping windows handles created with CreateFile
@@ -41,7 +41,7 @@ private:
 	HandleWrapper& HandleWrapper::operator=(const HandleWrapper& other);
 
 public:
-	HandleWrapper(HANDLE handle);
+	explicit HandleWrapper(HANDLE handle);
 
 	~HandleWrapper();
 

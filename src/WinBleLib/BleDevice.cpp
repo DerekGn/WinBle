@@ -23,13 +23,9 @@ SOFTWARE.
 
 */
 
-#include <windows.h>
-#include <Setupapi.h>
-#include <BluetoothAPIs.h>
-
-#pragma comment(lib, "Rpcrt4")
-#pragma comment(lib, "SetupAPI")
-#pragma comment(lib, "BluetoothAPIs")
+#include <Windows.h>
+#include <SetupAPI.h>
+#include <bluetoothapis.h>
 
 #include "BleException.h"
 #include "BleDevice.h"
@@ -37,16 +33,20 @@ SOFTWARE.
 
 #include <sstream>
 
+#pragma comment(lib, "Rpcrt4")
+#pragma comment(lib, "SetupAPI")
+#pragma comment(lib, "BluetoothAPIs")
+
 using namespace std;
 
-HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
+HANDLE BleDevice::getBleDeviceHandle(const wstring& deviceInstanceId)
 {
 	HDEVINFO hDI;
 	SP_DEVICE_INTERFACE_DATA did{};
 	SP_DEVINFO_DATA dd{};
-	HANDLE handle = NULL;
+	HANDLE handle = nullptr;
 
-	hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, deviceInstanceId.c_str(), NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+	hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, deviceInstanceId.c_str(), nullptr, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
 
 	if (hDI == INVALID_HANDLE_VALUE)
 	{
@@ -62,7 +62,7 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 
 	DWORD i = 0;
 
-	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &GUID_BLUETOOTHLE_DEVICE_INTERFACE, i, &did); i++)
+	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, nullptr, &GUID_BLUETOOTHLE_DEVICE_INTERFACE, i, &did); i++)
 	{
 		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData{};
 
@@ -70,15 +70,15 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 
 		DWORD size = 0;
 
-		if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, NULL, 0, &size, 0))
+		if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, nullptr, 0, &size, nullptr))
 		{
 			int err = GetLastError();
 
 			if (err == ERROR_NO_MORE_ITEMS) break;
 
-			PSP_DEVICE_INTERFACE_DETAIL_DATA pInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)GlobalAlloc(GPTR, size);
+			auto pInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)GlobalAlloc(GPTR, size);
 
-			if (pInterfaceDetailData != NULL)
+			if (pInterfaceDetailData != nullptr)
 			{
 				pInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
@@ -89,10 +89,10 @@ HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 					pInterfaceDetailData->DevicePath,
 					GENERIC_WRITE | GENERIC_READ,
 					FILE_SHARE_READ | FILE_SHARE_WRITE,
-					NULL,
+					nullptr,
 					OPEN_EXISTING,
 					0,
-					NULL);
+					nullptr);
 
 				GlobalFree(pInterfaceDetailData);
 			}
@@ -122,7 +122,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	HRESULT hr = BluetoothGATTGetServices(
 		_hBleDeviceHandle,
 		0,
-		NULL,
+		nullptr,
 		_pGattServiceCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
@@ -138,11 +138,11 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	hr = BluetoothGATTGetServices(
 		_hBleDeviceHandle,
 		0,
-		NULL,
+		nullptr,
 		_pGattServiceCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
-	PBTH_LE_GATT_SERVICE pServiceBuffer = (PBTH_LE_GATT_SERVICE)
+	auto pServiceBuffer = (PBTH_LE_GATT_SERVICE)
 		malloc(sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
 
 	if (!_pGattServiceCount)
@@ -166,9 +166,12 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	return pServiceBuffer;
 }
 
-BleDevice::BleDevice(wstring deviceInstanceId) : _hBleDevice(new HandleWrapper(getBleDeviceHandle(deviceInstanceId))), _deviceContext(_hBleDevice->get(), deviceInstanceId)
+BleDevice::BleDevice(const wstring& deviceInstanceId) : 
+	_hBleDevice(new HandleWrapper(getBleDeviceHandle(deviceInstanceId))), 
+	_deviceContext(_hBleDevice->get(), deviceInstanceId),
+	_deviceInstanceId(deviceInstanceId)
 {
-	_deviceInstanceId = deviceInstanceId;
+	
 }
 
 BleDevice::~BleDevice()
@@ -183,7 +186,7 @@ BleDevice::~BleDevice()
 		delete(_hBleDevice);
 }
 
-wstring BleDevice::getDeviceIntstanceId()
+wstring BleDevice::getDeviceIntstanceId() const
 {
 	return _deviceInstanceId;
 }
@@ -204,7 +207,7 @@ void BleDevice::enumerateBleServices()
 		_bleGattServices.push_back(new BleGattService(_deviceContext, &_pGattServiceBuffer[i]));
 }
 
-const BleDevice::BleGattServices & BleDevice::getBleGattServices()
+const BleDevice::BleGattServices & BleDevice::getBleGattServices() const
 {	
 	return _bleGattServices;
 }

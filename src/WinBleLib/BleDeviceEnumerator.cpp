@@ -51,7 +51,7 @@ inline std::wstring& rtrim_null(std::wstring& s)
 	return s;
 }
 
-wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property)
+wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property) const
 {
 	wstring text;
 	DWORD bufferSize = 0;
@@ -60,7 +60,7 @@ wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DE
 		hDI,
 		&did,
 		property,
-		NULL,
+		nullptr,
 		(PBYTE)&text[0],
 		bufferSize,
 		&bufferSize))
@@ -72,10 +72,6 @@ wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DE
 	}
 
 	return text;
-}
-
-BleDeviceEnumerator::BleDeviceEnumerator()
-{
 }
 
 BleDeviceEnumerator::~BleDeviceEnumerator()
@@ -90,7 +86,7 @@ void BleDeviceEnumerator::enumerate()
 	SP_DEVINFO_DATA did{};
 	DWORD i;
 
-	HDEVINFO hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+	HDEVINFO hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, nullptr, nullptr, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
 
 	if (INVALID_HANDLE_VALUE == hDI)
 	{

@@ -29,13 +29,13 @@ SOFTWARE.
 #include <Windows.h>
 #include <mutex>
 
-#include <Bluetoothleapis.h>
+#include <bluetoothleapis.h>
 #include "BleGattNotificationData.h"
-
-using namespace std;
 
 #include <functional>
 #include <condition_variable>
+
+using namespace std;
 
 class CallbackContext
 {

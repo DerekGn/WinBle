@@ -27,14 +27,14 @@ SOFTWARE.
 #define BLEGATTDESCRIPTOR_H
 
 #include <Windows.h>
-#include <Bluetoothleapis.h>
+#include <bluetoothleapis.h>
 
 #include "BleDeviceContext.h"
 #include "BleGattDescriptorValue.h"
 
-using namespace std;
-
 #include <list>
+
+using namespace std;
 
 /// <summary>
 /// Represents a descriptor for a characteristic of a bluetooth low energy device
@@ -60,32 +60,32 @@ class BleGattDescriptor
 		/// <param name="pGattDescriptor">The contained <see cref="PBTH_LE_GATT_DESCRIPTOR"/></param>
 		BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
 
-		~BleGattDescriptor();
+		~BleGattDescriptor() = default;
 
 		/// <summary>
 		/// Get the descriptors service handle
 		/// </summary>
-		USHORT getServiceHandle();
+		USHORT getServiceHandle() const;
 
 		/// <summary>
 		/// Get the descriptors characteristic handle
 		/// </summary>
-		USHORT getCharacteristicHandle();
+		USHORT getCharacteristicHandle() const;
 
 		/// <summary>
 		/// Get the descriptors type
 		/// </summary>
-		BTH_LE_GATT_DESCRIPTOR_TYPE getDescriptorType();
+		BTH_LE_GATT_DESCRIPTOR_TYPE getDescriptorType() const;
 
 		/// <summary>
 		/// Get the descriptors UUID
 		/// </summary>
-		BTH_LE_UUID getDescriptorUuid();
+		BTH_LE_UUID getDescriptorUuid() const;
 		
 		/// <summary>
 		/// Get the descriptors attribute handle
 		/// </summary>
-		USHORT getAttributeHandle();
+		USHORT getAttributeHandle() const;
 
 		/// <summary>
 		/// Gets the descriptors value

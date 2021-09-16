@@ -26,14 +26,14 @@ SOFTWARE.
 #ifndef BLEGATTSERVICE_H
 #define BLEGATTSERVICE_H
 
-using namespace std;
-
 #include <Windows.h>
-#include <Bluetoothleapis.h>
+#include <bluetoothleapis.h>
 
 #include "BleGattCharacteristic.h"
 
 #include <list>
+
+using namespace std;
 
 /// <summary>
 /// Represents a service of a bluetooth low energy device
