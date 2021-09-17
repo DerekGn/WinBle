@@ -50,7 +50,7 @@ class BleDeviceContext
 		/// </summary>
 		/// <param name="hBleDevice">The device handle</param>
 		/// <param name="deviceInstanceId">The device instance Id</param>
-		BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId);
+		explicit BleDeviceContext(HANDLE hBleDevice, const wstring& deviceInstanceId);
 		
 		~BleDeviceContext();
 
@@ -62,7 +62,7 @@ class BleDeviceContext
 		/// <summary>
 		/// Gets the device instance Id
 		/// </summary>
-		wstring getDeviceInstanceId();
+		wstring getDeviceInstanceId() const;
 };
 
 #endif

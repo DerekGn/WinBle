@@ -52,9 +52,9 @@ HANDLE BleDevice::getBleDeviceHandle(const wstring& deviceInstanceId)
 	{
 		stringstream stream;
 		stream << "Unable to open device information set for device interface UUID: ["
-			<< Util.convertToString(deviceInstanceId) << "]";
+			<< Utility::convertToString(deviceInstanceId) << "]";
 
-		Util.throwLastErrorException(stream.str());
+		Utility::throwLastErrorException(stream.str());
 	}
 
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -109,7 +109,7 @@ HANDLE BleDevice::getBleDeviceHandle(const wstring& deviceInstanceId)
 	{
 		stringstream msg;
 		msg << "Device interface UUID: ["
-			<< Util.convertToString(deviceInstanceId) << "] not found";
+			<< Utility::convertToString(deviceInstanceId) << "] not found";
 
 		throw BleException(msg.str());
 	}
@@ -130,7 +130,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	{
 		stringstream msg;
 		msg << "Unable to determine the number of gatt services. Reason: ["
-			<< Util.getLastErrorString(hr) << "]";
+			<< Utility::getLastErrorString(hr) << "]";
 
 		throw BleException(msg.str());
 	}
@@ -146,7 +146,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 		malloc(sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
 
 	if (!_pGattServiceCount)
-		Util.handleMallocFailure(sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
+		Utility::handleMallocFailure(sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
 	else
 		RtlZeroMemory(pServiceBuffer, sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
 
@@ -160,7 +160,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 
 	if (S_OK != hr)
 	{
-		Util.throwHResultException("Unable to determine the number of gatt services.", hr);
+		Utility::throwHResultException("Unable to determine the number of gatt services.", hr);
 	}
 
 	return pServiceBuffer;
@@ -171,14 +171,10 @@ BleDevice::BleDevice(const wstring& deviceInstanceId) :
 	_deviceContext(_hBleDevice->get(), deviceInstanceId),
 	_deviceInstanceId(deviceInstanceId)
 {
-	
 }
 
 BleDevice::~BleDevice()
 {
-	for (BleGattService *s : _bleGattServices)
-		delete(s);
-
 	if (_pGattServiceBuffer)
 		free(_pGattServiceBuffer);
 
@@ -193,9 +189,6 @@ wstring BleDevice::getDeviceIntstanceId() const
 
 void BleDevice::enumerateBleServices()
 {
-	for (BleGattService *s : _bleGattServices)
-		delete(s);
-
 	_bleGattServices.clear();
 
 	if (_pGattServiceBuffer)
@@ -204,7 +197,7 @@ void BleDevice::enumerateBleServices()
 	_pGattServiceBuffer = getGattServices(_hBleDevice->get(), &_gattServiceCount);
 
 	for (size_t i = 0; i < _gattServiceCount; i++)
-		_bleGattServices.push_back(new BleGattService(_deviceContext, &_pGattServiceBuffer[i]));
+		_bleGattServices.push_back(make_unique<BleGattService>(_deviceContext, &_pGattServiceBuffer[i]));
 }
 
 const BleDevice::BleGattServices & BleDevice::getBleGattServices() const

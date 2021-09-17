@@ -43,7 +43,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 		hBleDeviceHandle,
 		pGattService,
 		0,
-		NULL,
+		nullptr,
 		&expectedCharBufferCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
@@ -51,7 +51,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 	{
 		if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 		{
-			Util.throwHResultException("Unable to determine the number of gatt characteristics.", hr);
+			Utility::throwHResultException("Unable to determine the number of gatt characteristics.", hr);
 		}
 
 		if (expectedCharBufferCount > 0)
@@ -59,9 +59,9 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 			pCharBuffer = (PBTH_LE_GATT_CHARACTERISTIC)
 				malloc(expectedCharBufferCount * sizeof(BTH_LE_GATT_CHARACTERISTIC));
 
-			if (NULL == pCharBuffer)
+			if (pCharBuffer == nullptr)
 			{
-				Util.handleMallocFailure(sizeof(BTH_LE_GATT_SERVICE) * expectedCharBufferCount);
+				Utility::handleMallocFailure(sizeof(BTH_LE_GATT_SERVICE) * expectedCharBufferCount);
 			}
 			else
 			{
@@ -79,7 +79,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 
 			if (S_OK != hr)
 			{
-				Util.throwHResultException("Unable to determine the number of gatt characteristics.", hr);
+				Utility::throwHResultException("Unable to determine the number of gatt characteristics.", hr);
 			}
 
 			if (*pGattCharcteristicsCount != expectedCharBufferCount)
@@ -102,9 +102,6 @@ BleGattService::BleGattService(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_
 
 BleGattService::~BleGattService()
 {
-	for (BleGattCharacteristic *c : _bleGattCharacteristics)
-		delete(c);
-
 	if (_pGattCharacteristics)
 		free(_pGattCharacteristics);
 
@@ -112,21 +109,18 @@ BleGattService::~BleGattService()
 		CloseHandle(_hBleService);
 }
 
-BTH_LE_UUID BleGattService::getServiceUuid()
+BTH_LE_UUID BleGattService::getServiceUuid() const
 {
 	return _pGattService->ServiceUuid;
 }
 
-USHORT BleGattService::getServiceAttributeHandle()
+USHORT BleGattService::getServiceAttributeHandle() const
 {
 	return _pGattService->AttributeHandle;
 }
 
 void BleGattService::enumerateBleCharacteristics()
 {
-	for (BleGattCharacteristic *c : _bleGattCharacteristics)
-		delete(c);
-
 	_pGattCharacteristics = getGattCharacteristics(_bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
 
 	_hBleService = openBleInterfaceHandle(
@@ -134,10 +128,10 @@ void BleGattService::enumerateBleCharacteristics()
 		GENERIC_READ);
 
 	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
-		_bleGattCharacteristics.push_back(new BleGattCharacteristic(_bleDeviceContext, _pGattService, &_pGattCharacteristics[i]));
+		_bleGattCharacteristics.push_back(make_unique<BleGattCharacteristic>(_bleDeviceContext, _pGattService, &_pGattCharacteristics[i]));
 }
 
-const BleGattService::BleGattCharacteristics & BleGattService::getBleCharacteristics()
+const BleGattService::BleGattCharacteristics & BleGattService::getBleCharacteristics() const
 {
 	return _bleGattCharacteristics;
 }

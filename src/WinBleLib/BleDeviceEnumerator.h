@@ -59,13 +59,13 @@ class BleDeviceEnumerator
 		/// </summary>
 		void enumerate();
 
-		typedef list<BleDeviceInfo*> BleDevices;
+		using BleDevices = list<BleDeviceInfo*>;
 
 		/// <summary>
 		/// Gets the enumerated devices
 		/// </summary>
 		/// <returns>A list of devices enumerated after the call to enumerate</returns>
-		const BleDevices& getBleDevices();
+		const BleDevices& getBleDevices() const;
 };
 
 extern BleDeviceEnumerator BleEnumerator;

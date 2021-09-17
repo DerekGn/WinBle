@@ -23,10 +23,10 @@ SOFTWARE.
 
 */
 
-#include <windows.h>
+#include <Windows.h>
 #include <bthdef.h>
 #include <devguid.h>
-#include <setupapi.h>
+#include <SetupAPI.h>
 #include <bluetoothleapis.h>
 
 #include "BleDeviceEnumerator.h"
@@ -132,7 +132,7 @@ void BleDeviceEnumerator::enumerate()
 	}
 }
 
-const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
+const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices() const
 {
 	return _bleEnumeratedDevices;
 }

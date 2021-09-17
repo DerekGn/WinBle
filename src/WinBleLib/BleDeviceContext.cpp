@@ -26,10 +26,11 @@ SOFTWARE.
 #include "BleDeviceContext.h"
 #include "BleFunctions.h"
 
-BleDeviceContext::BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId)
+BleDeviceContext::BleDeviceContext(HANDLE hBleDevice, const wstring& deviceInstanceId) :
+	_hBleDevice(hBleDevice),
+	_deviceInstanceId(deviceInstanceId)
+
 {
-	_hBleDevice = hBleDevice;
-	_deviceInstanceId = deviceInstanceId;
 }
 
 BleDeviceContext::~BleDeviceContext()
@@ -44,7 +45,7 @@ HANDLE BleDeviceContext::getBleDeviceHandle()
 	return _hBleDevice;
 }
 
-wstring BleDeviceContext::getDeviceInstanceId()
+wstring BleDeviceContext::getDeviceInstanceId() const
 {
 	return _deviceInstanceId;
 }
