@@ -37,10 +37,10 @@ using namespace std;
 /// <summary>
 /// A class that enumerates paired ble devices
 /// </summary>
-class BleDeviceEnumerator
+class BleDeviceEnumerator final
 {
 	private:
-		list<BleDeviceInfo*> _bleEnumeratedDevices;
+		static list<BleDeviceInfo*> _bleEnumeratedDevices;
 	
 		/// <summary>
 		/// Reads a string from the device registry
@@ -49,15 +49,16 @@ class BleDeviceEnumerator
 		/// <param name="did">The device info data</param>
 		/// <param name="property">The property identifier</param>
 		/// <returns>The device registry string value</returns>
-		wstring getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property) const;
+		static wstring getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property);
 
+		BleDeviceEnumerator() = delete;
 	public:
 		~BleDeviceEnumerator();
 
 		/// <summary>
 		/// Enumerate the paired ble devices
 		/// </summary>
-		void enumerate();
+		static void enumerate();
 
 		using BleDevices = list<BleDeviceInfo*>;
 
@@ -65,9 +66,7 @@ class BleDeviceEnumerator
 		/// Gets the enumerated devices
 		/// </summary>
 		/// <returns>A list of devices enumerated after the call to enumerate</returns>
-		const BleDevices& getBleDevices() const;
+		static const BleDevices& getBleDevices();
 };
-
-extern BleDeviceEnumerator BleEnumerator;
 
 #endif

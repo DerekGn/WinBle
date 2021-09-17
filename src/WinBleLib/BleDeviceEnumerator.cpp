@@ -38,7 +38,7 @@ SOFTWARE.
 
 using namespace std;
 
-BleDeviceEnumerator BleEnumerator;
+list<BleDeviceInfo*> BleDeviceEnumerator::_bleEnumeratedDevices;
 
 inline std::wstring& rtrim_null(std::wstring& s)
 {
@@ -51,7 +51,7 @@ inline std::wstring& rtrim_null(std::wstring& s)
 	return s;
 }
 
-wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property) const
+wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property)
 {
 	wstring text;
 	DWORD bufferSize = 0;
@@ -84,8 +84,7 @@ void BleDeviceEnumerator::enumerate()
 	_bleEnumeratedDevices.clear();
 
 	SP_DEVINFO_DATA did{};
-	DWORD i;
-
+	
 	HDEVINFO hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, nullptr, nullptr, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
 
 	if (INVALID_HANDLE_VALUE == hDI)
@@ -97,7 +96,7 @@ void BleDeviceEnumerator::enumerate()
 
 	try
 	{
-		for (i = 0; SetupDiEnumDeviceInfo(hDI, i, &did); i++)
+		for (DWORD i = 0; SetupDiEnumDeviceInfo(hDI, i, &did); i++)
 		{
 			wstring name = getDeviceRegistryStringProperty(hDI, did, SPDRP_FRIENDLYNAME);
 
@@ -132,7 +131,7 @@ void BleDeviceEnumerator::enumerate()
 	}
 }
 
-const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices() const
+const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
 {
 	return _bleEnumeratedDevices;
 }

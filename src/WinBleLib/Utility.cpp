@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Utility.h"
 #include "BleException.h"
 
-#include <windows.h>
+#include <Windows.h>
 #include <codecvt>
 #include <sstream>
 

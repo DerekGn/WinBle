@@ -34,11 +34,12 @@ using namespace std;
 /// <summary>
 /// A utility class of helper methods
 /// </summary>
-class Utility
+class Utility final
 {
-public:
+private:
 	Utility() = delete;
-
+public:
+	
 	~Utility() = default;
 
 	/// <summary>

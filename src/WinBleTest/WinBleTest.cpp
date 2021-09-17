@@ -196,18 +196,18 @@ int main()
 {
 	try
 	{
-		BleEnumerator.enumerate();
+		BleDeviceEnumerator::enumerate();
 
-		for (BleDeviceInfo const *i : BleEnumerator.getBleDevices())
+		for (BleDeviceInfo const *i : BleDeviceEnumerator::getBleDevices())
 			wcout << "Name: " << i->getName()
 			<< " HardwareId: " << i->getHardwareId()
 			<< " InstanceId: " << i->getInstanceId() << endl;
 		
-		if (BleEnumerator.getBleDevices().size() >= 1)
+		if (BleDeviceEnumerator::getBleDevices().size() >= 1)
 		{
 			cout << "Opening device" << endl;
 
-			auto bleDevice = BleDevice(BleEnumerator.getBleDevices().front()->getInstanceId());
+			auto bleDevice = BleDevice(BleDeviceEnumerator::getBleDevices().front()->getInstanceId());
 
 			bleDevice.enumerateBleServices();
 
