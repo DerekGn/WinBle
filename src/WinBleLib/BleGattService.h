@@ -29,9 +29,10 @@ SOFTWARE.
 #include <Windows.h>
 #include <bluetoothleapis.h>
 
-#include "BleGattCharacteristic.h"
-
 #include <list>
+
+#include "BleGattCharacteristic.h"
+#include "HandleWrapper.h"
 
 using namespace std;
 
@@ -42,7 +43,7 @@ class BleGattService
 {
 	private:
 		
-		HANDLE _hBleService = nullptr;
+		unique_ptr<HandleWrapper> _hBleService;
 
 		BleDeviceContext& _bleDeviceContext;
 

@@ -104,9 +104,6 @@ BleGattService::~BleGattService()
 {
 	if (_pGattCharacteristics)
 		free(_pGattCharacteristics);
-
-	if(_hBleService)
-		CloseHandle(_hBleService);
 }
 
 BTH_LE_UUID BleGattService::getServiceUuid() const
@@ -123,9 +120,9 @@ void BleGattService::enumerateBleCharacteristics()
 {
 	_pGattCharacteristics = getGattCharacteristics(_bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
 
-	_hBleService = openBleInterfaceHandle(
+	_hBleService = make_unique<HandleWrapper>(openBleInterfaceHandle(
 		mapServiceUUID(&_pGattService->ServiceUuid),
-		GENERIC_READ);
+		GENERIC_READ));
 
 	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
 		_bleGattCharacteristics.push_back(make_unique<BleGattCharacteristic>(_bleDeviceContext, _pGattService, &_pGattCharacteristics[i]));
