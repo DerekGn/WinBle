@@ -43,7 +43,7 @@ class BleGattService
 {
 	private:
 		
-		unique_ptr<HandleWrapper> _hBleService;
+		shared_ptr<HandleWrapper> _hBleService;
 
 		BleDeviceContext& _bleDeviceContext;
 
@@ -51,7 +51,7 @@ class BleGattService
 
 		PBTH_LE_GATT_SERVICE _pGattService = nullptr;
 
-		list<unique_ptr<BleGattCharacteristic>> _bleGattCharacteristics;
+		list<shared_ptr<BleGattCharacteristic>> _bleGattCharacteristics;
 
 		PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristics = nullptr;
 
@@ -91,7 +91,7 @@ class BleGattService
 		/// <remarks>must be called prior to calling get characteristics</remarks>
 		void enumerateBleCharacteristics();
 
-		using BleGattCharacteristics = list<unique_ptr<BleGattCharacteristic>>;
+		using BleGattCharacteristics = list<shared_ptr<BleGattCharacteristic>>;
 
 		/// <summary>
 		/// Gets the services list of characteristics

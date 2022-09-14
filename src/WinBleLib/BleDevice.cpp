@@ -197,7 +197,7 @@ void BleDevice::enumerateBleServices()
 	_pGattServiceBuffer = getGattServices(_hBleDevice->get(), &_gattServiceCount);
 
 	for (size_t i = 0; i < _gattServiceCount; i++)
-		_bleGattServices.push_back(make_unique<BleGattService>(_deviceContext, &_pGattServiceBuffer[i]));
+		_bleGattServices.push_back(make_shared<BleGattService>(_deviceContext, &_pGattServiceBuffer[i]));
 }
 
 const BleDevice::BleGattServices & BleDevice::getBleGattServices() const

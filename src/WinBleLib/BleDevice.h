@@ -49,7 +49,7 @@ class BleDevice
 
 		BleDeviceContext _deviceContext;
 
-		list<unique_ptr<BleGattService>> _bleGattServices;
+		list<shared_ptr<BleGattService>> _bleGattServices;
 
 		USHORT _gattServiceCount = 0;
 
@@ -83,7 +83,7 @@ class BleDevice
 		/// <remarks>must be called prior to calling get services</remarks>
 		void enumerateBleServices();
 
-		using BleGattServices = list<unique_ptr<BleGattService>>;
+		using BleGattServices = list<shared_ptr<BleGattService>>;
 
 		/// <summary>
 		/// Get the list of <see cref="BleGattServices"/>

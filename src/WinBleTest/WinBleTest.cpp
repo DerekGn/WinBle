@@ -52,7 +52,7 @@ void HandleCallback(BleGattNotificationData& data)
 
 void readCharacteristicValueAndDisplay(BleGattService::BleGattCharacteristics const &characteristics, USHORT uuid)
 {
-	auto cit = find_if(begin(characteristics), end(characteristics), [&](unique_ptr<BleGattCharacteristic> const &c)
+	auto cit = find_if(begin(characteristics), end(characteristics), [&](shared_ptr<BleGattCharacteristic> const &c)
 	{
 		return c->getCharacteristicUuid().Value.ShortUuid == uuid;
 	});
@@ -71,7 +71,7 @@ void displayServices(BleDevice const &bleDevice)
 {
 	cout << "BleGattServices Count: " << bleDevice.getBleGattServices().size() << endl;
 
-	for (unique_ptr<BleGattService> const& s : bleDevice.getBleGattServices())
+	for (shared_ptr<BleGattService> const& s : bleDevice.getBleGattServices())
 	{
 		cout << "\tService - Guid: ["
 			<< Utility::guidToString(s->getServiceUuid().Value.LongUuid) << "]"
@@ -80,7 +80,7 @@ void displayServices(BleDevice const &bleDevice)
 
 		s->enumerateBleCharacteristics();
 
-		for (unique_ptr<BleGattCharacteristic> const& c : s->getBleCharacteristics())
+		for (shared_ptr<BleGattCharacteristic> const& c : s->getBleCharacteristics())
 		{
 			cout << "\t\tCharacteristic - Guid: ["
 				<< Utility::guidToString(c->getCharacteristicUuid().Value.LongUuid) << "]"
@@ -100,7 +100,7 @@ void displayServices(BleDevice const &bleDevice)
 
 void displayDeviceInformation(BleDevice::BleGattServices const& services)
 {
-	auto it = find_if(begin(services), end(services), [&](unique_ptr<BleGattService> const& s)
+	auto it = find_if(begin(services), end(services), [&](shared_ptr<BleGattService> const& s)
 	{
 		return s->getServiceUuid().Value.ShortUuid == GATT_UUID_DEVICE_INFO_SVC;
 	});
@@ -123,7 +123,7 @@ void displayDeviceInformation(BleDevice::BleGattServices const& services)
 
 void testSerialService(BleDevice::BleGattServices const& services)
 {
-	auto it = find_if(begin(services), end(services), [&](unique_ptr<BleGattService> const& s)
+	auto it = find_if(begin(services), end(services), [&](shared_ptr<BleGattService> const& s)
 	{
 		return s->getServiceUuid().Value.LongUuid == UUID_SERIAL_SERVICE;
 	});
@@ -136,7 +136,7 @@ void testSerialService(BleDevice::BleGattServices const& services)
 
 		BleGattService::BleGattCharacteristics const& characteristics = service->getBleCharacteristics();
 
-		auto txit = find_if(begin(characteristics), end(characteristics), [&](unique_ptr<BleGattCharacteristic> const& c)
+		auto txit = find_if(begin(characteristics), end(characteristics), [&](shared_ptr<BleGattCharacteristic> const& c)
 		{
 			return c->getCharacteristicUuid().Value.LongUuid == UUID_TX_CHARACTERISTIC;
 		});

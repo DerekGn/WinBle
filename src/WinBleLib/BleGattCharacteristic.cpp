@@ -349,7 +349,7 @@ void BleGattCharacteristic::enumerateBleDescriptors()
 	_pGattDescriptors = getGattDescriptors(_bleDeviceContext.getBleDeviceHandle(), _pGattCharacteristic, &_gattDescriptorsCount);
 
 	for (size_t i = 0; i < _gattDescriptorsCount; i++)
-		_bleGattDescriptors.push_back(make_unique<BleGattDescriptor>(_bleDeviceContext, _pGattService, &_pGattDescriptors[i]));
+		_bleGattDescriptors.push_back(make_shared<BleGattDescriptor>(_bleDeviceContext, _pGattService, &_pGattDescriptors[i]));
 
 }
 

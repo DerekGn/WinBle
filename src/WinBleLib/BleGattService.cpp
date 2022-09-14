@@ -120,12 +120,12 @@ void BleGattService::enumerateBleCharacteristics()
 {
 	_pGattCharacteristics = getGattCharacteristics(_bleDeviceContext.getBleDeviceHandle(), _pGattService, &_gattCharacteristicsCount);
 
-	_hBleService = make_unique<HandleWrapper>(openBleInterfaceHandle(
+	_hBleService = make_shared<HandleWrapper>(openBleInterfaceHandle(
 		mapServiceUUID(&_pGattService->ServiceUuid),
 		GENERIC_READ));
 
 	for (size_t i = 0; i < _gattCharacteristicsCount; i++)
-		_bleGattCharacteristics.push_back(make_unique<BleGattCharacteristic>(_bleDeviceContext, _pGattService, &_pGattCharacteristics[i]));
+		_bleGattCharacteristics.push_back(make_shared<BleGattCharacteristic>(_bleDeviceContext, _pGattService, &_pGattCharacteristics[i]));
 }
 
 const BleGattService::BleGattCharacteristics & BleGattService::getBleCharacteristics() const
