@@ -56,7 +56,7 @@ class BleGattCharacteristic
 
 		BLUETOOTH_GATT_EVENT_HANDLE _eventHandle;
 		
-		list<unique_ptr<BleGattDescriptor>> _bleGattDescriptors;
+		list<shared_ptr<BleGattDescriptor>> _bleGattDescriptors;
 
 		PBTH_LE_GATT_DESCRIPTOR _pGattDescriptors = nullptr;
 
@@ -184,7 +184,7 @@ class BleGattCharacteristic
 		/// <remarks>must be called prior to calling get characteristics</remarks>
 		void enumerateBleDescriptors();
 
-		using BleGattDescriptors = list<unique_ptr<BleGattDescriptor>>;
+		using BleGattDescriptors = list<shared_ptr<BleGattDescriptor>>;
 
 		/// <summary>
 		/// Gets a list of <see cref="BleDescriptors"/> associated with this characteristic
