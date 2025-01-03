@@ -1,5 +1,7 @@
 # WinBle
 
+**This REPO is no longer maintained or supported as BLE is no longer supported but the win32 device APIs. WinRt is the only mechanism to use BLE on the windows platfrom.**
+
 A set of classes for enumerating and interacting with Bluetooth low energy devices on the windows platform.
 
 ## Requirements
